@@ -26,3 +26,17 @@ jobs:
     - name: Create table
       run: |
         python utils/compare_pkg_completeness.py
+    - name: Rename file
+      run: |
+       mv version_compare.html noetic.html 
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add noetic.html
+        git commit -m "Update table"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
