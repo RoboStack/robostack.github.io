@@ -1,15 +1,13 @@
 name: Update distro tables
 
 on:
-  push:
-  pull_request:
   schedule:    
     - cron: "0 */6 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    if: github.ref == 'refs/heads/master'
     steps:
     - name: Set up Python
       uses: actions/setup-python@v2
