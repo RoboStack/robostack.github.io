@@ -1,0 +1,29 @@
+name: Update noetic table
+
+on:
+  push:
+  pull_request:
+  schedule:    
+    - cron: "*/30 * * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install yaml json requests rich
+    - name: Checkout ros-noetic
+      uses: actions/checkout@v2
+      with:
+        repository: RoboStack/ros-noetic
+    - name: Create table
+      run: |
+        python utils/compare_pkg_completeness.py
