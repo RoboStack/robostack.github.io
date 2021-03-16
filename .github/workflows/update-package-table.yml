@@ -18,7 +18,7 @@ jobs:
         python-version: '3.8'
     - name: Install dependencies
       run: |
-        pip install pyyaml json requests rich
+        pip install pyyaml requests rich
     - name: Checkout ros-noetic
       uses: actions/checkout@v2
       with:
