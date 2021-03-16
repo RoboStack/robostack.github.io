@@ -18,18 +18,19 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pyyaml requests rich
+    - name: Checkout robostack.github.io
+      uses: actions/checkout@v2
     - name: Checkout ros-noetic
       uses: actions/checkout@v2
       with:
         repository: RoboStack/ros-noetic
-    - name: Checkout robostack.github.io
-      uses: actions/checkout@v2
+        path: ros-noetic
     - name: Create table
       run: |
-        python utils/compare_pkg_completeness.py
+        python ros-noetic/utils/compare_pkg_completeness.py
     - name: Rename file
       run: |
-       mv version_compare.html noetic.html 
+       mv version_compare.html noetic.html
     - name: Commit changes
       run: |
         git config --local user.email "action@github.com"
