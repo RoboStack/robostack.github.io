@@ -1,10 +1,10 @@
-name: Update noetic table
+name: Update distro tables
 
 on:
   push:
   pull_request:
   schedule:    
-    - cron: "*/30 * * * *"
+    - cron: "0 */6 * * *"
 
 jobs:
   build:
@@ -20,23 +20,19 @@ jobs:
         pip install pyyaml requests rich
     - name: Checkout robostack.github.io
       uses: actions/checkout@v2
-    - name: Checkout ros-noetic
-      uses: actions/checkout@v2
-      with:
-        repository: RoboStack/ros-noetic
-        path: ros-noetic
-    - name: Create table
+    - name: Create table noetic
       run: |
-        python ros-noetic/utils/compare_pkg_completeness.py
-    - name: Rename file
+        python utils/compare_pkg_completeness.py noetic
+    - name: Create table foxy
       run: |
-       mv version_compare.html noetic.html
+        python utils/compare_pkg_completeness.py foxy
     - name: Commit changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add noetic.html
-        git commit -m "Update table"
+        git add foxy.html
+        git commit -m "Update tables"
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
