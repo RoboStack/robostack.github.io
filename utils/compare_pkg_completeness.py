@@ -73,8 +73,13 @@ for a in archs:
 table.add_column("Versions")
 upper_rows, bottom_rows = [], []
 
+longest_pkg_length = 0
+
 for name, pkg in availability.items():
     row = [name]
+    if len(name) > longest_pkg_length:
+        longest_pkg_length = len(name)
+
     versions = set()
     is_upper = False
     for arch in archs:
@@ -102,6 +107,8 @@ for row in upper_rows:
     table.add_row(*row)
 for row in bottom_rows:
     table.add_row(*row)
+
+table.columns[0].width = longest_pkg_length + 1
 
 console.print(table)
 console.save_html(distro + ".html")
