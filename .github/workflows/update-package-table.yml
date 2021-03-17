@@ -1,0 +1,38 @@
+name: Update distro tables
+
+on:
+  schedule:    
+    - cron: "0 */6 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        pip install pyyaml requests rich
+    - name: Checkout robostack.github.io
+      uses: actions/checkout@v2
+    - name: Create table noetic
+      run: |
+        python utils/compare_pkg_completeness.py noetic
+    - name: Create table foxy
+      run: |
+        python utils/compare_pkg_completeness.py foxy
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add noetic.html
+        git add foxy.html
+        git commit -m "Update tables"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
