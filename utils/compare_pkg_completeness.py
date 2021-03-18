@@ -44,6 +44,7 @@ def get_conda_pkgs(arch="linux-64"):
     return conda_pkgs_versions
 
 table = Table(show_header=True, header_style="bold magenta")
+table.max_width = None
 table.add_column("Package")
 
 availability = {}
@@ -73,12 +74,8 @@ for a in archs:
 table.add_column("Versions")
 upper_rows, bottom_rows = [], []
 
-longest_pkg_length = 0
-
 for name, pkg in availability.items():
     row = [name]
-    if len(name) > longest_pkg_length:
-        longest_pkg_length = len(name)
 
     versions = set()
     is_upper = False
@@ -107,8 +104,6 @@ for row in upper_rows:
     table.add_row(*row)
 for row in bottom_rows:
     table.add_row(*row)
-
-table.columns[0].width = longest_pkg_length + 1
 
 console.print(table)
 console.save_html(distro + ".html")
