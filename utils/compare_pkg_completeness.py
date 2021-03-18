@@ -43,7 +43,7 @@ def get_conda_pkgs(arch="linux-64"):
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
     return conda_pkgs_versions
 
-table = Table(show_header=True, header_style="bold magenta", width=130)
+table = Table(show_header=True, header_style="bold magenta", width=155)
 table.add_column("Package")
 
 availability = {}
