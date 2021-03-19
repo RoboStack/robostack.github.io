@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("distro", help="distro to check package completeness for", default="noetic")
 args = parser.parse_args()
 
-console = Console(record=True)
+console = Console(record=True, width=250)
 
 distro = args.distro
 
@@ -43,7 +43,7 @@ def get_conda_pkgs(arch="linux-64"):
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
     return conda_pkgs_versions
 
-table = Table(show_header=True, header_style="bold magenta", width=155)
+table = Table(show_header=True, header_style="bold magenta")
 table.add_column("Package")
 
 availability = {}
