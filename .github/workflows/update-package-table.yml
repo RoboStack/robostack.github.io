@@ -26,13 +26,16 @@ jobs:
       run: |
         python utils/compare_pkg_completeness.py foxy
     - name: Commit changes
+      id: commit
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add noetic.html
         git add foxy.html
         git commit -m "Update tables"
+      continue-on-error: true
     - name: Push changes
+      if: steps.commit.outcome == 'success'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
