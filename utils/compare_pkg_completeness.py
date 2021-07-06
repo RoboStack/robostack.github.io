@@ -73,6 +73,10 @@ for a in archs:
 table.add_column("Versions")
 upper_rows, bottom_rows = [], []
 
+num_pkgs_per_arch = {}
+for arch in archs:
+    num_pkgs_per_arch[arch] = 0
+
 for name, pkg in availability.items():
     row = [name]
 
@@ -83,6 +87,7 @@ for name, pkg in availability.items():
             row.append("[green]✔")
             is_upper = True
             versions |= pkg[arch]
+            num_pkgs_per_arch[arch] = num_pkgs_per_arch[arch] + 1
         else:
             row.append("[red]✖")
 
@@ -102,7 +107,16 @@ bottom_rows = sorted(bottom_rows, key=lambda x: x[0])
 for row in upper_rows:
     table.add_row(*row)
 for row in bottom_rows:
-    table.add_row(*row)
+    if row == bottom_rows[-1]:
+        table.add_row(*row, end_section=True)
+    else:
+        table.add_row(*row)
+
+summary_row = ["Number of available packages"]
+for arch in archs:
+    summary_row.append(f"{num_pkgs_per_arch[arch]} / {len(availability)}")
+summary_row.append("")
+table.add_row(*summary_row, style="bold magenta")
 
 console.print(table)
 console.save_html(distro + ".html")
