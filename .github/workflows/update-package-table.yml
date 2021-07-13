@@ -21,10 +21,10 @@ jobs:
       uses: actions/checkout@v2
     - name: Create table noetic
       run: |
-        python utils/compare_pkg_completeness.py noetic
+        python utils/compare_pkg_completeness.py noetic robostack
     - name: Create table foxy
       run: |
-        python utils/compare_pkg_completeness.py foxy
+        python utils/compare_pkg_completeness.py foxy robostack
     - name: Create table galactic
       run: |
         python utils/compare_pkg_completeness.py galactic robostack-experimental
