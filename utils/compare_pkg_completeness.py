@@ -8,14 +8,16 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("distro", help="distro to check package completeness for", default="noetic")
+parser.add_argument("channel", help="channel to be used", default="robostack")
 args = parser.parse_args()
 
 console = Console(record=True, width=250)
 
 distro = args.distro
+channel = args.channel
 
 rosdistro_pkgs = "https://raw.githubusercontent.com/ros/rosdistro/master/{distro}/distribution.yaml".format(distro=distro)
-conda_pkgs_url = "https://conda.anaconda.org/robostack/{arch}/repodata.json"
+conda_pkgs_url = "https://conda.anaconda.org/{channel}/{arch}/repodata.json"
 
 rosdistro_pkgs = yaml.safe_load(requests.get(rosdistro_pkgs).text)
 
@@ -34,7 +36,7 @@ def to_ros(pkg):
     return f"ros-{distro}-{pkg.replace('_', '-')}"
 
 def get_conda_pkgs(arch="linux-64"):
-    conda_pkgs = requests.get(conda_pkgs_url.format(arch=arch)).json()
+    conda_pkgs = requests.get(conda_pkgs_url.format(arch=arch, channel=channel)).json()
     conda_pkgs_versions = {}
     for pkgname, pkg in conda_pkgs['packages'].items():
         if pkg["name"] in conda_pkgs_versions:
