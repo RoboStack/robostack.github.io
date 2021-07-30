@@ -60,6 +60,8 @@ def add_arch(arch="linux-64"):
             availability[pkg] = {arch: versions}
 
     for pkg in available_pkgs:
+        if available_pkgs[pkg] is None:
+            continue
         rpkg = to_ros(pkg)
         if rpkg in conda_pkgs_versions:
             add_available(arch, rpkg, conda_pkgs_versions[rpkg])
