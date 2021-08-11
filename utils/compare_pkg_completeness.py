@@ -30,7 +30,7 @@ for reponame, repo in rosdistro_pkgs['repositories'].items():
         for pname in pkgs:
             available_pkgs[pname] = repo['release'].get('version', None)
     else:
-        available_pkgs[reponame] = repo['release']['version']
+        available_pkgs[reponame] = repo['release'].get('version', None)
 
 def to_ros(pkg):
     return f"ros-{distro}-{pkg.replace('_', '-')}"
