@@ -16,7 +16,7 @@ jobs:
         python-version: '3.8'
     - name: Install dependencies
       run: |
-        pip install pyyaml requests rich
+        pip install pyyaml requests
     - name: Checkout robostack.github.io
       uses: actions/checkout@v2
     - name: Create table noetic
@@ -33,9 +33,9 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add noetic.html
-        git add foxy.html
-        git add galactic.html
+        git add docs/noetic.md
+        git add docs/foxy.md
+        git add docs/galactic.md
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
