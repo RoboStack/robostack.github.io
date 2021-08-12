@@ -1,19 +1,18 @@
 site_name: RoboStack
 repo_url: https://github.com/RoboStack/robostack.github.io
-edit_uri: edit/master/
+edit_uri: edit/master/docs/
 nav:
     - Home: index.md
     - What's New: WhatsNew.md
     - Getting Started: GettingStarted.md
-    - ROS1:
-      - Noetic: noetic.md
-    - ROS2:
-      - Foxy: foxy.md
-      - Galactic: galactic.md
-        
+    - Available Packages:
+      - ROS1 Noetic: noetic.md
+      - Foxy2: foxy.md
+      - Galactic2: galactic.md
     - Support:
         - Create an Issue: https://github.com/RoboStack/robostack.github.io
         - Contributing: Contributing.md
+
 theme: material
 markdown_extensions:
   - attr_list
@@ -29,4 +28,3 @@ strict: true
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
   - javascripts/tables.js
-
