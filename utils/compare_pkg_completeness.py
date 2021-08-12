@@ -44,7 +44,7 @@ def get_conda_pkgs(arch="linux-64"):
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
     return conda_pkgs_versions
 
-f.write("| Package { data-sort-method='none' } | ")
+f.write("| Package | ")
 availability = {}
 
 def add_arch(arch="linux-64"):
