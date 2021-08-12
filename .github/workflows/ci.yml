@@ -4,6 +4,9 @@ on:
     branches: 
       - master
       - main
+  workflow_run:
+    workflows: ["Update distro tables"]
+    types: [completed]
 jobs:
   deploy:
     runs-on: ubuntu-latest
