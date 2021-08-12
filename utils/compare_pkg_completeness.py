@@ -1,8 +1,7 @@
+import os
 import yaml
 import json
 import requests
-from rich.table import Table
-from rich.console import Console
 import argparse
 
 
@@ -11,10 +10,10 @@ parser.add_argument("distro", help="distro to check package completeness for", d
 parser.add_argument("channel", help="channel to be used", default="robostack")
 args = parser.parse_args()
 
-console = Console(record=True, width=250)
-
 distro = args.distro
 channel = args.channel
+
+f = open(os.path.join("docs", distro + ".md"), 'w')
 
 rosdistro_pkgs = "https://raw.githubusercontent.com/ros/rosdistro/master/{distro}/distribution.yaml".format(distro=distro)
 conda_pkgs_url = "https://conda.anaconda.org/{channel}/{arch}/repodata.json"
@@ -45,9 +44,7 @@ def get_conda_pkgs(arch="linux-64"):
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
     return conda_pkgs_versions
 
-table = Table(show_header=True, header_style="bold magenta")
-table.add_column("Package")
-
+f.write("| Package | ")
 availability = {}
 
 def add_arch(arch="linux-64"):
@@ -71,11 +68,17 @@ def add_arch(arch="linux-64"):
 archs = ('linux-64', 'win-64', 'osx-64', 'linux-aarch64', 'osx-arm64')
 
 for a in archs:
-    table.add_column(a)
+    f.write(f" {a} |")
     add_arch(a)
 
-table.add_column("Versions")
-upper_rows, bottom_rows = [], []
+f.write(" Version |\n")
+
+f.write("|--")
+for a in archs:
+    f.write("|--")
+f.write("|--|\n")
+
+rows = []
 
 num_pkgs_per_arch = {}
 for arch in archs:
@@ -85,44 +88,32 @@ for name, pkg in availability.items():
     row = [name]
 
     versions = set()
-    is_upper = False
     for arch in archs:
         if pkg.get(arch):
-            row.append("[green]✔")
-            is_upper = True
+            row.append(":heavy_check_mark:")
             versions |= pkg[arch]
             num_pkgs_per_arch[arch] = num_pkgs_per_arch[arch] + 1
         else:
-            row.append("[red]✖")
+            row.append(":x:")
 
     if versions:
         row.append(', '.join(sorted(versions)))
     else:
         row.append('')
 
-    if is_upper:
-        upper_rows.append(row)
-    else:
-        bottom_rows.append(row)
+    rows.append(row)
 
-upper_rows = sorted(upper_rows, key=lambda x: x[0])
-bottom_rows = sorted(bottom_rows, key=lambda x: x[0])
+rows = sorted(rows, key=lambda x: x[0])
 
-for row in upper_rows:
-    table.add_row(*row)
-for row in bottom_rows:
-    if row == bottom_rows[-1]:
-        table.add_row(*row, end_section=True)
-    else:
-        table.add_row(*row)
+for row in rows:
+    for cell in row:
+        f.write(f"| {cell} ")
+    f.write(" |\n")
 
-summary_row = ["Number of available packages"]
+f.write("| Number of available packages | ")
 for arch in archs:
-    summary_row.append(f"{num_pkgs_per_arch[arch]} / {len(availability)}")
-summary_row.append("")
-table.add_row(*summary_row, style="bold magenta")
+    f.write(f" {num_pkgs_per_arch[arch]} / {len(availability)} |")
 
-console.print(table)
-console.save_html(distro + ".html")
+f.close()
 
 # import IPython; IPython.embed()
