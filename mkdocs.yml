@@ -28,3 +28,8 @@ strict: true
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
   - javascripts/tables.js
+plugins:
+  - minify:
+      minify_html: true
+      htmlmin_opts:
+          remove_comments: true
