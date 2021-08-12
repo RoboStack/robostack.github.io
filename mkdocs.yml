@@ -7,8 +7,8 @@ nav:
     - Getting Started: GettingStarted.md
     - Available Packages:
       - ROS1 Noetic: noetic.md
-      - Foxy2: foxy.md
-      - Galactic2: galactic.md
+      - ROS2 Foxy: foxy.md
+      - ROS2 Galactic: galactic.md
     - Support:
         - Create an Issue: https://github.com/RoboStack/robostack.github.io
         - Contributing: Contributing.md
