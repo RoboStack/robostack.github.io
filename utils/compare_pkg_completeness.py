@@ -44,7 +44,7 @@ def get_conda_pkgs(arch="linux-64"):
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
     return conda_pkgs_versions
 
-f.write("| Package | ")
+f.write("| Package { data-sort-method='none' } | ")
 availability = {}
 
 def add_arch(arch="linux-64"):
@@ -90,11 +90,11 @@ for name, pkg in availability.items():
     versions = set()
     for arch in archs:
         if pkg.get(arch):
-            row.append(":heavy_check_mark:")
+            row.append(":heavy_check_mark: { data-sort='1' }")
             versions |= pkg[arch]
             num_pkgs_per_arch[arch] = num_pkgs_per_arch[arch] + 1
         else:
-            row.append(":x:")
+            row.append(":x: { data-sort='0' }")
 
     if versions:
         row.append(', '.join(sorted(versions)))
