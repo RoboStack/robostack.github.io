@@ -1,5 +1,5 @@
 # RoboStack
-Welcome to RoboStack - a bundling of The Robot Operating System (ROS) by Open Robotics for Linux, Mac and Windows using the Condaforge package manager. 
+Welcome to RoboStack - a bundling of the Robot Operating System (ROS) by Open Robotics for Linux, Mac and Windows using the Conda package manager.
 
 
 ```
