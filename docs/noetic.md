@@ -1,4 +1,4 @@
-| Package { data-sort-method='none' } |  linux-64 | win-64 | osx-64 | linux-aarch64 | osx-arm64 | Version |
+| Package |  linux-64 | win-64 | osx-64 | linux-aarch64 | osx-arm64 | Version |
 |--|--|--|--|--|--|--|
 | ros-noetic-abb-egm-msgs | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.5.2  |
 | ros-noetic-abb-rapid-msgs | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.5.2  |
