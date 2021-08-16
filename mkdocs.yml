@@ -1,4 +1,5 @@
 site_name: RoboStack
+site_url: https://robostack.github.io
 repo_url: https://github.com/RoboStack/robostack.github.io
 edit_uri: edit/master/docs/
 nav:
