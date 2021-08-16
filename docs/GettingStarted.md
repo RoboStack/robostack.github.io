@@ -15,8 +15,9 @@ mamba create -n ros_env python=3.8
 conda activate ros_env
 # this adds the conda-forge channel to the new created environment configuration 
 conda config --env --add channels conda-forge
-# and the robostack channel
-conda config --env --add channels robostack-experimental
+# and the robostack channels
+conda config --env --add channels robostack  # for Foxy & Noetic
+conda config --env --add channels robostack-experimental  # for Galactic
 # it's very much advised to use strict channel priority
 conda config --env --set channel_priority strict
 
