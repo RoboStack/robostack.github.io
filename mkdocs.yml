@@ -11,11 +11,11 @@ nav:
       - ROS2 Foxy: foxy.md
       - ROS2 Galactic: galactic.md
     - Support:
-        - Create an Issue (documentation): https://github.com/RoboStack/robostack.github.io/issues/new
-        - Create an Issue (ROS Noetic): https://github.com/RoboStack/ros-noetic/issues/new
-        - Create an Issue (ROS2 Foxy): https://github.com/RoboStack/ros-foxy/issues/new
-        - Create an Issue (ROS2 Galactic): https://github.com/RoboStack/ros-galactic/issues/new
-        - Contributing: Contributing.md
+      - Create an Issue (docs): https://github.com/RoboStack/robostack.github.io/issues/new
+      - Create an Issue (ROS Noetic): https://github.com/RoboStack/ros-noetic/issues/new
+      - Create an Issue (ROS2 Foxy): https://github.com/RoboStack/ros-foxy/issues/new
+      - Create an Issue (ROS2 Galactic): https://github.com/RoboStack/ros-galactic/issues/new
+    - Contributing: Contributing.md
 
 theme: material
 markdown_extensions:
