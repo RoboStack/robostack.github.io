@@ -25,7 +25,7 @@ conda config --env --set channel_priority strict
 mamba install ros-galactic-desktop  # (or: mamba install ros-noetic-desktop)
 
 # optionally, install some compiler packages if you want to e.g. build packages in a colcon_ws:
-mamba install compilers cmake pkg-config make ninja colcon-common-extensions make
+mamba install compilers cmake pkg-config make ninja colcon-common-extensions
 
 # on Linux and osx (but not Windows) for ROS1 you might want to:
 mamba install catkin_tools
