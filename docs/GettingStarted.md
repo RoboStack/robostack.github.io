@@ -8,7 +8,7 @@ To get started with conda (or mamba) as package managers, you need to have a bas
 
 ```bash
 # if you don't have mamba yet, install it first (not needed when using mambaforge):
-conda install mamba
+conda install mamba -c conda-forge
 
 # now create a new environment
 mamba create -n ros_env python=3.8
