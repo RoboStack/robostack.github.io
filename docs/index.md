@@ -3,11 +3,12 @@ Welcome to RoboStack - a bundling of the Robot Operating System (ROS) by Open Ro
 
 If you use RoboStack in an academic article, please cite the following [paper](https://arxiv.org/abs/2104.12910):
 ```BibTeX
-@article{fischer2021robostack,
-  title={RoboStack: Using the Robot Operating System alongside the Conda and Jupyter Data Science Ecosystems},
-  author={Fischer, Tobias and Vollprecht, Wolf and Traversaro, Silvio and Yen, Sean and Herrero, Carlos and Milford, Michael},
-  journal={arXiv preprint arXiv:2104.12910},
-  year={2021}
+@article{FischerRAM2021,
+    title={A RoboStack Tutorial: Using the Robot Operating System Alongside the Conda and Jupyter Data Science Ecosystems},
+    author={Tobias Fischer and Wolf Vollprecht and Silvio Traversaro and Sean Yen and Carlos Herrero and Michael Milford},
+    journal={IEEE Robotics and Automation Magazine},
+    year={2021},
+    doi={10.1109/MRA.2021.3128367},
 }
 ```
 
