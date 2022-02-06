@@ -13,13 +13,12 @@ conda install mamba -c conda-forge
 # now create a new environment
 mamba create -n ros_env python=3.8
 conda activate ros_env
+
 # this adds the conda-forge channel to the new created environment configuration 
 conda config --env --add channels conda-forge
 # and the robostack channels
-conda config --env --add channels robostack  # for Foxy & Noetic
-conda config --env --add channels robostack-experimental  # for Galactic
-# it's very much advised to use strict channel priority
-conda config --env --set channel_priority strict
+conda config --env --add channels robostack
+conda config --env --add channels robostack-experimental
 
 # Install the version of ROS you are interested in:
 mamba install ros-galactic-desktop  # (or: mamba install ros-noetic-desktop)
