@@ -378,6 +378,7 @@
 | ros-noetic-eigenpy | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.5.0, 2.6.1, 2.6.3, 2.6.4, 2.6.8, 2.6.9  |
 | ros-noetic-eiquadprog | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.2.3  |
 | ros-noetic-eml | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.8.15  |
+| ros-noetic-end-effector | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ergodic-exploration | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.0.0  |
 | ros-noetic-ethercat-grant | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.2.5  |
 | ros-noetic-ethercat-hardware | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1722,4 +1723,4 @@
 | ros-noetic-ypspur | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.20.2  |
 | ros-noetic-ypspur-ros | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.3.4, 0.3.5  |
 | ros-noetic-zbar-ros | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.3.0  |
-| Number of available packages |  1291 / 1722 | 715 / 1722 | 1030 / 1722 | 412 / 1722 | 342 / 1722 |
+| Number of available packages |  1291 / 1723 | 715 / 1723 | 1030 / 1723 | 412 / 1723 | 342 / 1723 |
