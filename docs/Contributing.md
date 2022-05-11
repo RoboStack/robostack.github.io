@@ -26,12 +26,12 @@ Sometimes, it may be required to patch the packages. An example of how to do so 
 
 1. Create a new conda environment and add the conda-forge and robostack channels:
 ```
-conda create -n robostackenv python=3.8
+conda create -n robostackenv python=3.9
 conda activate robostackenv
-conda config --append channels defaults
+conda config --remove channels defaults
 conda config --add channels conda-forge
 conda config --add channels robostack
-conda config --set channel_priority strict
+conda config --add channels robostack-experimental
 ```
 2. Install some dependencies: `mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa`
 3. Install vinca: `pip install git+https://github.com/RoboStack/vinca.git@master --no-deps`
