@@ -30,7 +30,7 @@ jobs:
         python utils/compare_pkg_completeness.py galactic robostack-experimental
     - name: Create table humble
       run: |
-        python utils/compare_pkg_completeness.py galactic robostack-experimental
+        python utils/compare_pkg_completeness.py humble robostack-humble
     - name: Commit changes
       id: commit
       run: |
