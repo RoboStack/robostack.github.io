@@ -10,11 +10,13 @@ nav:
       - ROS1 Noetic: noetic.md
       - ROS2 Foxy: foxy.md
       - ROS2 Galactic: galactic.md
+      - ROS2 Humble: humble.md
     - Support:
       - Create an Issue (docs): https://github.com/RoboStack/robostack.github.io/issues/new
       - Create an Issue (ROS Noetic): https://github.com/RoboStack/ros-noetic/issues/new
       - Create an Issue (ROS2 Foxy): https://github.com/RoboStack/ros-foxy/issues/new
       - Create an Issue (ROS2 Galactic): https://github.com/RoboStack/ros-galactic/issues/new
+      - Create an Issue (ROS2 Humble): https://github.com/RoboStack/ros-humble/issues/new
     - Contributing: Contributing.md
 
 theme: material

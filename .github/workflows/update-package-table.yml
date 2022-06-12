@@ -28,6 +28,9 @@ jobs:
     - name: Create table galactic
       run: |
         python utils/compare_pkg_completeness.py galactic robostack-experimental
+    - name: Create table humble
+      run: |
+        python utils/compare_pkg_completeness.py humble robostack-humble
     - name: Commit changes
       id: commit
       run: |
@@ -36,6 +39,7 @@ jobs:
         git add docs/noetic.md
         git add docs/foxy.md
         git add docs/galactic.md
+        git add docs/humble.md
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
