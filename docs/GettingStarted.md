@@ -19,9 +19,10 @@ conda config --env --add channels conda-forge
 # and the robostack channels
 conda config --env --add channels robostack
 conda config --env --add channels robostack-experimental
+conda config --env --add channels robostack-humble
 
 # Install the version of ROS you are interested in:
-mamba install ros-galactic-desktop  # (or: mamba install ros-noetic-desktop)
+mamba install ros-humble-desktop  # (or "mamba install ros-noetic-desktop" or "mamba install ros-galactic-desktop")
 
 # optionally, install some compiler packages if you want to e.g. build packages in a colcon_ws:
 mamba install compilers cmake pkg-config make ninja colcon-common-extensions
