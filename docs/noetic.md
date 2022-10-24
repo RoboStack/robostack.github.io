@@ -1376,6 +1376,7 @@
 | ros-noetic-robot-upstart | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.4.0, 0.4.1  |
 | ros-noetic-roboticsgroup-upatras-gazebo-plugins | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.2.0  |
 | ros-noetic-robotis-manipulator | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.1.1  |
+| ros-noetic-robotont-description | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-robotraconteur | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-rokubimini | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.5.9, 0.6.0, 0.6.1  |
 | ros-noetic-rokubimini-bus-manager | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.6.0, 0.6.1  |
@@ -1873,4 +1874,4 @@
 | ros-noetic-ypspur | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.20.2  |
 | ros-noetic-ypspur-ros | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.3.4, 0.3.5  |
 | ros-noetic-zbar-ros | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.3.0  |
-| Number of available packages |  1292 / 1873 | 717 / 1873 | 1030 / 1873 | 425 / 1873 | 362 / 1873 |
+| Number of available packages |  1292 / 1874 | 717 / 1874 | 1030 / 1874 | 425 / 1874 | 362 / 1874 |
