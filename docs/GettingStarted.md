@@ -11,15 +11,16 @@ To get started with conda (or mamba) as package managers, you need to have a bas
 conda install mamba -c conda-forge
 
 # now create a new environment
+# For ROS2 Humble
+mamba create -n ros_env python=3.10
+# For ROS1 Noetic and ROS2 Galactic
 mamba create -n ros_env python=3.9
 conda activate ros_env
 
 # this adds the conda-forge channel to the new created environment configuration 
 conda config --env --add channels conda-forge
-# and the robostack channels
-conda config --env --add channels robostack
-conda config --env --add channels robostack-experimental
-conda config --env --add channels robostack-humble
+# and the robostack channel
+conda config --env --add channels robostack-staging
 
 # Install the version of ROS you are interested in:
 mamba install ros-humble-desktop  # (or "mamba install ros-noetic-desktop" or "mamba install ros-galactic-desktop")
