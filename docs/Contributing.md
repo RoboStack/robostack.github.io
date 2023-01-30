@@ -26,17 +26,21 @@ Sometimes, it may be required to patch the packages. An example of how to do so 
 
 1. Create a new conda environment and add the conda-forge and robostack channels:
 ```
+# For ROS2:
+conda create -n robostackenv python=3.10
+# For ROS1:
 conda create -n robostackenv python=3.9
+
+# For both ROS1+2
 conda activate robostackenv
 conda config --remove channels defaults
 conda config --add channels conda-forge
-conda config --add channels robostack
-conda config --add channels robostack-experimental
+conda config --add channels robostack-staging
 ```
 2. Install some dependencies: `mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa`
 3. Install vinca: `pip install git+https://github.com/RoboStack/vinca.git@master --no-deps`
-4. Clone one of our repos: `git clone https://github.com/RoboStack/ros-noetic.git` (or: `git clone https://github.com/RoboStack/ros-galactic.git`)
-5. `cd ros-noetic` / `cd ros-galactic`
+4. Clone one of our repos: `git clone https://github.com/RoboStack/ros-noetic.git` (or: `git clone https://github.com/RoboStack/ros-humble.git`)
+5. `cd ros-noetic` / `cd ros-humble`
 6. `cp vinca_linux_64.yaml vinca.yaml` (replace with your platform as necessary)
 7. Modify `vinca.yaml` as you please, e.g. add new packages to be built.
 8. Run vinca to generate the recipe by executing `vinca --multiple`; the recipes will be located in the `recipes` folder
