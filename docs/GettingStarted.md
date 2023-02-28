@@ -12,15 +12,17 @@ conda install mamba -c conda-forge
 
 # now create a new environment
 # For ROS2 Humble
-mamba create -n ros_env python=3.10
+mamba create -n ros_env python=3.10 -c conda-forge
 # For ROS1 Noetic and ROS2 Galactic
-mamba create -n ros_env python=3.9
+mamba create -n ros_env python=3.9 -c conda-forge
 conda activate ros_env
 
 # this adds the conda-forge channel to the new created environment configuration 
 conda config --env --add channels conda-forge
 # and the robostack channel
 conda config --env --add channels robostack-staging
+# remove the defaults channel just in case, this might return an error if it is not in the list which is ok
+conda config --env --remove channels defaults
 
 # Install the version of ROS you are interested in:
 mamba install ros-humble-desktop  # (or "mamba install ros-noetic-desktop" or "mamba install ros-galactic-desktop")
