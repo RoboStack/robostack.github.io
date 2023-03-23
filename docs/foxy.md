@@ -389,6 +389,7 @@
 | ros-foxy-lanelet2-routing | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-lanelet2-traffic-rules | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-lanelet2-validation | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-foxy-laser-filters | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-laser-geometry | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 2.2.0  |
 | ros-foxy-laser-proc | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-launch | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.10.4  |
@@ -1068,6 +1069,10 @@
 | ros-foxy-velodyne-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-velodyne-pointcloud | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-velodyne-simulator | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-foxy-vesc | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-foxy-vesc-ackermann | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-foxy-vesc-driver | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-foxy-vesc-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-vision-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-vision-opencv | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-visp | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1100,4 +1105,4 @@
 | ros-foxy-yaml-cpp-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 7.0.2  |
 | ros-foxy-zmqpp-vendor | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-foxy-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.3.6, 0.3.7  |
-| Number of available packages |  328 / 1100 | 201 / 1100 | 216 / 1100 | 0 / 1100 | 0 / 1100 |
+| Number of available packages |  328 / 1105 | 201 / 1105 | 216 / 1105 | 0 / 1105 | 0 / 1105 |
