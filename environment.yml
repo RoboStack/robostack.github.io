@@ -1,0 +1,8 @@
+name: robostack-docs-env
+channels:
+- conda-forge
+dependencies:
+  - mkdocs-material
+  - pip:
+    - mkdocs-redirects
+    - mkdocs-minify-plugin
