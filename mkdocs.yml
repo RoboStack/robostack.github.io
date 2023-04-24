@@ -22,8 +22,13 @@ nav:
 theme:
   name: material
   features:
+    - content.code.copy
     - content.action.edit
     - content.action.view
+    - content.tabs.link
+    - navigation.instant
+    - navigation.path
+
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
