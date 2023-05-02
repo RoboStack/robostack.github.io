@@ -11,8 +11,10 @@ nav:
       - ROS2 Foxy: foxy.md
       - ROS2 Galactic: galactic.md
       - ROS2 Humble: humble.md
+      - JupyterRos: JupyterRos.md
     - Support: support.md
     - Contributing: Contributing.md
+    - FAQ: FAQ.md
 
 theme:
   name: material
