@@ -23,3 +23,14 @@ First, make sure that the package is installed; in the example case it would be 
 ### Can I use RoboStack in a non-conda virtual environment?
 RoboStack is based on conda-forge and will not work without conda. However, check out [rospypi](https://github.com/rospypi/simple) which can run in a pure Python virtualenv. rospypi supports tf2 and other binary packages.
 
+### What to do if I have Python-related problems during the build of custom messages?
+
+It is possible that if you are having problems in finding the Python installed in your environment, and for some reason the Python of your system is found instead. To workaround these kind of problems, a trick is to explicitly specify which Python to use to CMake, via: 
+~~~
+--cmake-args "-DPython_EXECUTABLE=$CONDA_PYTHON_EXE  -DPython3_EXECUTABLE=$CONDA_PYTHON_EXE -DPYTHON_EXECUTABLE=$CONDA_PYTHON_EXE"
+~~~
+if you are using colcon or:
+~~~
+-DPython_EXECUTABLE=$CONDA_PYTHON_EXE  -DPython3_EXECUTABLE=$CONDA_PYTHON_EXE -DPYTHON_EXECUTABLE=$CONDA_PYTHON_EXE
+~~~
+if you are invoking CMake directly. If you are on Windows' Command Prompt, substitute `$CONDA_PYTHON_EXE` with `%CONDA_PYTHON_EXE%`.
