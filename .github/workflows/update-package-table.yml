@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Create table noetic
       run: |
-        python utils/compare_pkg_completeness.py noetic robostack
+        python utils/compare_pkg_completeness.py noetic robostack-staging
     - name: Create table foxy
       run: |
         python utils/compare_pkg_completeness.py foxy robostack
@@ -30,7 +30,7 @@ jobs:
         python utils/compare_pkg_completeness.py galactic robostack-experimental
     - name: Create table humble
       run: |
-        python utils/compare_pkg_completeness.py humble robostack-humble
+        python utils/compare_pkg_completeness.py humble robostack-staging
     - name: Commit changes
       id: commit
       run: |
