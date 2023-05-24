@@ -24,8 +24,9 @@ Sometimes, it may be required to patch the packages. An example of how to do so 
 
 # Testing changes locally
 
-1. Create a new conda environment and add the conda-forge and robostack channels:
-```
+```bash
+# First, create a new conda environment and add the conda-forge and robostack channels:
+
 # For ROS2:
 conda create -n robostackenv python=3.10
 # For ROS1:
@@ -36,15 +37,35 @@ conda activate robostackenv
 conda config --remove channels defaults
 conda config --add channels conda-forge
 conda config --add channels robostack-staging
+
+# Install some dependencies
+mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa
+
+# Install vinca
+pip install git+https://github.com/RoboStack/vinca.git@master --no-deps
+
+# Clone the relevant repo
+git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git
+
+# Move in the newly cloned repo
+cd ros-humble  # or: cd ros-noetic
+
+# Make a copy of the relevant vinca file
+cp vinca_linux_64.yaml vinca.yaml  # replace with your platform as necessary
+
+# Now modify vinca.yaml as you please, e.g. add new packages to be built
+code vinca.yaml
+
+# Run vinca to generate the recipe; the recipes will be located in the `recipes` folder
+vinca --multiple
+
+# Build the recipe using boa:
+boa build recipes -m ./.ci_support/conda_forge_pinnings.yaml -m ./conda_build_config.yaml
+
+# You can also generate an azure pipeline locally, e.g.
+vinca-azure -d recipes -t mytriggerbranch -p linux-64
+# which will create a `linux.yml` file that contains the azure pipeline definition
 ```
-2. Install some dependencies: `mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa`
-3. Install vinca: `pip install git+https://github.com/RoboStack/vinca.git@master --no-deps`
-4. Clone one of our repos: `git clone https://github.com/RoboStack/ros-noetic.git` (or: `git clone https://github.com/RoboStack/ros-humble.git`)
-5. `cd ros-noetic` / `cd ros-humble`
-6. `cp vinca_linux_64.yaml vinca.yaml` (replace with your platform as necessary)
-7. Modify `vinca.yaml` as you please, e.g. add new packages to be built.
-8. Run vinca to generate the recipe by executing `vinca --multiple`; the recipes will be located in the `recipes` folder
-9. Build the recipe using boa: `boa build recipes -m ./.ci_support/conda_forge_pinnings.yaml -m ./conda_build_config.yaml`
 
 # How does it work?
 - The `vinca.yaml` file specifies which packages should be built. 

@@ -1,5 +1,5 @@
 
-### When running `catkin` or `catkin_make` 
+### What to do in case of "Multiple packages found with the same name"
  When running `catkin` or `catkin_make` I get errors that "Multiple packages found with the same name", e.g.
 ```
 /Users/me/miniconda3/envs/robostackenv/share/catkin/cmake/em/order_packages.cmake.em:23: error: <class 'RuntimeError'>: Multiple packages found with the same name "catkin":
@@ -8,7 +8,7 @@
 ```
 You probably installed conda or mamba into your `robostackenv`. However, conda and mamba should only be installed in your `base` environment. Try setting up a new environment without `conda` and `mamba` installed into that environment.
 
-### When trying to build packages, 
+### What to do if packages could not be found?
 When trying to build packages, you get CMake errors that packages could not be found, such as
 ```
 CMake Error at /Users/me/miniconda3/envs/robostackenv/share/catkin/cmake/catkinConfig.cmake:83 (find_package):

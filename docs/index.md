@@ -1,5 +1,5 @@
 # RoboStack
-Welcome to RoboStack - a bundling of the Robot Operating System (ROS) by Open Robotics for Linux, Mac and Windows using the Conda package manager. We provide ROS packages for ROS1 Noetic, ROS2 Foxy and ROS2 Galactic (experimental), as well as a variety of ROS related plugins for Jupyter notebooks.
+Welcome to RoboStack - a bundling of the Robot Operating System (ROS) by Open Robotics for Linux, Mac and Windows using the Conda package manager. We provide ROS packages for ROS1 Noetic and ROS2 Humble (as well as unsupported Melodic/Foxy/Galactic packages), as well as a variety of ROS related plugins for Jupyter notebooks.
 
 If you use RoboStack in an academic article, please cite the following [paper](https://arxiv.org/abs/2104.12910):
 ```BibTeX
@@ -34,3 +34,7 @@ Please see the "Available Packages" links in the menu. If a package is not yet a
 
 ## How to get involved?
 We are very keen to involve more collaborators. Join us on [Gitter](https://gitter.im/RoboStack/Lobby) and check out our [Contribution guidelines](https://robostack.github.io/Contributing.html).
+
+## Overview video
+Check out our IROS 2022 presentation for a 7 minute teaser:
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/QJE9a1zCSRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
