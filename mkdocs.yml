@@ -16,6 +16,8 @@ nav:
     - Contributing: Contributing.md
     - FAQ: FAQ.md
 
+extra_css: [extra.css]
+
 theme:
   name: material
   features:

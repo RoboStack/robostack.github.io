@@ -37,4 +37,6 @@ We are very keen to involve more collaborators. Join us on [Gitter](https://gitt
 
 ## Overview video
 Check out our IROS 2022 presentation for a 7 minute teaser:
+<div class="video-wrapper">
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/QJE9a1zCSRM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
