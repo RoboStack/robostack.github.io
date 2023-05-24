@@ -15,7 +15,7 @@ You can also contribute by following the guidelines in our [contribution](Contri
 
 * [ROS Noetic](https://github.com/RoboStack/ros-noetic/issues/new)
 * [ROS2 Humble](https://github.com/RoboStack/ros-humble/issues/new)
-* [ROS2 Galactic](https://github.com/RoboStack/ros-galactic/issues/new)
-* [ROS2 Foxy](https://github.com/RoboStack/ros-foxy/issues/new)
+* [ROS2 Galactic](https://github.com/RoboStack/ros-galactic/issues/new) (not actively maintained anymore)
+* [ROS2 Foxy](https://github.com/RoboStack/ros-foxy/issues/new) (not actively maintained anymore)
 
 By submitting your issue to the appropriate repo, we can better understand and address your concerns. Thank you for helping us improve the RoboStack ecosystem! 
