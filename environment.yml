@@ -3,6 +3,7 @@ channels:
 - conda-forge
 dependencies:
   - mkdocs-material
+  - pip
   - pip:
     - mkdocs-redirects
     - mkdocs-minify-plugin
