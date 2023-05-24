@@ -11,24 +11,35 @@ nav:
       - ROS2 Foxy: foxy.md
       - ROS2 Galactic: galactic.md
       - ROS2 Humble: humble.md
-    - Support:
-      - Create an Issue (docs): https://github.com/RoboStack/robostack.github.io/issues/new
-      - Create an Issue (ROS Noetic): https://github.com/RoboStack/ros-noetic/issues/new
-      - Create an Issue (ROS2 Foxy): https://github.com/RoboStack/ros-foxy/issues/new
-      - Create an Issue (ROS2 Galactic): https://github.com/RoboStack/ros-galactic/issues/new
-      - Create an Issue (ROS2 Humble): https://github.com/RoboStack/ros-humble/issues/new
+      - JupyterRos: JupyterRos.md
+    - Support: support.md
     - Contributing: Contributing.md
+    - FAQ: FAQ.md
 
-theme: material
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - content.tabs.link
+    - navigation.instant
+    - navigation.path
+
 markdown_extensions:
-  - attr_list
-  - pymdownx.tabbed
-  - pymdownx.superfences
   - pymdownx.highlight:
-      use_pygments: true
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - attr_list
+  - pymdownx.tabbed:
+      alternate_style: true 
   - pymdownx.emoji:      
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+
 use_directory_urls: false
 strict: true
 extra_javascript:
