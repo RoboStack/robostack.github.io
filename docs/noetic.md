@@ -650,7 +650,7 @@
 | ros-noetic-hector-xacro-tools | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-hls-lfcd-lds-driver | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.1.2  |
 | ros-noetic-hokuyo3d | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| ros-noetic-hpp-fcl | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-hpp-fcl | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 2.3.0  |
 | ros-noetic-hri | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-hri-actions-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-hri-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -918,7 +918,7 @@
 | ros-noetic-mavlink | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 2022.12.30  |
 | ros-noetic-mavros | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.15.0  |
 | ros-noetic-mavros-extras | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.15.0  |
-| ros-noetic-mavros-msgs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.15.0, 1.16.0  |
+| ros-noetic-mavros-msgs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.15.0, 1.16.0  |
 | ros-noetic-mbf-abstract-core | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.4.0  |
 | ros-noetic-mbf-abstract-nav | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-mbf-costmap-core | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.4.0  |
@@ -956,9 +956,9 @@
 | ros-noetic-mia-hand-ros-control | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-mia-hand-ros-pkgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-microstrain-3dmgx2-imu | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| ros-noetic-microstrain-inertial-driver | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 3.0.1  |
+| ros-noetic-microstrain-inertial-driver | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 3.0.1  |
 | ros-noetic-microstrain-inertial-examples | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| ros-noetic-microstrain-inertial-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 3.0.1  |
+| ros-noetic-microstrain-inertial-msgs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 3.0.1  |
 | ros-noetic-microstrain-inertial-rqt | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-mikrotik-swos-tools | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-mini-maxwell | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1878,7 +1878,7 @@
 | ros-noetic-urg-c | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.0.405  |
 | ros-noetic-urg-node | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 0.1.18  |
 | ros-noetic-urg-stamped | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| ros-noetic-usb-cam | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-usb-cam | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.3.7  |
 | ros-noetic-usb-cam-controllers | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-usb-cam-hardware | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-usb-cam-hardware-interface | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1968,4 +1968,4 @@
 | ros-noetic-zbar-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth-image-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| Number of available packages |  442 / 1968 | 374 / 1968 | 408 / 1968 | 391 / 1968 | 401 / 1968 |
+| Number of available packages |  445 / 1968 | 374 / 1968 | 411 / 1968 | 392 / 1968 | 401 / 1968 |
