@@ -26,11 +26,11 @@ Sometimes, it may be required to patch the packages. An example of how to do so 
 1. Follow the [section for testing the changes locally](#Testing-changes-locally) until before running `vinca` 
 2. Modify the yaml file, but just enabling the package you want to create the patch for
 3. Proceed until the end of the section, until running `boa`. You can verify that the package compiles in the current state to ensure that any eventually arising problem is only due to your changes, but it is not required.
-4. Start a shell and go inside the repository to be edited. It should be located in `<mambaforge root>/envs/robostackenv/conda-bld/<package name>/work/<package name>/src/work` 
+4. Start a shell and go inside the repository to be edited. It should be located in `$MAMBA_ROOT_PREFIX/envs/robostackenv/conda-bld/<package name>/work/<package name>/src/work` 
 5. Apply the changes that you would like to store into the patch
 6. Create a patch file with `git diff > changes.patch`
 7. Check that the patch contains the intended changes
-8. Move the file into the `patches` directory of this repository, renaming it according to the naming convention. If the changes are portable across all supported operating system, the file should be called `<package name>.patch`; otherwise, `<package name>.<win/lin/mac>.patch`
+8. Move the file into the `patches` directory of this repository, renaming it according to the naming convention. If the changes are portable across all supported operating system, the file should be called `<package name>.patch`; otherwise, `<package name>.<win/linux/osx>.patch`
 9. Rerun `boa` to ensure that the patching succeeds and the package builds without errors
 10. Commit the new file, push to your fork and create a PR
 
