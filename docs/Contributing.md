@@ -62,6 +62,10 @@ conda config --add channels robostack-staging
 # Install some dependencies
 mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa
 
+# Override conda-installed boa with the latest from source as a workaround for
+# https://github.com/mamba-org/boa/issues/284
+pip install git+https://github.com/mamba-org/boa@81dc74a9974ecd02494b300fb97a0a7b2f186afc --no-deps
+
 # Install vinca
 pip install git+https://github.com/RoboStack/vinca.git@master --no-deps
 
