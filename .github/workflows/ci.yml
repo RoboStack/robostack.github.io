@@ -11,9 +11,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: 3.x
       - run: pip install mkdocs-material mkdocs-minify-plugin
-      - run: mkdocs gh-deploy --force --strict=false
+      - run: mkdocs gh-deploy --force --no-strict
