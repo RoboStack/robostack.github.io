@@ -157,6 +157,22 @@ In the conda environment activation is the ROS activation included. There is no 
     ```
 
 
+## Updating
+Updating all packages in your environment is as easy as:
+
+=== "Mamba"
+    
+    ```bash
+    mamba update --all
+    ```
+
+=== "Micromamba"
+    
+    ```bash
+    micromamba update --all
+    ```
+
+
 ## Deactivating
 The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment. 
 
