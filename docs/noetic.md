@@ -443,6 +443,7 @@
 | ros-noetic-end-effector | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-er-public-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ergodic-exploration | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-ess-imu-driver | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ess-imu-ros1-uart-driver | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ethercat-grant | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ethercat-hardware | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -792,6 +793,7 @@
 | ros-noetic-jsk-pcl-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-jsk-pcl-ros-utils | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-jsk-perception | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-jsk-planning | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-jsk-pr2eus | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-jsk-recognition | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-jsk-recognition-msgs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.2.15  |
@@ -1208,6 +1210,9 @@
 | ros-noetic-pcl-conversions | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.7.4  |
 | ros-noetic-pcl-msgs | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.3.0  |
 | ros-noetic-pcl-ros | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.7.4  |
+| ros-noetic-pddl-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-pddl-planner | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-pddl-planner-viewer | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-people | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-people-msgs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 1.4.2  |
 | ros-noetic-people-tracking-filter | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1738,6 +1743,7 @@
 | ros-noetic-sick-scan | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-sick-scan-xd | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-sick-tim | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | 0.0.17  |
+| ros-noetic-sick-visionary-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-simple-grasping | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-simple-message | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-simulators | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.5.0  |
@@ -1814,6 +1820,7 @@
 | ros-noetic-swri-yaml-util | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-system-fingerprint | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-tablet-socket-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-task-compiler | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-taskflow | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-teb-local-planner | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.9.1  |
 | ros-noetic-teleop-legged-robots | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -2021,4 +2028,4 @@
 | ros-noetic-zbar-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth-image-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| Number of available packages |  543 / 2021 | 378 / 2021 | 414 / 2021 | 426 / 2021 | 403 / 2021 |
+| Number of available packages |  543 / 2028 | 378 / 2028 | 414 / 2028 | 426 / 2028 | 403 / 2028 |

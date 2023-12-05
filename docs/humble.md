@@ -334,6 +334,7 @@
 | ros-humble-fastcdr | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.0.24  |
 | ros-humble-fastrtps | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.6.3, 2.6.4  |
 | ros-humble-fastrtps-cmake-module | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.2.0  |
+| ros-humble-fields2cover | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-filters | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.1.0  |
 | ros-humble-find-object-2d | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-flexbe-behavior-engine | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -425,6 +426,7 @@
 | ros-humble-ibeo-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-iceoryx-binding-c | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.0.2  |
 | ros-humble-iceoryx-hoofs | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.0.2  |
+| ros-humble-iceoryx-introspection | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-iceoryx-posh | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.0.2  |
 | ros-humble-ifm3d-core | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-ign-ros2-control | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -735,6 +737,7 @@
 | ros-humble-pal-navigation-cfg-params | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-pal-statistics | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-pal-statistics-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-humble-pal-urdf-utils | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-parameter-traits | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.3.0  |
 | ros-humble-pcl-conversions | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 2.4.0  |
 | ros-humble-pcl-msgs | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 1.0.0  |
@@ -1393,4 +1396,4 @@
 | ros-humble-zmqpp-vendor | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-zstd-point-cloud-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-humble-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | 0.15.3, 0.15.4  |
-| Number of available packages |  595 / 1393 | 453 / 1393 | 505 / 1393 | 507 / 1393 | 492 / 1393 |
+| Number of available packages |  595 / 1396 | 453 / 1396 | 505 / 1396 | 507 / 1396 | 492 / 1396 |
