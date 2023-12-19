@@ -1927,6 +1927,7 @@
 | ros-noetic-ur10-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ur10e-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ur16e-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-noetic-ur20-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ur3-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ur3e-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-ur5-moveit-config | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -2030,4 +2031,4 @@
 | ros-noetic-zbar-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-noetic-zdepth-image-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
-| Number of available packages |  543 / 2030 | 378 / 2030 | 414 / 2030 | 426 / 2030 | 403 / 2030 |
+| Number of available packages |  543 / 2031 | 378 / 2031 | 414 / 2031 | 426 / 2031 | 403 / 2031 |
