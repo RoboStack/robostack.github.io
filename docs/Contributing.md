@@ -17,7 +17,7 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 # Adding new packages via pull requests
 You can open a pull request that will get build automatically in our CI.
 
-An example can be found [here](https://github.com/RoboStack/ros-noetic/pull/44). Simply add the required packages to the `vinca_*.yaml` files, where the * indicates the desired platform (linux_64, osx, win or linux_aarch64). Ideally, try to add packages to all of these platforms.
+An example can be found [here](https://github.com/RoboStack/ros-noetic/pull/44). Simply add the required packages to the `vinca_*.yaml` files, where the * indicates the desired platform (linux_64, osx, win or linux_aarch64). Ideally, try to add packages to all of these platforms. The name of the package is accepted both with underscores and dashes as word separators, but it is suggested to type the name of the package exactly as https://index.ros.org knows it.
 
 Sometimes, it may be required to patch the packages. An example of how to do so can be found in [this PR](https://github.com/RoboStack/ros-noetic/pull/32).
 
@@ -91,6 +91,8 @@ vinca-azure -d recipes -t mytriggerbranch -p linux-64
 # How does it work?
 - The `vinca.yaml` file specifies which packages should be built. 
   - Add the desired package under `packages_select_by_deps`. This will automatically pull in all dependencies of that package, too.
+  - The vinca.yaml files contain lots of commented-out package names. That is okay. Not all packages need to be rebuilt with every pull request. Do not be afraid if you see your package commented out after some time - it just means it is not being built now. For sure it will be built with next full rebuild. Full rebuilds happen occasionally (few times a year).
+    - If you want to request your package to be updated in between full rebuilds, just send a PR uncommenting the package.
   - Note that all packages that are already build in one of the channels listed under `skip_existing` will be skipped. You can also add your local channel to that list by e.g. adding `/home/ubuntu/miniconda3/conda-bld/linux-64/repodata.json`. 
   - If you want to manually skip packages, you can list them under `packages_skip_by_deps`.
   - If you set `skip_all_deps` to `True`, you will only build packages listed under `packages_select_by_deps` but none of their dependencies.
