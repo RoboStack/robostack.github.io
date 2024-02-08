@@ -37,3 +37,12 @@ if you are using colcon or:
 -DPython_EXECUTABLE=$CONDA_PREFIX/bin/python -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DPYTHON_EXECUTABLE=$CONDA_PREFIX/bin/python
 ~~~
 if you are invoking CMake directly. If you are on Windows' Command Prompt, substitute `$CONDA_PREFIX/bin/python` with `%CONDA_PREFIX%\python.exe`.
+
+### What to do if my conda environment C++ compiler is unable to find GL/gl.h?
+
+For OpenGL and related packages, conda-forge relies on the system version for loading libraries at run-time. But when compiling C/C++ code that includes those headers, it expects the cdt packages to be installed.
+
+On an x86-64 Linux platform you can install these with:
+~~~
+mamba install -c conda-forge -c robotology-staging mesa-libgl-devel-cos7-x86_64 mesa-dri-drivers-cos7-x86_64 libselinux-cos7-x86_64 libxxf86vm-cos7-x86_64
+~~~
