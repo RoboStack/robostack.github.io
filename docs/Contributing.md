@@ -48,22 +48,17 @@ To make code review easier, please consider manually porting the new hunks into 
 ```bash
 # First, create a new conda environment and add the conda-forge and robostack channels:
 
-# For ROS2:
-conda create -n robostackenv python=3.10
-# For ROS1:
-conda create -n robostackenv python=3.9
+micromamba create -n robostackenv python=3.11
 
-# For both ROS1+2
-conda activate robostackenv
-conda config --remove channels defaults
-conda config --add channels conda-forge
-conda config --add channels robostack-staging
+micromamba activate robostackenv
+micromamba config append channels conda-forge
+micromamba config append channels robostack-staging
 
 # Install some dependencies
-mamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa
+micromamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa
 
 # Install vinca
-pip install git+https://github.com/RoboStack/vinca.git@master --no-deps
+pip install git+https://github.com/RoboStack/vinca.git --no-deps
 
 # Clone the relevant repo
 git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git
