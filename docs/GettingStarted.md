@@ -74,7 +74,7 @@ conda install mamba -c conda-forge
 === "Mamba"
 
     ```bash title="Default tools to help with local development of ROS packages"
-    mamba install compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools
+    mamba install compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
     ```
 
     ```bash title="Additional dependencies for developing on windows"
@@ -91,7 +91,7 @@ conda install mamba -c conda-forge
 === "Micromamba"
 
     ```bash title="Default tools to help with local development of ROS packages"
-    micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions
+    micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
     ```
 
     ```bash title="Additional dependencies for developing on windows"
