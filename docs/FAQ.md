@@ -38,6 +38,8 @@ if you are using colcon or:
 ~~~
 if you are invoking CMake directly. If you are on Windows' Command Prompt, substitute `$CONDA_PREFIX/bin/python` with `%CONDA_PREFIX%\python.exe`.
 
+If you still encounter issues, you will also need to set `cmake_minimum_required` to at least version 3.15: `cmake_minimum_required(VERSION 3.15)` in your `CMakeLists.txt`. In order to remain compatible with older cmake versions, you can exploit the `policy_max` feature as such: `cmake_minimum_required(VERSION 3.5...3.15)`. Note that this is required because of [CMP0094](https://cmake.org/cmake/help/latest/policy/CMP0094.html) (see also https://github.com/RoboStack/ros-humble/issues/162).
+
 ### What to do if my conda environment C++ compiler is unable to find GL/gl.h?
 
 For OpenGL and related packages, conda-forge relies on the system version for loading libraries at run-time. But when compiling C/C++ code that includes those headers, it expects the cdt packages to be installed.
