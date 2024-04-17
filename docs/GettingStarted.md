@@ -25,7 +25,7 @@ conda install mamba -c conda-forge
 === "Mamba"
 
     ```bash title="Prepare an environment to use the correct channels"
-    mamba create -n ros_env
+    mamba create -n ros_env python=3.11
     mamba activate ros_env
 
     # this adds the conda-forge channel to the new created environment configuration 
@@ -56,7 +56,7 @@ conda install mamba -c conda-forge
 
     ```bash title="ROS1 Noetic"
     # Create a ros-noetic desktop environment
-    micromamba create -n ros_env -c conda-forge -c robostack-staging ros-noetic-desktop
+    micromamba create -n ros_env -c conda-forge -c robostack-staging ros-noetic-desktop python=3.11
 
     # Activate the environment
     micromamba activate ros_env
