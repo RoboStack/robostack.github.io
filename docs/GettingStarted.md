@@ -156,8 +156,13 @@ In the conda environment activation is the ROS activation included. There is no 
     micromamba activate ros_env
     rviz2
     ```
-
-
+If you run into "RLException: Unable to contact my own server" error on MacOS here are the instructions that you need to follow in order to resolve that issue:
+- Set up ROS_MASTER URI at 127.0.0.1 on port 11311 : `export ROS_MASTER_URI=http://127.0.0.1:11311`
+- Set up ROS_HOSTNAME : `export ROS_HOSTNAME=127.0.0.1`
+- Open the hosts file with a text editor like nano: `sudo nano /etc/hosts`
+- Add the following lines if they are not already present: `127.0.0.1   macbookpro` and `127.0.0.1   localhost`
+- Then save the file and restart your terminal.
+  
 ## Updating
 Updating all packages in your environment is as easy as:
 
