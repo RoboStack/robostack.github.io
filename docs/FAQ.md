@@ -23,7 +23,7 @@ First, make sure that the package is installed; in the example case it would be 
 ### Why does autocomplete not work in zsh environments?
 You will need to install https://github.com/conda-incubator/conda-zsh-completion
 
-### How to fix RLException error on MacOS(M Chip & Intel CPUs) ?
+### How to fix RLException error on MacOS (M Chip & Intel CPUs) ?
 If you run into "RLException: Unable to contact my own server" error on MacOS here are the instructions that you need to follow in order to resolve that issue:
 - Set up ROS_MASTER URI at 127.0.0.1 on port 11311 : `export ROS_MASTER_URI=http://127.0.0.1:11311`
 - Set up ROS_HOSTNAME : `export ROS_HOSTNAME=127.0.0.1`
