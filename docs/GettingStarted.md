@@ -157,7 +157,7 @@ In the conda environment activation is the ROS activation included. There is no 
     rviz2
     ```
 
-If you run into any issues or for any frequently asked questions, you can check the [FAQ page]([https://link-url-here.org](https://robostack.github.io/FAQ.html))
+If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
 ## Updating
 Updating all packages in your environment is as easy as:
