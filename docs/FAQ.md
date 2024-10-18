@@ -25,11 +25,13 @@ You will need to install https://github.com/conda-incubator/conda-zsh-completion
 
 ### How to fix RLException error on MacOS (M Chip & Intel CPUs) ?
 If you run into "RLException: Unable to contact my own server" error on MacOS here are the instructions that you need to follow in order to resolve that issue:
+
 - Set up ROS_MASTER URI at 127.0.0.1 on port 11311 : `export ROS_MASTER_URI=http://127.0.0.1:11311`
 - Set up ROS_HOSTNAME : `export ROS_HOSTNAME=127.0.0.1`
 - Open the hosts file with a text editor like nano: `sudo nano /etc/hosts`
 - Add the following lines if they are not already present: `127.0.0.1   macbookpro` and `127.0.0.1   localhost`
 - Then save the file and restart your terminal.
+
 
 ### Can I use RoboStack in a non-conda virtual environment?
 RoboStack is based on conda-forge and will not work without conda. However, check out [rospypi](https://github.com/rospypi/simple) which can run in a pure Python virtualenv. rospypi supports tf2 and other binary packages.
