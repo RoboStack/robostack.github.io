@@ -52,9 +52,17 @@ If you still encounter issues, you will also need to set `cmake_minimum_required
 
 ### What to do if my conda environment C++ compiler is unable to find GL/gl.h?
 
-For OpenGL and related packages, conda-forge relies on the system version for loading libraries at run-time. But when compiling C/C++ code that includes those headers, it expects the cdt packages to be installed.
+If you are using Windows or macOS, you do not need any additional package to find `GL/gl.h` and use `OpenGL`.
 
-On an x86-64 Linux platform you can install these with:
+Instead for using `OpenGL` on Linux, conda-forge packages the [`libglvnd`](https://gitlab.freedesktop.org/glvnd/libglvnd) OpenGL loader that contains the library required to link OpenGL, and you can install it with:
+
 ~~~
-mamba install -c conda-forge mesa-libgl-devel-cos7-x86_64 mesa-dri-drivers-cos7-x86_64 libselinux-cos7-x86_64 libxxf86vm-cos7-x86_64
+mamba install -c conda-forge libgl-devel
 ~~~
+
+For actually running OpenGL-applications on Linux, you also need to make sure that your distribution has installed the packages containing the OpenGL drivers for you GPU. 
+In most cases those should be already installed in your system, but in case they are not (tipically for headless systems or barebone containers) you can tipically add them with:
+
+- Debian/Ubuntu-based distributions: `sudo apt-get install libgl1-mesa-dri libglx-mesa0 libegl-mesa0`
+- Fedora-based distributions: `sudo dnf install mesa-libGL mesa-libEGL mesa-dri-drivers`
+
