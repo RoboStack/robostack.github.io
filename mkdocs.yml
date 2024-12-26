@@ -11,6 +11,7 @@ nav:
       - ROS2 Foxy: foxy.md
       - ROS2 Galactic: galactic.md
       - ROS2 Humble: humble.md
+      - ROS2 Jazzy: jazzy.md
       - JupyterRos: JupyterRos.md
     - Support: support.md
     - Contributing: Contributing.md
