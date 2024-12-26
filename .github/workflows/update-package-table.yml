@@ -33,7 +33,7 @@ jobs:
         python utils/compare_pkg_completeness.py humble robostack-staging
     - name: Create table jazzy
       run: |
-        python utils/compare_pkg_completeness.py jazzy robostack-staging
+        python utils/compare_pkg_completeness.py jazzy robostack-jazzy
     - name: Commit changes
       id: commit
       run: |
