@@ -1,1 +1,5 @@
 site
+
+# pixi environments
+.pixi
+*.egg-info

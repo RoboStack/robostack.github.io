@@ -37,11 +37,12 @@ def to_ros(pkg):
 def get_conda_pkgs(arch="linux-64"):
     conda_pkgs = requests.get(conda_pkgs_url.format(arch=arch, channel=channel)).json()
     conda_pkgs_versions = {}
-    for pkgname, pkg in conda_pkgs['packages'].items():
+    for pkgname, pkg in {**conda_pkgs.get('packages.conda', {}), **conda_pkgs.get('packages', {})}.items():
         if pkg["name"] in conda_pkgs_versions:
             conda_pkgs_versions[pkg["name"]].add(pkg["version"])
         else:
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
+    print(conda_pkgs_versions)
     return conda_pkgs_versions
 
 f.write("| Package | ")

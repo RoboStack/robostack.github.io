@@ -1,0 +1,17 @@
+[project]
+authors = ["Tobias Fischer <info@tobiasfischer.info>"]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "robostack-docs-env"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+mkdocs-material = "*"
+pip = "*"
+
+[pypi-dependencies]
+mkdocs-redirects = "*"
+mkdocs-minify-plugin = "*"
