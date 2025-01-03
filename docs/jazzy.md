@@ -1036,6 +1036,7 @@
 | ros-jazzy-rmw-gurumdds-cpp | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-rmw-implementation | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 2.15.2  |
 | ros-jazzy-rmw-implementation-cmake | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | 7.3.1  |
+| ros-jazzy-rmw-zenoh-cpp | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-robot-calibration | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-robot-calibration-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-robot-localization | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1483,9 +1484,10 @@
 | ros-jazzy-zbar-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zbar-ros-interfaces | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zenoh-bridge-dds | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-jazzy-zenoh-cpp-vendor | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zlib-point-cloud-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zmqpp-vendor | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zstd-image-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zstd-point-cloud-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | 0.26.3  |
-| Number of available packages |  262 / 1488 | 0 / 1488 | 4 / 1488 | 0 / 1488 | 59 / 1488 |
+| Number of available packages |  262 / 1490 | 0 / 1490 | 4 / 1490 | 0 / 1490 | 59 / 1490 |
