@@ -73,7 +73,7 @@ conda install mamba -c conda-forge
 
     ```bash title="ROS2 Jazzy"
     # Create a ros-jazzy desktop environment
-    micromamba create -n ros_env -c conda-forge -c robostack-staging ros-jazzy-desktop
+    micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
 
     # Activate the environment
     micromamba activate ros_env
