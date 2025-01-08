@@ -30,8 +30,10 @@ conda install mamba -c conda-forge
 
     # this adds the conda-forge channel to the new created environment configuration 
     conda config --env --add channels conda-forge
-    # and the robostack channel
+    # and the robostack-staging channel
     conda config --env --add channels robostack-staging
+    # if you want to use Jazzy, also add its own channel:
+    conda config --env --add channels robostack-jazzy
     # remove the defaults channel just in case, this might return an error if it is not in the list which is ok
     conda config --env --remove channels defaults
     ```
@@ -41,8 +43,11 @@ conda install mamba -c conda-forge
     # Install ros-noetic into the environment (ROS1)
     mamba install ros-noetic-desktop
 
-    # Install ros-humble into the environment (ROS2)
+    # Install ros-humble into the environment (ROS2 Humble)
     mamba install ros-humble-desktop
+
+    # Install ros-jazzy into the environment (ROS2 Jazzy)
+    mamba install ros-jazzy-desktop
     ```
 
     ```bash title="Reactivate the environment to initialize the ros env"
@@ -65,6 +70,10 @@ conda install mamba -c conda-forge
     ```bash title="ROS2 Humble"
     # Create a ros-humble desktop environment
     micromamba create -n ros_env -c conda-forge -c robostack-staging ros-humble-desktop
+
+    ```bash title="ROS2 Jazzy"
+    # Create a ros-jazzy desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-staging ros-jazzy-desktop
 
     # Activate the environment
     micromamba activate ros_env
