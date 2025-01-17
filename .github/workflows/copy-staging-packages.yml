@@ -3,7 +3,7 @@ name: Copy staging packages
 on:
   workflow_dispatch:
   schedule:
-    - cron: "42 * * * *" 
+    - cron: "42 * * * *"
 
 jobs:
   copy-packages-noetic:
