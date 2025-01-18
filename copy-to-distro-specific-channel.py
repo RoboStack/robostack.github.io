@@ -50,14 +50,12 @@ def main():
     parser.add_argument(
         "cutoff",
         type=str,
-        help="Only package built after this cutoff date are uploaded. The cutoff date is a ISO 8601-formatted string."
+        help="Only package built after this cutoff date are uploaded. The cutoff date is a a string with format YYYY-MM-DD."
     )
     args = parser.parse_args()
     distro = args.distro
 
     destination_channel = f"robostack-{distro}"
-    # debug
-    destination_channel = f"robostack-{distro}-traversaro"
 
     # Convert cutoff date to cutoff timestamps
     cutoff_timestamp = int(datetime.datetime.strptime(args.cutoff, "%Y-%m-%d").timestamp()*1000.0)
