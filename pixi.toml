@@ -3,7 +3,7 @@ authors = ["Tobias Fischer <info@tobiasfischer.info>"]
 channels = ["conda-forge"]
 description = "Add a short description here"
 name = "robostack-docs-env"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
@@ -11,6 +11,9 @@ version = "0.1.0"
 [dependencies]
 mkdocs-material = "*"
 pip = "*"
+# Required by copy-staging-packages.yml
+requests = "*"
+anaconda-client = "*"
 
 [pypi-dependencies]
 mkdocs-redirects = "*"
