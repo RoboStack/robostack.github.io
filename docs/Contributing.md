@@ -45,7 +45,19 @@ To make code review easier, please consider manually porting the new hunks into 
 
 # Testing changes locally
 
-First of all, do the modifications in the `vinca_***.yaml` files for your platform, then run:
+Clone the relevant repo:
+
+```bash
+git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git
+```bash
+
+Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
+
+```bash
+cd ros-humble  # or: cd ros-noetic or cd ros-jazzy
+```bash
+
+then you can build the packages that need to be built after the `vinca_***.yaml` changes with:
 
 ```bash
 pixi run build
