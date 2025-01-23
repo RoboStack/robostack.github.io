@@ -45,45 +45,26 @@ To make code review easier, please consider manually porting the new hunks into 
 
 # Testing changes locally
 
+Clone the relevant repo:
+
 ```bash
-# First, create a new conda environment and add the conda-forge and robostack channels:
+git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git
+```bash
 
-micromamba create -n robostackenv python=3.11
+Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
 
-micromamba activate robostackenv
-micromamba config append channels conda-forge
-micromamba config append channels robostack-staging
+```bash
+cd ros-humble  # or: cd ros-noetic or cd ros-jazzy
+```bash
 
-# Install some dependencies
-micromamba install pip conda-build anaconda-client mamba conda catkin_pkg ruamel_yaml rosdistro empy networkx requests boa
+then you can build the packages that need to be built after the `vinca_***.yaml` changes with:
 
-# Install vinca
-pip install git+https://github.com/RoboStack/vinca.git --no-deps
-
-# Clone the relevant repo
-git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git
-
-# Move in the newly cloned repo
-cd ros-humble  # or: cd ros-noetic
-
-# Make a copy of the relevant vinca file
-cp vinca_linux_64.yaml vinca.yaml  # replace with your platform as necessary
-
-# Now modify vinca.yaml as you please, e.g. add new packages to be built
-code vinca.yaml
-
-# Run vinca to generate the recipe; the recipes will be located in the `recipes` folder
-vinca --multiple
-
-# Build the recipe using boa:
-boa build recipes -m ./.ci_support/conda_forge_pinnings.yaml -m ./conda_build_config.yaml
-
-# You can also generate an azure pipeline locally, e.g.
-vinca-azure -d recipes -t mytriggerbranch -p linux-64
-# which will create a `linux.yml` file that contains the azure pipeline definition
+```bash
+pixi run build
 ```
 
 # How does it work?
+
 - The `vinca.yaml` file specifies which packages should be built. 
   - Add the desired package under `packages_select_by_deps`. This will automatically pull in all dependencies of that package, too.
   - The vinca.yaml files contain lots of commented-out package names. That is okay. Not all packages need to be rebuilt with every pull request. Do not be afraid if you see your package commented out after some time - it just means it is not being built now. For sure it will be built with next full rebuild. Full rebuilds happen occasionally (few times a year).
