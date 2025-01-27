@@ -18,11 +18,10 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 # Adding new packages via pull requests
 You can open a pull request that will get build automatically in our CI.
 
-An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257). Simply add the required packages to the `vinca_*.yaml` files, where the * indicates the desired platform (linux_64, osx, win or linux_aarch64). Ideally, try to add packages to all of these platforms. The name of the package is accepted both with underscores and dashes as word separators, but it is suggested to type the name of the package exactly as https://index.ros.org knows it.
-
-Sometimes, it may be required to patch the packages. An example of how to do so can be found in [this PR](https://github.com/RoboStack/ros-noetic/pull/32).
+An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257). Simply add the required packages to the `vinca_*.yaml` files, where the `*` indicates the desired platform (`linux_64`, `linux_aarch64` (for ARM processors), `osx_64` (old Intel Macs), `osx_arm64` (Apple Silicon), or `win`). Ideally, try to add packages to all of these platforms. The name of the package is accepted both with underscores and dashes as word separators, but it is suggested to type the name of the package exactly as https://index.ros.org knows it.
 
 ## Creating a new patch file
+Sometimes, it may be required to patch the packages. An example of how to do so can be found in [this PR](https://github.com/RoboStack/ros-noetic/pull/32). Generating the patch can be done as follows:
 
 1. Modify the `vinca_*.yaml` file, but just adding the package you want to create the patch for
 2. Run `pixi run build`. This will either succeded it the package can be built without any patch, or fail if a patch is required to actually build the package.
@@ -67,11 +66,7 @@ pixi run build
 
 - The `vinca_*.yaml` files specify which packages should be built. 
   - Add the desired package under `packages_select_by_deps`. This will automatically pull in all dependencies of that package, too.
-  - The `vinca_*.yaml files contain lots of commented-out package names. That is okay. Not all packages need to be rebuilt with every pull request. Do not be afraid if you see your package commented out after some time - it just means it is not being built now. Probably it will be built with next full rebuild. Full rebuilds happen occasionally (few times a year).
   - Note that all packages that are already build in one of the channels listed under `skip_existing` will be skipped. 
-  - If you want to manually skip packages, you can list them under `packages_skip_by_deps`.
-  - If you set `skip_all_deps` to `True`, you will only build packages listed under `packages_select_by_deps` but none of their dependencies.
   - The `packages_remove_from_deps` list allows you to never build packages, even if they are listed as dependencies of other packages, by removing them from the dependencies of other packages. We use it for e.g. the stage simulator which is not available in conda-forge, but is listed as one of the dependencies of the ros-simulator metapackage.
-  - If you want to rebuild a package (for example because it had a problem for which you added a patch), set it build number explicitly in the `pkg_additional_info.yaml` file. Note that this will not update the package, unless the `rosdistro_snapshot.yaml` file is also updated (and that tipically happens only for full rebuild)
-- If the package does not build successfully out of the box, you might need to patch it. To do so, create a new file `ros-$ROSDISTRO-$PACKAGENAME.patch` in the `patch` directory (replace `$PACKAGENAME` with the name of the package, and replace any underscores with hyphens; and replace `$ROSDISTRO` with the distro name, for example `humble`). You can also use platform specifiers to only apply the patch on a specific platform, e.g. `ros-$ROSDISTRO-$PACKAGENAME.win.patch`.
+- If you want to rebuild a package (for example because it had a problem for which you added a patch), set it build number explicitly in the `pkg_additional_info.yaml` file. Note that this will not update the package, unless the `rosdistro_snapshot.yaml` file is also updated (and that typically happens only for full rebuild)
 - The `robostack.yaml` and `packages-ignore.yaml` files are the equivalent of the [rosdep.yaml](http://wiki.ros.org/rosdep/rosdep.yaml) and translate ROS dependencies into conda package names (or in the case of the dependencies listed in `packages-ignore.yaml` the dependencies are ignored by specifying an empty list).
