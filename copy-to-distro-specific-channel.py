@@ -39,6 +39,17 @@ def upload_package(package_name_simple, package_name, version, build, platform, 
     except subprocess.CalledProcessError as e:
         print(f"Failed to upload {package_name}, version {version}, build {build}, platform {platform}: {e}")
 
+# Get the timestamp in milliseconds from epoch, with an additional workaround
+# for packages that for some reason have a timestamp in seconds instead of milliseconds
+def get_timestamp_with_workaround_for_timestamp_in_seconds_instead_of_milliseconds(pkg_data):
+    timestamp = pkg_data["timestamp"]
+    # Workaround for https://github.com/RoboStack/ros-humble/issues/258 .
+    # If it seems that the packages was built before 2001, probably the timestamp is actually
+    # in seconds instead of milliseconds
+    if timestamp < 1000000000000:
+        timestamp *= 1000
+    return timestamp
+
 def main():
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Upload packages from robostack-staging to robostack-<distroname>.")
@@ -91,7 +102,7 @@ def main():
             for pkg_name, pkg_data in source_packages.items()
             # This should cover both packages that start with 'ros-<distro>'
             # '(ros|ros2)-<distro>-mutex' packages whose build string contains <distro>
-            if (pkg_name.startswith(prefix) or (pkg_data["name"].endswith("distro-mutex") and distro in pkg_data["build"])) and (pkg_data["timestamp"] >= cutoff_timestamp)
+            if (pkg_name.startswith(prefix) or (pkg_data["name"].endswith("distro-mutex") and distro in pkg_data["build"])) and (get_timestamp_with_workaround_for_timestamp_in_seconds_instead_of_milliseconds(pkg_data) >= cutoff_timestamp)
         }
 
         print(f"Found {len(filtered_packages)} packages in {SOURCE_CHANNEL}/{platform} that belong to distro {distro}")
