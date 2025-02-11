@@ -1,7 +1,7 @@
 # Getting Started
 RoboStack is a bundling of ROS for Linux, Mac and Windows using the [conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
 
-## Installation mamba
+## Installating mamba
 
 To get started with conda (or mamba) as package managers, you need to have a base conda installation. Please do _not_ use the Anaconda installer, but rather start with [`miniforge`](https://github.com/conda-forge/miniforge) that is much more "minimal" installer. This installer will create a "base" environment that contains the package managers conda and mamba. After this installation is done, you can move on to the next steps.
 
@@ -21,7 +21,7 @@ conda install mamba -c conda-forge
 
     At the moment on Windows only the Command Prompt terminal is supported, while Powershell is not supported.
  
-## Installation ros
+## Installating ros
 === "Mamba"
 
     ```bash title="Prepare an environment to use the correct channels"
