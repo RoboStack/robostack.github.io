@@ -171,7 +171,7 @@ You can install Robostack using either Mamba or pixi.
     version = "0.1.0"
     description = "Development environment for RoboStack ROS packages"
     authors = ["Your Name <your.email@example.com>"]
-    channels = ["https://prefix.dev/conda-forge"]
+    channels = ["https://fast.prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     [target.win-64.dependencies]
@@ -219,6 +219,7 @@ You can install Robostack using either Mamba or pixi.
     ```
     ```bash
     #Save and exit pixi.toml
+    pixi install
     #You can now start an environment with your desired robostack distribution using one of the below commands (must be in the project directory):
 
     #ROS noetic
@@ -320,7 +321,7 @@ After installation, you should test if you are able to run `rviz` and other ros 
     
     !!! note
         Remember that Pixi environments can only be activated from within your project directory.
-        
+
     **ROS1**
     ```bash title="First terminal"
     cd robostack
