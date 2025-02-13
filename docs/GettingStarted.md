@@ -2,34 +2,45 @@
 
 RoboStack is a bundling of ROS for Linux, Mac and Windows using the [conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
 You can install Robostack using either Pixi or Mamba.
-=== "Using Pixi"
+=== "Pixi"
+    [Pixi](https://prefix.dev/docs/pixi/overview) is a package management tool for developers that builds upon the conda ecosystem. [Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of Pixi for those already familiar with Conda and Mamba.
     ## Install Pixi
-    [Pixi](https://prefix.dev/docs/pixi/overview) is a package management tool for developers. It allows the developer to install libraries and applications in a reproducible way. Here's how to install it on your system:
+    To install `pixi` you can run the following command in your terminal:
 
-    === "Linux/macOS"
+    === "Linux & macOS"
         ```bash
-        # Install using the official installer script
         curl -fsSL https://pixi.sh/install.sh | bash
-
-        # Verify the installation
-        pixi --version
         ```
+
+        The above invocation will automatically download the latest version of `pixi`, extract it, and move the `pixi` binary to `~/.pixi/bin`.
+        If this directory does not already exist, the script will create it.
+
+        The script will also update your `~/.bashrc` to include `~/.pixi/bin` in your PATH, allowing you to invoke the `pixi` command from anywhere.
 
     === "Windows"
-        ```powershell
-        # Install using Windows installer script
-        irm https://pixi.sh/install.ps1 | iex
-
-        # Verify the installation
-        pixi --version
+        ```bash
+        winget install prefix-dev.pixi
         ```
+
+        The above invocation will automatically download the latest version of `pixi`, extract it, and move the `pixi` binary to `LocalAppData/pixi/bin`.
+        If this directory does not already exist, the script will create it.
+
+        The command will also automatically add `LocalAppData/pixi/bin` to your path allowing you to invoke `pixi` from anywhere.
+
+        !!! warning "PowerShell is not supported"
+            At the moment on Windows only the Command Prompt terminal is supported, while Powershell is not supported.
+
+        !!! tip "Prerequisites"
+            - Windows users need Visual Studio (2019 or 2022) with C++ support
+            - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)    
+
 
     !!! note
         After installation, you may need to restart your terminal for the `pixi` command to be available.
+    
+    !!! warning "Do not source the system ROS environment"
+        When there is an installation available of ros on the system, in non-conda environments, there will be interference with the environments. As the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
-    !!! tip "Prerequisites"
-        - Windows users need Visual Studio (2019 or 2022) with C++ support
-        - You can download them here: https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160
 
     ## Install RoboStack using Pixi
 
@@ -50,9 +61,7 @@ You can install Robostack using either Pixi or Mamba.
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     [target.win-64.dependencies]
-    # if using Windows, uncomment ONE Visual Studio version:
-    #vs2019_win-64 = "*"  # For VS 2019
-    #vs2022_win-64 = "*"  # For VS 2022
+    #vs2022_win-64 = "*" #Uncomment if using Visual Studio 2022
 
     [dependencies]
     python = "==3.11"
@@ -109,14 +118,9 @@ You can install Robostack using either Pixi or Mamba.
     pixi shell -e jazzy
 
     ```
-    
-    ## Testing installation
-    After installation you are able to run `rviz` and other ros tools.
-
-    In the conda environment activation is the ROS activation included. There is no need to add a `source` command in the `~/.bashrc`
 
 
-=== "Using Mamba"
+=== "Mamba"
     ## Install Mamba
     To get started, you'll need a base conda installation. We recommend using the [`miniforge`](https://github.com/conda-forge/miniforge) installer.
 
@@ -147,27 +151,29 @@ You can install Robostack using either Pixi or Mamba.
 
         # this adds the conda-forge channel to the new created environment configuration 
         conda config --env --add channels conda-forge
-        # and the robostack-staging channel
-        conda config --env --add channels robostack-staging
-        # if you want to use Jazzy, also add its own channel:
-        conda config --env --add channels robostack-jazzy
         # remove the defaults channel just in case, this might return an error if it is not in the list which is ok
         conda config --env --remove channels defaults
         ```
+        !!! note
+            There are different channels depending on the version of ROS that you want to install:
+        === "ROS1 Noetic"
+            ```
+            conda config --env --add channels robostack-noetic
+            mamba install ros-noetic-desktop
+            ```
+        === "ROS2 Humble"
+            ```
+            conda config --env --add channels robostack-humble
+            mamba install ros-humble-desktop
+            ```
+        === "ROS2 Jazzy"
+            ```
+            conda config --env --add channels robostack-jazzy
+            mamba install ros-jazzy-desktop
+            ```
 
-
-        ```bash title="Install ROS1 or ROS2"
-        # Install ros-noetic into the environment (ROS1)
-        mamba install ros-noetic-desktop
-
-        # Install ros-humble into the environment (ROS2 Humble)
-        mamba install ros-humble-desktop
-
-        # Install ros-jazzy into the environment (ROS2 Jazzy)
-        mamba install ros-jazzy-desktop
-        ```
-
-        ```bash title="Reactivate the environment to initialize the ros env"
+    
+        ```bash title="Deactivate and reactivate the environment to initialize the configured ROS environment"
         mamba deactivate
         mamba activate ros_env
         ```
@@ -176,42 +182,37 @@ You can install Robostack using either Pixi or Mamba.
 
         When you only have micromamba available use the following commands: 
 
-        ```bash title="ROS1 Noetic"
-        # Create a ros-noetic desktop environment
-        micromamba create -n ros_env -c conda-forge -c robostack-staging ros-noetic-desktop python=3.11
+        === "ROS1 Noetic"
+            ```
+            # Create a ros-noetic desktop environment
+            micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop python=3.11
 
-        # Activate the environment
-        micromamba activate ros_env
-        ```
+            # Activate the environment
+            micromamba activate ros_env
+            ```
+        === "ROS2 Humble"
+            ```
+            # Create a ros-humble desktop environment
+            micromamba create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
 
-        ```bash title="ROS2 Humble"
-        # Create a ros-humble desktop environment
-        micromamba create -n ros_env -c conda-forge -c robostack-staging ros-humble-desktop
+            # Activate the environment
+            micromamba activate ros_env
+            ```
+        === "ROS2 Jazzy"
+            ```
+            # Create a ros-jazzy desktop environment
+            micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
 
-        ```bash title="ROS2 Jazzy"
-        # Create a ros-jazzy desktop environment
-        micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+            # Activate the environment
+            micromamba activate ros_env
+            ```
 
-        # Activate the environment
-        micromamba activate ros_env
-        ```
 
-    ## Installation tools for local development
+    ## Installatiing tools for local development
     === "Mamba"
 
         ```bash title="Default tools to help with local development of ROS packages"
         mamba install compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
-        ```
-
-        ```bash title="Additional dependencies for developing on windows"
-        # Install Visual Studio 2017, 2019 or 2022 with C++ support 
-        # see https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160
-
-        # Install the Visual Studio command prompt - if you use Visual Studio 2019:
-        mamba install vs2019_win-64
-        
-        # Install the Visual Studio command prompt - if you use Visual Studio 2022:
-        mamba install vs2022_win-64
         ```
 
     === "Micromamba"
@@ -220,22 +221,60 @@ You can install Robostack using either Pixi or Mamba.
         micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
         ```
 
-        ```bash title="Additional dependencies for developing on windows"
-        # Install Visual Studio 2017 or 2019 with C++ support 
-        # see https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160
-
-        # Install the Visual Studio command prompt - if you use Visual Studio 2019:
-        micromamba install vs2019_win-64
+    !!! tip "Developing on Windows"
+        - Windows users also need Visual Studio (2019 or 2022) with C++ support
+        - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
         
-        # Install the Visual Studio command prompt - if you use Visual Studio 2022:
-        micromamba install vs2022_win-64
+        If you use Visual Studio 2022, you must also install the command line tool (pre-included included for VS2019):
+        ```
+        mamba install vs2022_win-64
         ```
 
-    ## Testing installation
-    After installation you are able to run `rviz` and other ros tools.
+## Testing installation
+After installation, you should test if you are able to run `rviz` and other ros tools.
 
-    In the conda environment activation is the ROS activation included. There is no need to add a `source` command in the `~/.bashrc`
+!!! note
+    The ROS environment activation is included automatically. There is no need to add a `source` command in the `~/.bashrc`
 
+=== "Pixi"
+    **ROS1**
+    ```bash title="First terminal"
+    cd robostack
+    pixi shell -e noetic
+    roscore
+    ```
+
+    ```bash title="Second terminal"
+    cd robostack
+    pixi shell -e noetic
+    rviz
+    ```
+
+    **ROS2**
+    ```bash title="Terminal"
+    cd robostack
+    pixi shell -e humble #OR jazzy
+    rviz2
+    ```
+
+    !!! note
+        Remember that Pixi environments can only be activated from within your project directory.
+    
+    ## Updating
+    Updating all packages in your environment is as easy as:
+
+    ```bash
+    cd robostack
+    pixi update
+    ```
+
+    ## Deactivating
+    You can just exit the current shell to deactivate the current environment.
+    ```bash
+    exit  # or press Ctrl+D
+    ```
+
+=== "Mamba"
     === "Mamba"
 
         **ROS1**
@@ -314,11 +353,11 @@ You can install Robostack using either Pixi or Mamba.
         micromamba deactivate
         ```
 
-    ## Why ROS and Conda?
-    We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager. We provide ROS binaries for Linux, macOS (Intel and Apple Silicon), Windows and ARM (Linux). Installing other recent packages via conda-forge side-by-side works easily, e.g. you can install TensorFlow/PyTorch in the same environment as ROS Noetic without any issues. As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu. As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows. No root access is required, all packages live in your home directory. We have recently written up a paper and blog post with more information.
+## Why ROS and Conda?
+We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager. We provide ROS binaries for Linux, macOS (Intel and Apple Silicon), Windows and ARM (Linux). Installing other recent packages via conda-forge side-by-side works easily, e.g. you can install TensorFlow/PyTorch in the same environment as ROS Noetic without any issues. As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu. As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows. No root access is required, all packages live in your home directory. We have recently written up a paper and blog post with more information.
 
 ## Attribution
-If you use RoboStack in your academic work, please refer to the following paper:
+If you use RoboStack in your academic work, please reference the following paper:
 ```bibtex
 @article{FischerRAM2021,
     title={A RoboStack Tutorial: Using the Robot Operating System Alongside the Conda and Jupyter Data Science Ecosystems},
