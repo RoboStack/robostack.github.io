@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.1
+      - uses: prefix-dev/setup-pixi@v0.8.3
       - env:
           ANACONDA_API_TOKEN: ${{ secrets.ROBOSTACK_NOETIC_ANACONDA_API_TOKEN }}
         run: |
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: prefix-dev/setup-pixi@v0.8.1
+      - uses: prefix-dev/setup-pixi@v0.8.3
       - env:
           ANACONDA_API_TOKEN: ${{ secrets.ROBOSTACK_HUMBLE_ANACONDA_API_TOKEN }}
         run: |
