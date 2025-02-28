@@ -1,7 +1,7 @@
 name: Update distro tables
 
 on:
-  schedule:    
+  schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 
@@ -10,30 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        pip install pyyaml requests
     - name: Checkout robostack.github.io
       uses: actions/checkout@v4
+    - uses: prefix-dev/setup-pixi@v0.8.3
     - name: Create table noetic
       run: |
-        python utils/compare_pkg_completeness.py noetic robostack-staging
+        pixi run compare-completeness noetic robostack-staging
     - name: Create table foxy
       run: |
-        python utils/compare_pkg_completeness.py foxy robostack
+        pixi run compare-completeness foxy robostack
     - name: Create table galactic
       run: |
-        python utils/compare_pkg_completeness.py galactic robostack-experimental
+        pixi run compare-completeness galactic robostack-experimental
     - name: Create table humble
       run: |
-        python utils/compare_pkg_completeness.py humble robostack-staging
+        pixi run compare-completeness humble robostack-staging
     - name: Create table jazzy
       run: |
-        python utils/compare_pkg_completeness.py jazzy robostack-jazzy
+        pixi run compare-completeness jazzy robostack-jazzy
     - name: Commit changes
       id: commit
       run: |

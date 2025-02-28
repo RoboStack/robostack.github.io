@@ -3,10 +3,14 @@ authors = ["Tobias Fischer <info@tobiasfischer.info>"]
 channels = ["conda-forge"]
 description = "Add a short description here"
 name = "robostack-docs-env"
-platforms = ["osx-arm64", "linux-64"]
+platforms = ["osx-arm64", "linux-64", "win-64"]
 version = "0.1.0"
 
 [tasks]
+compare-completeness = { cmd = "python utils/compare_pkg_completeness.py", description = "Add two arguments to give it the DISTRO and CHANNEL"}
+serve = "mkdocs serve"
+
+
 
 [dependencies]
 mkdocs-material = "*"
