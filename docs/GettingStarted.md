@@ -1,6 +1,6 @@
 # Getting Started
 
-RoboStack is a bundling of ROS for Linux, Mac and Windows using the [Conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
+RoboStack is a bundling of ROS for Linux, macOS and Windows using the [Conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
 We have also extended support to the [Pixi](https://pixi.sh/latest/) package manager, which builds upon the foundations of, and maintains compatabillity with the Conda ecosystem. 
 
 [Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of how Pixi works when compared to Conda/Mamba
@@ -41,7 +41,7 @@ You can install Robostack using either Mamba or pixi.
         conda config --env --remove channels defaults
         ```
         !!! note
-            There are different channels depending on the version of ROS that you want to install, you must only install ONE version of ROS per environment:
+            There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
         === "ROS1 Noetic"
             ```
             conda config --env --add channels robostack-noetic
@@ -220,7 +220,7 @@ You can install Robostack using either Mamba or pixi.
     ```bash
     #Save and exit pixi.toml
     pixi install
-    #You can now start an environment with your desired robostack distribution using one of the below commands (must be in the project directory):
+    #You can now start an environment with your desired robostack distribution using one of the below commands (either executed from within the project directory or by appending `--manifest-path` and pointing to your project directory):
 
     #ROS noetic
     pixi shell -e noetic
