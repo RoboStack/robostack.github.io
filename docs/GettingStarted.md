@@ -71,7 +71,7 @@ You can install Robostack using either Mamba or pixi.
         === "ROS1 Noetic"
             ```
             # Create a ros-noetic desktop environment
-            micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop python=3.11
+            micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
 
             # Activate the environment
             micromamba activate ros_env
