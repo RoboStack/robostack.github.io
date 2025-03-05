@@ -178,7 +178,7 @@ You can install Robostack using either Mamba or pixi.
     #vs2022_win-64 = "*" #Uncomment if using Visual Studio 2022
 
     [dependencies]
-    python = "==3.11"
+    python = "*"
     compilers = "*"
     cmake = "*"
     pkg-config = "*"
