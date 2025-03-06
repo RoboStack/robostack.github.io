@@ -1,11 +1,9 @@
 # Getting Started
 
 RoboStack is a bundling of ROS for Linux, macOS and Windows using the [Conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
-We have also extended support to the [Pixi](https://pixi.sh/latest/) package manager, which builds upon the foundations of, and maintains compatabillity with the Conda ecosystem. 
+We have also extended support to the [Pixi](https://pixi.sh/latest/) package manager, which builds upon the foundations of, and maintains compatability with the Conda ecosystem. [Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of how Pixi works when compared to Conda/Mamba.
 
-[Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of how Pixi works when compared to Conda/Mamba
-
-You can install Robostack using either Mamba or pixi.
+You can install Robostack using either Mamba or Pixi. We recommend using Pixi for any new installations.
 === "Mamba"
     ## Install Mamba
     To get started, you'll need a base conda installation. We recommend using the [`miniforge`](https://github.com/conda-forge/miniforge) installer.
@@ -22,7 +20,7 @@ You can install Robostack using either Mamba or pixi.
         Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base. 
         
     !!! warning "Do not source the system ROS environment"
-        When there is an installation available of ros on the system, in non-conda environments, there will be interference with the environments. As the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+        When there is an installation available of ros on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
     !!! warning "PowerShell is not supported"
 
@@ -153,7 +151,7 @@ You can install Robostack using either Mamba or pixi.
         After installation, you may need to restart your terminal for the `pixi` command to be available.
     
     !!! warning "Do not source the system ROS environment"
-        When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments. As the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+        When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
 
     ## Install RoboStack using Pixi
@@ -175,7 +173,7 @@ You can install Robostack using either Mamba or pixi.
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     [target.win-64.dependencies]
-    #vs2022_win-64 = "*" #Uncomment if using Visual Studio 2022
+    # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
 
     [dependencies]
     python = "*"
@@ -184,13 +182,14 @@ You can install Robostack using either Mamba or pixi.
     pkg-config = "*"
     make = "*"
     ninja = "*"
+    libgl-devel = "*"
 
     [environments]
     noetic = { features = ["noetic"] }
     humble = { features = ["humble"] }
     jazzy = { features = ["jazzy"] }
 
-    #noetic
+    # noetic
     [feature.noetic]
     channels = ["https://prefix.dev/robostack-noetic"]
 
@@ -199,7 +198,7 @@ You can install Robostack using either Mamba or pixi.
     catkin_tools = "*"
     rosdep = "*"
 
-    #humble
+    # humble
     [feature.humble]
     channels = ["https://prefix.dev/robostack-humble"]
 
@@ -208,7 +207,7 @@ You can install Robostack using either Mamba or pixi.
     colcon-common-extensions = "*"
     rosdep = "*"
 
-    #jazzy
+    # jazzy
     [feature.jazzy]
     channels = ["https://prefix.dev/robostack-jazzy"]
 
@@ -218,23 +217,22 @@ You can install Robostack using either Mamba or pixi.
     rosdep = "*"
     ```
     ```bash
-    #Save and exit pixi.toml
+    # Save and exit pixi.toml
     pixi install
-    #You can now start an environment with your desired robostack distribution using one of the below commands (either executed from within the project directory or by appending `--manifest-path` and pointing to your project directory):
+    # You can now start an environment with your desired robostack distribution using one of the below commands (either executed from within the project directory or by appending `--manifest-path` and pointing to your project directory):
 
-    #ROS noetic
+    # ROS noetic
     pixi shell -e noetic
 
-    #ROS humble
+    # ROS humble
     pixi shell -e humble
 
-    #ROS jazzy
+    # ROS jazzy
     pixi shell -e jazzy
-
     ```
 
 ## Testing installation
-After installation, you should test if you are able to run `rviz` and other ros tools.
+After installation, you should test if you are able to run `rviz`/`rviz2` and other ROS tools.
 
 !!! note "Reminder"
     The ROS environment activation is included automatically. There is no need to add a `source` command in the `~/.bashrc`
@@ -338,7 +336,7 @@ After installation, you should test if you are able to run `rviz` and other ros 
     **ROS2**
     ```bash title="Terminal"
     cd robostack
-    pixi shell -e humble #OR jazzy
+    pixi shell -e humble  # OR jazzy
     rviz2
     ```
     
