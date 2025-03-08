@@ -182,6 +182,8 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     pkg-config = "*"
     make = "*"
     ninja = "*"
+
+    [target.linux.dependencies]
     libgl-devel = "*"
 
     [environments]
