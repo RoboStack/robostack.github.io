@@ -70,3 +70,15 @@ pixi run build
   - The `packages_remove_from_deps` list allows you to never build packages, even if they are listed as dependencies of other packages, by removing them from the dependencies of other packages. We use it for e.g. the stage simulator which is not available in conda-forge, but is listed as one of the dependencies of the ros-simulator metapackage.
 - If you want to rebuild a package (for example because it had a problem for which you added a patch), set it build number explicitly in the `pkg_additional_info.yaml` file. Note that this will not update the package, unless the `rosdistro_snapshot.yaml` file is also updated (and that typically happens only for full rebuild)
 - The `robostack.yaml` and `packages-ignore.yaml` files are the equivalent of the [rosdep.yaml](http://wiki.ros.org/rosdep/rosdep.yaml) and translate ROS dependencies into conda package names (or in the case of the dependencies listed in `packages-ignore.yaml` the dependencies are ignored by specifying an empty list).
+
+# Doing a full rebuild
+
+A "full rebuild" is a rebuild of all packages for a given distro, that is tipically done to update the version of ROS packages contained in a robostack channel, and to build against new version of dependencies provided by conda-forge.
+
+When doing a full rebuild, please follow this guidelines:
+- Refresh the rosdistro_snapshot.yaml by running vinca snapshot (this is the only step that actually queries rosdistro, directly from the repo and indipendently from sync).
+- Refresh the conda_build_config.yaml file to reflect the current status of conda-forge plus migrations that are basically finished even if not updated in conda-forge-pinnings (if in doubt, ask to mantainers).
+- Bump the build_number in `vinca_*.yaml` files to a version higher then any existing build number (considering the overriden build numbers in pkg_additional_info.yaml).
+- Bump the minor number of the mutex_package in `vinca_*.yaml`, and manually search for any hardcoded number for `ros-distro-mutex` or `ros2-distro-mutex` in `additional_recipes`
+- Remove any build_number override in pkg_additional_info.yaml.
+
