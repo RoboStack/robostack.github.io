@@ -66,7 +66,7 @@ def add_arch(arch="linux-64"):
         else:
             add_available(arch, rpkg, None)
 
-archs = ('linux-64', 'win-64', 'osx-64', 'linux-aarch64', 'osx-arm64')
+archs = ('linux-64', 'win-64', 'osx-64', 'linux-aarch64', 'osx-arm64', 'emscripten-wasm32')
 
 for a in archs:
     f.write(f" {a} |")

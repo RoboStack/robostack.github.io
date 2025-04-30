@@ -6,7 +6,7 @@ import datetime
 # Configuration
 BASE_URL = "https://conda.anaconda.org"
 SOURCE_CHANNEL = "robostack-staging"
-PLATFORMS = ["linux-64", "linux-aarch64", "win-64", "osx-64", "osx-arm64", "noarch"]
+PLATFORMS = ["linux-64", "linux-aarch64", "win-64", "osx-64", "osx-arm64", "noarch", "emscripten-wasm32"]
 
 def fetch_repodata(channel, platform):
     """
