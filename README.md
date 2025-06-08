@@ -7,3 +7,4 @@ Source files for the [robostack.github.io](https://robostack.github.io/) documen
 pixi run serve
 ```
 Open server on http://127.0.0.1:8000/
+
