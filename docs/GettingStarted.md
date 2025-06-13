@@ -138,9 +138,6 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
         The command will also automatically add `LocalAppData/pixi/bin` to your path allowing you to invoke `pixi` from anywhere.
 
-        !!! warning "PowerShell is not supported"
-            On Windows, Powershell is not supported, only the Command Prompt terminal is supported.
-
         !!! tip "Prerequisites"
             - Windows users need Visual Studio (2019 or 2022) with C++ support
             - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
@@ -172,6 +169,22 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     channels = ["https://fast.prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
+    # This will automatically activate the ros workspace on activation
+    [target.win-64.activation]
+    scripts = ["install/setup.bat"]
+
+    [target.linux-64.activation]
+    scripts = ["install/setup.bash"]
+
+    [target.linux-aarch64.activation]
+    scripts = ["install/setup.bash"]
+
+    [target.osx-64.activation]
+    scripts = ["install/setup.bash"]
+
+    [target.osx-arm64.activation]
+    scripts = ["install/setup.bash"]
+
     [target.win-64.dependencies]
     # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
 
@@ -200,6 +213,16 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     catkin_tools = "*"
     rosdep = "*"
 
+    # To build you can use - pixi run -e noetic build <Any other temporary args>
+    [feature.noetic.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.noetic.target.linux-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.noetic.target.linux-aarch64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
     # humble
     [feature.humble]
     channels = ["https://prefix.dev/robostack-humble"]
@@ -209,6 +232,16 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     colcon-common-extensions = "*"
     rosdep = "*"
 
+    # To build you can use - pixi run -e humble build <Any other temporary args>
+    [feature.humble.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.humble.target.linux-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.humble.target.linux-aarch64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
     # jazzy
     [feature.jazzy]
     channels = ["https://prefix.dev/robostack-jazzy"]
@@ -217,6 +250,16 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     ros-jazzy-desktop = "*"
     colcon-common-extensions = "*"
     rosdep = "*"
+
+    # To build you can use - pixi run -e jazzy build <Any other temporary args>
+    [feature.jazzy.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.jazzy.target.linux-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.jazzy.target.linux-aarch64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
     ```
     ```bash
     # Save and exit pixi.toml
@@ -320,9 +363,14 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 === "Pixi"
     
     !!! note
-        Remember that Pixi environments can only be activated from within your project directory.
+        Remember if trying to activate the pixi from outside the project directory, provide the path to the pixi.toml with `--manifest-path`.
 
     **ROS1**
+    ```bash title="First terminal"
+    cd robostack
+    pixi run -e noetic roscore
+    ```
+    alternatively,
     ```bash title="First terminal"
     cd robostack
     pixi shell -e noetic
@@ -331,11 +379,21 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 
     ```bash title="Second terminal"
     cd robostack
+    pixi run -e noetic rviz
+    ```
+    alternatively,
+    ```bash title="Second terminal"
+    cd robostack
     pixi shell -e noetic
     rviz
     ```
 
     **ROS2**
+    ```bash title="Terminal"
+    cd robostack
+    pixi run -e humble rviz2 # OR jazzy
+    ```
+    alternatively,
     ```bash title="Terminal"
     cd robostack
     pixi shell -e humble  # OR jazzy
