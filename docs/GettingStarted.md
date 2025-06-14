@@ -30,7 +30,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     === "Mamba"
 
         ```bash title="Prepare an environment to use the correct channels"
-        mamba create -n ros_env python=3.11
+        mamba create -n ros_env
         mamba activate ros_env
 
         # this adds the conda-forge channel to the new created environment configuration 
