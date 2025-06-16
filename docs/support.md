@@ -5,7 +5,7 @@ We strive to make our documentation as clear as possible, but sometimes things c
 How to help improve our documentation:
 
 - For typos, grammar, or other errors, we'd appreciate your support! Simply [fork](https://github.com/RoboStack/robostack.github.io/fork) our repo, make the necessary changes, and submit a pull request.
-- If you have questions or need help, feel free to create an [issue](https://github.com/RoboStack/robostack.github.io/issues) or join our [Gitter](https://matrix.to/#/#RoboStack_Lobby:gitter.im) community.
+- If you have questions or need help, feel free to create an [issue](https://github.com/RoboStack/robostack.github.io/issues) or join the community in the [`robotics` channel on `prefix.dev`'s discord](https://discord.gg/kKV8ZxyzY4).
 
 We're always eager to improve, and your input is valuable to us. Thank you for being part of the RoboStack community!
 

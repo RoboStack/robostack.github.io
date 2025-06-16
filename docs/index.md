@@ -33,7 +33,8 @@ See [Getting Started](https://robostack.github.io/GettingStarted.html)
 Please see the "Available Packages" links in the menu. If a package is not yet available for a given distribution/platforms, simply open a pull request and we will do our best to get it up any running.
 
 ## How to get involved?
-We are very keen to involve more collaborators. Join us on [Gitter](https://gitter.im/RoboStack/Lobby) and check out our [Contribution guidelines](https://robostack.github.io/Contributing.html).
+
+We are very keen to involve more collaborators. Join us on the [`robotics` channel on `prefix.dev`'s discord](https://discord.gg/kKV8ZxyzY4) and check out our [Contribution guidelines](https://robostack.github.io/Contributing.html).
 
 ## Overview video
 Check out our IROS 2022 presentation for a 7 minute teaser:
