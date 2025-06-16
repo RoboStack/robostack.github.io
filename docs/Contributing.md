@@ -30,8 +30,9 @@ Sometimes, it may be required to patch the packages. An example of how to do so 
 6. Create a patch file with `git diff > changes.patch`
 7. Check that the patch contains the intended changes
 8. Move the file into the `patches` directory of this repository, renaming it according to the naming convention. If the changes are portable across all supported operating system, the file should be called `<package name>.patch`; otherwise, `<package name>.<win/linux/osx>.patch`
-9. Rerun `pixi run build` to ensure that the patching succeeds and the package builds without errors
-10. Commit the new file, push to your fork and create a PR
+9. In some cases the `recipe.yaml` generated needs also a patch (eg. add a conda dependency), in those scenarios a `add_host` key needs to be added to `patch/dependencies.yaml` [example](https://github.com/RoboStack/ros-noetic/blob/bd1d2f44fcbfb02a31c464e51a761fb0fdc32ec0/patch/dependencies.yaml#L15-L17)
+10. Rerun `pixi run build` to ensure that the patching succeeds and the package builds without errors
+11. Commit the new file, push to your fork and create a PR
 
 ## Extending an existing patch file
 
