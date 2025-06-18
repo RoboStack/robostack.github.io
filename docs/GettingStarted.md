@@ -241,7 +241,6 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     colcon-common-extensions = "*"
     rosdep = "*"
     ```
-    ```
     ```bash
     # Save and exit pixi.toml
     pixi install
