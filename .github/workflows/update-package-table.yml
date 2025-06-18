@@ -28,6 +28,9 @@ jobs:
     - name: Create table jazzy
       run: |
         pixi run compare-completeness jazzy robostack-jazzy
+    - name: Create table kilted
+      run: |
+        pixi run compare-completeness kilted robostack-kilted
     - name: Commit changes
       id: commit
       run: |
