@@ -169,7 +169,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     version = "0.1.0"
     description = "Development environment for RoboStack ROS packages"
     authors = ["Your Name <your.email@example.com>"]
-    channels = ["https://fast.prefix.dev/conda-forge"]
+    channels = ["https://prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     [target.win-64.dependencies]
