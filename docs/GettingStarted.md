@@ -56,6 +56,11 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
             mamba install ros-jazzy-desktop
             ```
 
+        === "ROS2 Kilted"
+            ```
+            conda config --env --add channels robostack-kilted
+            mamba install ros-kilted-desktop
+            ```
     
         ```bash title="Deactivate and reactivate the environment to initialize the configured ROS environment"
         mamba deactivate
@@ -91,6 +96,14 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
             micromamba activate ros_env
             ```
 
+        === "ROS2 Kilted"
+            ```
+            # Create a ros-kilted desktop environment
+            micromamba create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+
+            # Activate the environment
+            micromamba activate ros_env
+            ```
 
     ## Installing tools for local development
     === "Mamba"
@@ -190,6 +203,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     noetic = { features = ["noetic"] }
     humble = { features = ["humble"] }
     jazzy = { features = ["jazzy"] }
+    kilted = { features = ["kilted"] }
 
     # noetic
     [feature.noetic]
@@ -217,6 +231,15 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     ros-jazzy-desktop = "*"
     colcon-common-extensions = "*"
     rosdep = "*"
+
+    # kilted
+    [feature.kilted]
+    channels = ["https://prefix.dev/robostack-kilted"]
+
+    [feature.kilted.dependencies]
+    ros-kilted-desktop = "*"
+    colcon-common-extensions = "*"
+    rosdep = "*"
     ```
     ```bash
     # Save and exit pixi.toml
@@ -231,6 +254,9 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
     # ROS jazzy
     pixi shell -e jazzy
+
+    # ROS kilted
+    pixi shell -e kilted
     ```
 
 ## Testing installation
@@ -338,7 +364,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     **ROS2**
     ```bash title="Terminal"
     cd robostack
-    pixi shell -e humble  # OR jazzy
+    pixi shell -e humble  # OR jazzy, kilted
     rviz2
     ```
     

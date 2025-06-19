@@ -12,6 +12,7 @@ nav:
       - ROS2 Galactic: galactic.md
       - ROS2 Humble: humble.md
       - ROS2 Jazzy: jazzy.md
+      - ROS2 Kilted: kilted.md
       - JupyterRos: JupyterRos.md
     - Support: support.md
     - Contributing: Contributing.md
