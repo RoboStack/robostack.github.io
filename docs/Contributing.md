@@ -48,13 +48,13 @@ To make code review easier, please consider manually porting the new hunks into 
 Clone the relevant repo:
 
 ```bash
-git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git
+git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git or git clone https://github.com/RoboStack/ros-kilted.git
 ```bash
 
 Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
 
 ```bash
-cd ros-humble  # or: cd ros-noetic or cd ros-jazzy
+cd ros-humble  # or: cd ros-noetic or cd ros-jazzy or cd ros-kilted
 ```bash
 
 then you can build the packages that need to be built after the `vinca_***.yaml` changes with:
