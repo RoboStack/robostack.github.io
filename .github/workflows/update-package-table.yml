@@ -41,6 +41,7 @@ jobs:
         git add docs/galactic.md
         git add docs/humble.md
         git add docs/jazzy.md
+        git add docs/kilted.md
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
