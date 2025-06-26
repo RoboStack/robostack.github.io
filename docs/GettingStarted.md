@@ -151,9 +151,6 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
         The command will also automatically add `LocalAppData/pixi/bin` to your path allowing you to invoke `pixi` from anywhere.
 
-        !!! warning "PowerShell is not supported"
-            On Windows, Powershell is not supported, only the Command Prompt terminal is supported.
-
         !!! tip "Prerequisites"
             - Windows users need Visual Studio (2019 or 2022) with C++ support
             - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
@@ -176,71 +173,86 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     ```
 
     Open the newly created pixi.toml in your favourite text editor and paste the below configuration into the file (overwriting the configuration created by `pixi init`):
-    ``` bash title="pixi.toml"
+    ```toml title="pixi.toml"
     [project]
     name = "robostack"
-    version = "0.1.0"
     description = "Development environment for RoboStack ROS packages"
-    authors = ["Your Name <your.email@example.com>"]
     channels = ["https://prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
+
+    # This will automatically activate the ros workspace on activation
+    [target.win.activation]
+    scripts = ["install/setup.bat"]
+
+    [target.unix.activation]
+    # For activation scripts, we use bash for Unix-like systems
+    scripts = ["install/setup.bash"] 
 
     [target.win-64.dependencies]
     # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
 
+    # To build you can use - `pixi run -e <ros distro> build <Any other temporary args>`
+    [feature.build.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.build.target.unix.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    # Dependencies used by all environments
     [dependencies]
     python = "*"
+    # Build tools
     compilers = "*"
     cmake = "*"
     pkg-config = "*"
     make = "*"
     ninja = "*"
+    # ROS specific tools
+    rosdep = "*"
+    colcon-common-extensions = "*"
 
     [target.linux.dependencies]
     libgl-devel = "*"
 
+    # Define all the different ROS environments
+    # Each environment corresponds to a different ROS distribution
+    # and can be activated using the `pixi run/shell -e <environment>` command.
     [environments]
-    noetic = { features = ["noetic"] }
-    humble = { features = ["humble"] }
-    jazzy = { features = ["jazzy"] }
-    kilted = { features = ["kilted"] }
+    noetic = { features = ["noetic", "build"] }
+    humble = { features = ["humble", "build"] }
+    jazzy = { features = ["jazzy", "build"] }
+    kilted = { features = ["kilted", "build"] }
 
-    # noetic
+    ### ROS Noetic ####  
     [feature.noetic]
     channels = ["https://prefix.dev/robostack-noetic"]
 
     [feature.noetic.dependencies]
     ros-noetic-desktop = "*"
     catkin_tools = "*"
-    rosdep = "*"
 
-    # humble
+    ### ROS Humble ####
     [feature.humble]
     channels = ["https://prefix.dev/robostack-humble"]
 
     [feature.humble.dependencies]
     ros-humble-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
 
-    # jazzy
+    ### ROS Jazzy ####
     [feature.jazzy]
     channels = ["https://prefix.dev/robostack-jazzy"]
 
     [feature.jazzy.dependencies]
     ros-jazzy-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
 
-    # kilted
+    ### ROS Kilted ####
     [feature.kilted]
     channels = ["https://prefix.dev/robostack-kilted"]
 
     [feature.kilted.dependencies]
     ros-kilted-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
     ```
+
     ```bash
     # Save and exit pixi.toml
     pixi install
@@ -346,9 +358,14 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 === "Pixi"
     
     !!! note
-        Remember that Pixi environments can only be activated from within your project directory.
+        Remember if trying to activate the pixi from outside the project directory, provide the path to the pixi.toml with `--manifest-path`.
 
     **ROS1**
+    ```bash title="First terminal"
+    cd robostack
+    pixi run -e noetic roscore
+    ```
+    alternatively,
     ```bash title="First terminal"
     cd robostack
     pixi shell -e noetic
@@ -357,11 +374,21 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 
     ```bash title="Second terminal"
     cd robostack
+    pixi run -e noetic rviz
+    ```
+    alternatively,
+    ```bash title="Second terminal"
+    cd robostack
     pixi shell -e noetic
     rviz
     ```
 
     **ROS2**
+    ```bash title="Terminal"
+    cd robostack
+    pixi run -e humble rviz2 # OR jazzy, kilted
+    ```
+    alternatively,
     ```bash title="Terminal"
     cd robostack
     pixi shell -e humble  # OR jazzy, kilted
