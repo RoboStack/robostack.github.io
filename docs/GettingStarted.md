@@ -193,10 +193,10 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     scripts = ["install/setup.bash"]
 
     [target.osx-64.activation]
-    scripts = ["install/setup.bash"]
+    scripts = ["install/setup.zsh"]
 
     [target.osx-arm64.activation]
-    scripts = ["install/setup.bash"]
+    scripts = ["install/setup.zsh"]
 
     [target.win-64.dependencies]
     # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
@@ -237,6 +237,12 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     [feature.noetic.target.linux-aarch64.tasks]
     build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
 
+    [feature.noetic.target.osx-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.noetic.target.osx-arm64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
     # humble
     [feature.humble]
     channels = ["https://prefix.dev/robostack-humble"]
@@ -256,21 +262,19 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     [feature.humble.target.linux-aarch64.tasks]
     build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
 
+    [feature.humble.target.osx-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.humble.target.osx-arm64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+
     # jazzy
     [feature.jazzy]
     channels = ["https://prefix.dev/robostack-jazzy"]
 
     [feature.jazzy.dependencies]
     ros-jazzy-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
-
-    # kilted
-    [feature.kilted]
-    channels = ["https://prefix.dev/robostack-kilted"]
-
-    [feature.kilted.dependencies]
-    ros-kilted-desktop = "*"
     colcon-common-extensions = "*"
     rosdep = "*"
 
@@ -282,6 +286,37 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
 
     [feature.jazzy.target.linux-aarch64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.jazzy.target.osx-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.jazzy.target.osx-arm64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    # kilted
+    [feature.kilted]
+    channels = ["https://prefix.dev/robostack-kilted"]
+
+    [feature.kilted.dependencies]
+    ros-kilted-desktop = "*"
+    colcon-common-extensions = "*"
+    rosdep = "*"
+
+    # To build you can use - pixi run -e kilted build <Any other temporary args>
+    [feature.kilted.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.kilted.target.linux-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.kilted.target.linux-aarch64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.kilted.target.osx-64.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.kilted.target.osx-arm64.tasks]
     build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
     ```
 
