@@ -30,7 +30,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     === "Mamba"
 
         ```bash title="Prepare an environment to use the correct channels"
-        mamba create -n ros_env python=3.11
+        mamba create -n ros_env
         mamba activate ros_env
 
         # this adds the conda-forge channel to the new created environment configuration 
@@ -56,6 +56,11 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
             mamba install ros-jazzy-desktop
             ```
 
+        === "ROS2 Kilted"
+            ```
+            conda config --env --add channels robostack-kilted
+            mamba install ros-kilted-desktop
+            ```
     
         ```bash title="Deactivate and reactivate the environment to initialize the configured ROS environment"
         mamba deactivate
@@ -91,6 +96,14 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
             micromamba activate ros_env
             ```
 
+        === "ROS2 Kilted"
+            ```
+            # Create a ros-kilted desktop environment
+            micromamba create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+
+            # Activate the environment
+            micromamba activate ros_env
+            ```
 
     ## Installing tools for local development
     === "Mamba"
@@ -166,7 +179,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     version = "0.1.0"
     description = "Development environment for RoboStack ROS packages"
     authors = ["Your Name <your.email@example.com>"]
-    channels = ["https://fast.prefix.dev/conda-forge"]
+    channels = ["https://prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     # This will automatically activate the ros workspace on activation
@@ -203,6 +216,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     noetic = { features = ["noetic"] }
     humble = { features = ["humble"] }
     jazzy = { features = ["jazzy"] }
+    kilted = { features = ["kilted"] }
 
     # noetic
     [feature.noetic]
@@ -251,6 +265,15 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     colcon-common-extensions = "*"
     rosdep = "*"
 
+    # kilted
+    [feature.kilted]
+    channels = ["https://prefix.dev/robostack-kilted"]
+
+    [feature.kilted.dependencies]
+    ros-kilted-desktop = "*"
+    colcon-common-extensions = "*"
+    rosdep = "*"
+
     # To build you can use - pixi run -e jazzy build <Any other temporary args>
     [feature.jazzy.target.win-64.tasks]
     build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
@@ -261,6 +284,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     [feature.jazzy.target.linux-aarch64.tasks]
     build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
     ```
+
     ```bash
     # Save and exit pixi.toml
     pixi install
@@ -274,6 +298,9 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
     # ROS jazzy
     pixi shell -e jazzy
+
+    # ROS kilted
+    pixi shell -e kilted
     ```
 
 ## Testing installation
@@ -391,12 +418,12 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     **ROS2**
     ```bash title="Terminal"
     cd robostack
-    pixi run -e humble rviz2 # OR jazzy
+    pixi run -e humble rviz2 # OR jazzy, kilted
     ```
     alternatively,
     ```bash title="Terminal"
     cd robostack
-    pixi shell -e humble  # OR jazzy
+    pixi shell -e humble  # OR jazzy, kilted
     rviz2
     ```
     

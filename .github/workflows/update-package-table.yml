@@ -28,6 +28,9 @@ jobs:
     - name: Create table jazzy
       run: |
         pixi run compare-completeness jazzy robostack-jazzy
+    - name: Create table kilted
+      run: |
+        pixi run compare-completeness kilted robostack-kilted
     - name: Commit changes
       id: commit
       run: |
@@ -38,6 +41,7 @@ jobs:
         git add docs/galactic.md
         git add docs/humble.md
         git add docs/jazzy.md
+        git add docs/kilted.md
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
