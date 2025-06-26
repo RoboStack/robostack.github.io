@@ -173,151 +173,84 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     ```
 
     Open the newly created pixi.toml in your favourite text editor and paste the below configuration into the file (overwriting the configuration created by `pixi init`):
-    ``` bash title="pixi.toml"
+    ```toml title="pixi.toml"
     [project]
     name = "robostack"
-    version = "0.1.0"
     description = "Development environment for RoboStack ROS packages"
-    authors = ["Your Name <your.email@example.com>"]
     channels = ["https://prefix.dev/conda-forge"]
     platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
 
     # This will automatically activate the ros workspace on activation
-    [target.win-64.activation]
+    [target.win.activation]
     scripts = ["install/setup.bat"]
 
-    [target.linux-64.activation]
-    scripts = ["install/setup.bash"]
-
-    [target.linux-aarch64.activation]
-    scripts = ["install/setup.bash"]
-
-    [target.osx-64.activation]
-    scripts = ["install/setup.zsh"]
-
-    [target.osx-arm64.activation]
-    scripts = ["install/setup.zsh"]
+    [target.unix.activation]
+    # For activation scripts, we use bash for Unix-like systems
+    scripts = ["install/setup.bash"] 
 
     [target.win-64.dependencies]
     # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
 
+    # To build you can use - `pixi run -e <ros distro> build <Any other temporary args>`
+    [feature.build.target.win-64.tasks]
+    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    [feature.build.target.unix.tasks]
+    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
+
+    # Dependencies used by all environments
     [dependencies]
     python = "*"
+    # Build tools
     compilers = "*"
     cmake = "*"
     pkg-config = "*"
     make = "*"
     ninja = "*"
+    # ROS specific tools
+    rosdep = "*"
+    colcon-common-extensions = "*"
 
     [target.linux.dependencies]
     libgl-devel = "*"
 
+    # Define all the different ROS environments
+    # Each environment corresponds to a different ROS distribution
+    # and can be activated using the `pixi run/shell -e <environment>` command.
     [environments]
-    noetic = { features = ["noetic"] }
-    humble = { features = ["humble"] }
-    jazzy = { features = ["jazzy"] }
-    kilted = { features = ["kilted"] }
+    noetic = { features = ["noetic", "build"] }
+    humble = { features = ["humble", "build"] }
+    jazzy = { features = ["jazzy", "build"] }
+    kilted = { features = ["kilted", "build"] }
 
-    # noetic
+    ### ROS Noetic ####  
     [feature.noetic]
     channels = ["https://prefix.dev/robostack-noetic"]
 
     [feature.noetic.dependencies]
     ros-noetic-desktop = "*"
     catkin_tools = "*"
-    rosdep = "*"
 
-    # To build you can use - pixi run -e noetic build <Any other temporary args>
-    [feature.noetic.target.win-64.tasks]
-    build = "colcon build --merge-install --cmake-args -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.noetic.target.linux-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.noetic.target.linux-aarch64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.noetic.target.osx-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.noetic.target.osx-arm64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    # humble
+    ### ROS Humble ####
     [feature.humble]
     channels = ["https://prefix.dev/robostack-humble"]
 
     [feature.humble.dependencies]
     ros-humble-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
 
-    # To build you can use - pixi run -e humble build <Any other temporary args>
-    [feature.humble.target.win-64.tasks]
-    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.humble.target.linux-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.humble.target.linux-aarch64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.humble.target.osx-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.humble.target.osx-arm64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-
-    # jazzy
+    ### ROS Jazzy ####
     [feature.jazzy]
     channels = ["https://prefix.dev/robostack-jazzy"]
 
     [feature.jazzy.dependencies]
     ros-jazzy-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
 
-    # To build you can use - pixi run -e jazzy build <Any other temporary args>
-    [feature.jazzy.target.win-64.tasks]
-    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.jazzy.target.linux-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.jazzy.target.linux-aarch64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.jazzy.target.osx-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.jazzy.target.osx-arm64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    # kilted
+    ### ROS Kilted ####
     [feature.kilted]
     channels = ["https://prefix.dev/robostack-kilted"]
 
     [feature.kilted.dependencies]
     ros-kilted-desktop = "*"
-    colcon-common-extensions = "*"
-    rosdep = "*"
-
-    # To build you can use - pixi run -e kilted build <Any other temporary args>
-    [feature.kilted.target.win-64.tasks]
-    build = "colcon build --merge-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.kilted.target.linux-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.kilted.target.linux-aarch64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.kilted.target.osx-64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
-
-    [feature.kilted.target.osx-arm64.tasks]
-    build = "colcon build --symlink-install --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPython_FIND_VIRTUALENV=ONLY -DPython3_FIND_VIRTUALENV=ONLY"
     ```
 
     ```bash
