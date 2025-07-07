@@ -18,7 +18,11 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 # Adding new packages via pull requests
 You can open a pull request that will get build automatically in our CI.
 
-An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257). Simply add the required packages to the `vinca_*.yaml` files, where the `*` indicates the desired platform (`linux_64`, `linux_aarch64` (for ARM processors), `osx_64` (old Intel Macs), `osx_arm64` (Apple Silicon), or `win`). Ideally, try to add packages to all of these platforms. The name of the package is accepted both with underscores and dashes as word separators, but it is suggested to type the name of the package exactly as https://index.ros.org knows it.
+An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257). 
+
+Depending on the distribution, you need to add the package either to a unified `vinca.yaml` file, or to multiple `vinca_*.yaml` files, where the `*` indicates the desired platform (`linux_64`, `linux_aarch64` (for ARM processors), `osx_64` (old Intel Macs), `osx_arm64` (Apple Silicon), or `win`). For the distributions with a unified `vinca.yaml` file, a package can be included or excluded by a given platform using `rattler-build`-style selectors, see https://rattler.build/dev/selectors/ .
+
+Ideally, try to add packages to all of these platforms. The name of the package is accepted both with underscores and dashes as word separators, but it is suggested to type the name of the package exactly as https://index.ros.org knows it.
 
 ## Creating a new patch file
 Sometimes, it may be required to patch the packages. An example of how to do so can be found in [this PR](https://github.com/RoboStack/ros-noetic/pull/32). Generating the patch can be done as follows:
