@@ -18,7 +18,7 @@ CMake Error at /Users/me/miniconda3/envs/robostackenv/share/catkin/cmake/catkinC
     std_msgsConfig.cmake
     std_msgs-config.cmake
 ```
-First, make sure that the package is installed; in the example case it would be `mamba install ros-noetic-std-msgs`. You can use `rosdep` to install dependencies. Second, make sure that your `CMAKE_PREFIX_PATH` points to your `robostackenv`, in the example case you could achieve this by `export CMAKE_PREFIX_PATH=/Users/me/miniconda3/envs/robostackenv/`. This might happen if `CMAKE_PREFIX_PATH` is not empty when you activate your `robostackenv`.
+First, make sure that the package is installed; in the example if you use mamba case it would be `mamba install ros-noetic-std-msgs`. If you are using `conda`, `mamba` or `micromamba` can use `rosdep` to install dependencies, while `rosdep` is [not supported on pixi at the moment](https://github.com/conda-forge/rosdep-feedstock/issues/35). Second, make sure that your `CMAKE_PREFIX_PATH` points to your `robostackenv`, in the example case you could achieve this by `export CMAKE_PREFIX_PATH=/Users/me/miniconda3/envs/robostackenv/`. This might happen if `CMAKE_PREFIX_PATH` is not empty when you activate your `robostackenv`.
 
 ### Why does autocomplete not work in zsh environments?
 You will need to install https://github.com/conda-incubator/conda-zsh-completion
