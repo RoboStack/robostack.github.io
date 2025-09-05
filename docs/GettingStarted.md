@@ -120,7 +120,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
     !!! tip "Developing on Windows"
         - Windows users also need Visual Studio 2022 with C++ support
-        - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
+        - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
 
 
 === "Pixi"
@@ -148,9 +148,8 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
         The command will also automatically add `LocalAppData/pixi/bin` to your path allowing you to invoke `pixi` from anywhere.
 
         !!! tip "Prerequisites"
-            - Windows users need Visual Studio (2019 or 2022) with C++ support
-            - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
-            - If you wish to use VS2022, you also need to uncomment the indicated line in the below pixi.toml file.
+            - Windows users need Visual Studio 2022 with C++ support
+            - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
 
 
     !!! note
@@ -182,10 +181,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
     [target.unix.activation]
     # For activation scripts, we use bash for Unix-like systems
-    scripts = ["install/setup.bash"] 
-
-    [target.win-64.dependencies]
-    # vs2022_win-64 = "*"  # Uncomment if using Visual Studio 2022
+    scripts = ["install/setup.bash"]
 
     # To build you can use - `pixi run -e <ros distro> build <Any other temporary args>`
     [feature.build.target.win-64.tasks]
