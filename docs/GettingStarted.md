@@ -119,13 +119,9 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
         ```
 
     !!! tip "Developing on Windows"
-        - Windows users also need Visual Studio (2019 or 2022) with C++ support
+        - Windows users also need Visual Studio 2022 with C++ support
         - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-160)
-        
-        If you use Visual Studio 2022, you must also install the command line tool (pre-included included for VS2019):
-        ```
-        mamba install vs2022_win-64
-        ```
+
 
 === "Pixi"
     ## Install Pixi
