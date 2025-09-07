@@ -3,120 +3,67 @@
 RoboStack is a bundling of ROS for Linux, macOS and Windows using the [Conda package manager](https://docs.conda.io/en/latest/), based on top of [conda-forge](https://conda-forge.org/).
 We have also extended support to the [Pixi](https://pixi.sh/latest/) package manager, which builds upon the foundations of, and maintains compatability with the Conda ecosystem. [Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of how Pixi works when compared to Conda/Mamba.
 
-You can install Robostack using either Mamba or Pixi. We recommend using Pixi for any new installations.
-=== "Mamba"
-    ## Install Mamba
-    To get started, you'll need a base conda installation. We recommend using the [`miniforge`](https://github.com/conda-forge/miniforge) installer.
+You can install Robostack using either Micromamba or Pixi. We recommend using Pixi for any new installations.
 
-    To get started with conda (or mamba) as package managers, you need to have a base conda installation. Please do _not_ use the Anaconda installer, but rather start with [`miniforge`](https://github.com/conda-forge/miniforge) that is much more "minimal" installer. This installer will create a "base" environment that contains the package managers conda and mamba. After this installation is done, you can move on to the next steps.
-
-    When you already have a conda installation you can install mamba with:
+=== "Micromamba"
+    ## Install Micromamba
     ```bash
-    conda install mamba -c conda-forge
+    "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
     ```
 
-    !!! warning "Do not install ROS packages in the `base` environment"
+    For details, see the official [Micromamba Installation](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html#automatic-install) instructions.
 
-        Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base. 
-        
-    !!! warning "Do not source the system ROS environment"
-        When there is an installation available of ros on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+    By default, the installer will set up `conda-forge`, the prefix location at `~/micromamba`, and initialise shell variables in your `~/.bashrc`. To undo the changes to your `~/.bashrc`, run:
+    ```bash
+    micromamba shell deinit
+    ```
 
-    !!! warning "PowerShell is not supported"
+    Once installed, you can update micromamba with:
+    ```bash
+    micromamba self-update
+    ```
 
-        On Windows, Powershell is not supported, only the Command Prompt terminal is supported.
-    
-    ## Installing ros
-    === "Mamba"
+    !!! important "Do not install ROS packages in the `base` environment"
+        Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base.
 
-        ```bash title="Prepare an environment to use the correct channels"
-        mamba create -n ros_env
-        mamba activate ros_env
+    !!! important "Do not source the system ROS environment"
+        When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
-        # this adds the conda-forge channel to the new created environment configuration 
-        conda config --env --add channels conda-forge
-        # remove the defaults channel just in case, this might return an error if it is not in the list which is ok
-        conda config --env --remove channels defaults
+    ## Installing ROS
+    !!! note
+        There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
+    === "ROS 1 Noetic"
+        ```bash
+        # Create a ros-noetic desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
         ```
-        !!! note
-            There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
-        === "ROS1 Noetic"
-            ```
-            conda config --env --add channels robostack-noetic
-            mamba install ros-noetic-desktop
-            ```
-        === "ROS2 Humble"
-            ```
-            conda config --env --add channels robostack-humble
-            mamba install ros-humble-desktop
-            ```
-        === "ROS2 Jazzy"
-            ```
-            conda config --env --add channels robostack-jazzy
-            mamba install ros-jazzy-desktop
-            ```
-
-        === "ROS2 Kilted"
-            ```
-            conda config --env --add channels robostack-kilted
-            mamba install ros-kilted-desktop
-            ```
-    
-        ```bash title="Deactivate and reactivate the environment to initialize the configured ROS environment"
-        mamba deactivate
-        mamba activate ros_env
+    === "ROS 2 Humble"
+        ```bash
+        # Create a ros-humble desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
+        ```
+    === "ROS 2 Jazzy"
+        ```bash
+        # Create a ros-jazzy desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
         ```
 
-    === "Micromamba"
+    === "ROS 2 Kilted"
+        ```bash
+        # Create a ros-kilted desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+        ```
 
-        When you only have micromamba available use the following commands: 
-
-        === "ROS1 Noetic"
-            ```
-            # Create a ros-noetic desktop environment
-            micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
-
-            # Activate the environment
-            micromamba activate ros_env
-            ```
-        === "ROS2 Humble"
-            ```
-            # Create a ros-humble desktop environment
-            micromamba create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
-
-            # Activate the environment
-            micromamba activate ros_env
-            ```
-        === "ROS2 Jazzy"
-            ```
-            # Create a ros-jazzy desktop environment
-            micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
-
-            # Activate the environment
-            micromamba activate ros_env
-            ```
-
-        === "ROS2 Kilted"
-            ```
-            # Create a ros-kilted desktop environment
-            micromamba create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
-
-            # Activate the environment
-            micromamba activate ros_env
-            ```
+    ```bash
+    # Activate the environment
+    micromamba activate ros_env
+    ```
 
     ## Installing tools for local development
-    === "Mamba"
-
-        ```bash title="Default tools to help with local development of ROS packages"
-        mamba install compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
-        ```
-
-    === "Micromamba"
-
-        ```bash title="Default tools to help with local development of ROS packages"
-        micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
-        ```
+    ```bash title="Default tools to help with local development of ROS packages"
+    micromamba activate ros_env
+    micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
+    ```
 
     !!! tip "Developing on Windows"
         - Windows users also need Visual Studio 2022 with C++ support
@@ -155,7 +102,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     !!! note
         After installation, you may need to restart your terminal for the `pixi` command to be available.
 
-    !!! warning "Do not source the system ROS environment"
+    !!! important "Do not source the system ROS environment"
         When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
 
@@ -269,84 +216,43 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 !!! note "Reminder"
     The ROS environment activation is included automatically. There is no need to add a `source` command in the `~/.bashrc`
 
-=== "Mamba"
-    === "Mamba"
+=== "Micromamba"
+    **ROS 1**
+    ```bash title="First terminal"
+    micromamba activate ros_env
+    roscore
+    ```
 
-        **ROS 1**
-        ```bash title="First terminal"
-        mamba activate ros_env
-        roscore
-        ```
+    ```bash title="Second terminal"
+    micromamba activate ros_env
+    rviz
+    ```
 
-        ```bash title="Second terminal"
-        mamba activate ros_env
-        rviz
-        ```
+    **ROS 2**
+    !!! note
+        ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
 
-        **ROS 2**
-        !!! note
-
-            ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
-
-        ```bash title="Terminal"
-        mamba activate ros_env
-        rviz2
-        ```
-
-    === "Micromamba"
-
-        **ROS 1**
-        ```bash title="First terminal"
-        micromamba activate ros_env
-        roscore
-        ```
-
-        ```bash title="Second terminal"
-        micromamba activate ros_env
-        rviz
-        ```
-
-        **ROS 2**
-        !!! note
-
-            ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
-
-        ```bash title="Terminal"
-        micromamba activate ros_env
-        rviz2
-        ```
+    ```bash title="Terminal"
+    micromamba activate ros_env
+    rviz2
+    ```
 
     If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
     ## Updating
     Updating all packages in your environment is as easy as:
 
-    === "Mamba"
-
-        ```bash
-        mamba update --all
-        ```
-
-    === "Micromamba"
-
-        ```bash
-        micromamba update --all
-        ```
+    ```bash
+    micromamba update --all
+    ```
 
     ## Deactivating
     The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment.
 
-    === "Mamba"
+    ```bash
+    micromamba deactivate
+    ```
 
-        ```bash
-        mamba deactivate
-        ```
-
-    === "Micromamba"
-
-        ```bash
-        micromamba deactivate
-        ```
 === "Pixi"
 
     !!! note
