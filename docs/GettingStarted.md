@@ -272,7 +272,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 === "Mamba"
     === "Mamba"
 
-        **ROS1**
+        **ROS 1**
         ```bash title="First terminal"
         mamba activate ros_env
         roscore
@@ -283,10 +283,10 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
         rviz
         ```
 
-        **ROS2**
+        **ROS 2**
         !!! note
 
-            ROS2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
+            ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
 
         ```bash title="Terminal"
         mamba activate ros_env
@@ -295,7 +295,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 
     === "Micromamba"
         
-        **ROS1**
+        **ROS 1**
         ```bash title="First terminal"
         micromamba activate ros_env
         roscore
@@ -306,10 +306,10 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
         rviz
         ```
 
-        **ROS2**
+        **ROS 2**
         !!! note
 
-            ROS2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
+            ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
 
         ```bash title="Terminal"
         micromamba activate ros_env
@@ -352,7 +352,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     !!! note
         Remember if trying to activate the pixi from outside the project directory, provide the path to the pixi.toml with `--manifest-path`.
 
-    **ROS1**
+    **ROS 1**
     ```bash title="First terminal"
     cd robostack
     pixi run -e noetic roscore
@@ -375,7 +375,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     rviz
     ```
 
-    **ROS2**
+    **ROS 2**
     ```bash title="Terminal"
     cd robostack
     pixi run -e humble rviz2 # OR jazzy, kilted
