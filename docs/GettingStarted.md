@@ -154,7 +154,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
 
     !!! note
         After installation, you may need to restart your terminal for the `pixi` command to be available.
-    
+
     !!! warning "Do not source the system ROS environment"
         When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
 
@@ -215,7 +215,7 @@ You can install Robostack using either Mamba or Pixi. We recommend using Pixi fo
     jazzy = { features = ["jazzy", "build"] }
     kilted = { features = ["kilted", "build"] }
 
-    ### ROS Noetic ####  
+    ### ROS Noetic ####
     [feature.noetic]
     channels = ["https://prefix.dev/robostack-noetic"]
 
@@ -294,7 +294,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
         ```
 
     === "Micromamba"
-        
+
         **ROS 1**
         ```bash title="First terminal"
         micromamba activate ros_env
@@ -322,33 +322,33 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     Updating all packages in your environment is as easy as:
 
     === "Mamba"
-        
+
         ```bash
         mamba update --all
         ```
 
     === "Micromamba"
-        
+
         ```bash
         micromamba update --all
         ```
 
     ## Deactivating
-    The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment. 
+    The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment.
 
     === "Mamba"
-        
+
         ```bash
         mamba deactivate
         ```
 
     === "Micromamba"
-        
+
         ```bash
         micromamba deactivate
         ```
 === "Pixi"
-    
+
     !!! note
         Remember if trying to activate the pixi from outside the project directory, provide the path to the pixi.toml with `--manifest-path`.
 
@@ -386,7 +386,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     pixi shell -e humble  # OR jazzy, kilted
     rviz2
     ```
-    
+
     If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
     ## Updating
