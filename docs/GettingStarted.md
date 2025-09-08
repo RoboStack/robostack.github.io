@@ -4,6 +4,7 @@ RoboStack is a bundling of ROS for Linux, macOS and Windows using the [Conda pac
 We have also extended support to the [Pixi](https://pixi.sh/latest/) package manager, which builds upon the foundations of, and maintains compatability with the Conda ecosystem. [Here](https://pixi.sh/dev/switching_from/conda/) is a comparison of how Pixi works when compared to Conda/Mamba.
 
 You can install Robostack using either Micromamba or Pixi. We recommend using Pixi for any new installations.
+Note that the instructions for Conda and Micromamba are virtually identical apart from the installation.
 
 === "Micromamba"
     ## Install Micromamba
@@ -63,6 +64,62 @@ You can install Robostack using either Micromamba or Pixi. We recommend using Pi
     ```bash title="Default tools to help with local development of ROS packages"
     micromamba activate ros_env
     micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
+    ```
+
+    !!! tip "Developing on Windows"
+        - Windows users also need Visual Studio 2022 with C++ support
+        - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
+
+
+=== "Conda"
+    ## Install conda
+    On Debian- and RPM-based distributions, we recommend the [Debian and RPM repository for miniconda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/rpm-debian.html). To source the base environment:
+    ```bash
+    source /opt/conda/etc/profile.d/conda.sh
+    ```
+
+    For other OSes and Linux distributions, we recommend using the [`miniforge`](https://github.com/conda-forge/miniforge) installer.
+
+    !!! important "Do not install ROS packages in the `base` environment"
+        Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base.
+
+    !!! important "Do not source the system ROS environment"
+        When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+
+    ## Installing ROS
+    !!! note
+        There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
+    === "ROS 1 Noetic"
+        ```bash
+        # Create a ros-noetic desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
+        ```
+    === "ROS 2 Humble"
+        ```bash
+        # Create a ros-humble desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
+        ```
+    === "ROS 2 Jazzy"
+        ```bash
+        # Create a ros-jazzy desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+        ```
+
+    === "ROS 2 Kilted"
+        ```bash
+        # Create a ros-kilted desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+        ```
+
+    ```bash
+    # Activate the environment
+    conda activate ros_env
+    ```
+
+    ## Installing tools for local development
+    ```bash title="Default tools to help with local development of ROS packages"
+    conda activate ros_env
+    conda install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
     ```
 
     !!! tip "Developing on Windows"
@@ -251,6 +308,43 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
 
     ```bash
     micromamba deactivate
+    ```
+
+=== "Conda"
+    **ROS 1**
+    ```bash title="First terminal"
+    conda activate ros_env
+    roscore
+    ```
+
+    ```bash title="Second terminal"
+    conda activate ros_env
+    rviz
+    ```
+
+    **ROS 2**
+    !!! note
+        ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
+
+    ```bash title="Terminal"
+    conda activate ros_env
+    rviz2
+    ```
+
+    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
+
+    ## Updating
+    Updating all packages in your environment is as easy as:
+
+    ```bash
+    conda update --all
+    ```
+
+    ## Deactivating
+    The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment.
+
+    ```bash
+    conda deactivate
     ```
 
 === "Pixi"
