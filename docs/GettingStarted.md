@@ -73,12 +73,20 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
 
 === "Conda"
     ## Install conda
-    On Debian- and RPM-based distributions, we recommend the [Debian and RPM repository for miniconda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/rpm-debian.html). To source the base environment:
+    To get started, you'll need a base conda installation. We recommend using the [Miniforge](https://github.com/conda-forge/miniforge) installer.
+
+    On Debian- and RPM-based distributions, you can also use the [Debian and RPM repository for miniconda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/rpm-debian.html). To source the base environment:
     ```bash
     source /opt/conda/etc/profile.d/conda.sh
     ```
 
-    For other OSes and Linux distributions, we recommend using the [`miniforge`](https://github.com/conda-forge/miniforge) installer.
+    !!! warning "Avoid using the `defaults` channel"
+        The packages from the `defaults` channel (https://www.anaconda.com), set up by Anaconda and Miniconda, are subject to the [Anaconda Terms of Service](https://www.anaconda.com/legal/terms/terms-of-service). See [Conda Package Repository and Channels](https://conda.org/blog/2024-08-14-conda-ecosystem-explained/#conda-package-repository-and-channels) for details.
+
+        To avoid accidental violation of the Anaconda ToS, remove the `defaults` channel:
+        ```bash
+        conda config --env --remove channels defaults
+        ```
 
     !!! important "Do not install ROS packages in the `base` environment"
         Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base.
