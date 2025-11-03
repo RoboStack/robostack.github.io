@@ -112,28 +112,39 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
         ```bash
         # Create a ros-noetic desktop environment
         conda create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-noetic
         ```
     === "ROS 2 Humble"
         ```bash
         # Create a ros-humble desktop environment
         conda create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-humble
         ```
     === "ROS 2 Jazzy"
         ```bash
         # Create a ros-jazzy desktop environment
         conda create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-jazzy
         ```
 
     === "ROS 2 Kilted"
         ```bash
         # Create a ros-kilted desktop environment
         conda create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-kilted
         ```
-
-    ```bash
-    # Activate the environment
-    conda activate ros_env
-    ```
 
     ## Installing tools for local development
     ```bash title="Default tools to help with local development of ROS packages"
