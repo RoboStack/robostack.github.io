@@ -203,7 +203,7 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
 
     Open the newly created pixi.toml in your favourite text editor and paste the below configuration into the file (overwriting the configuration created by `pixi init`):
     ```toml title="pixi.toml"
-    [project]
+    [workspace]
     name = "robostack"
     description = "Development environment for RoboStack ROS packages"
     channels = ["https://prefix.dev/conda-forge"]
