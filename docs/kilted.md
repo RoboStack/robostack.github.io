@@ -638,6 +638,7 @@
 | ros-kilted-marti-visualization-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mavlink | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mavros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-kilted-mavros-examples | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mavros-extras | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mavros-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mcap-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.32.0  |
@@ -778,6 +779,7 @@
 | ros-kilted-mrpt-tps-astar-planner | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mrpt-tutorials | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-mrt-cmake-modules | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 1.0.11  |
+| ros-kilted-mujoco-vendor | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-multires-image | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-multisensor-calibration | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-multisensor-calibration-interface | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1574,4 +1576,4 @@
 | ros-kilted-zstd-image-transport | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 5.0.2, 5.1.0, 5.1.1  |
 | ros-kilted-zstd-point-cloud-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.32.0  |
-| Number of available packages |  704 / 1574 | 643 / 1574 | 692 / 1574 | 704 / 1574 | 692 / 1574 | 0 / 1574 |
+| Number of available packages |  704 / 1576 | 643 / 1576 | 692 / 1576 | 704 / 1576 | 692 / 1576 | 0 / 1576 |
