@@ -74,7 +74,7 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
     ## Installing tools for local development
     ```bash title="Default tools to help with local development of ROS packages"
     micromamba activate ros_env
-    micromamba install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
+    micromamba install -c conda-forge ros-dev-tools
     ```
 
     !!! tip "Developing on Windows"
@@ -149,7 +149,7 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
     ## Installing tools for local development
     ```bash title="Default tools to help with local development of ROS packages"
     conda activate ros_env
-    conda install -c conda-forge compilers cmake pkg-config make ninja colcon-common-extensions catkin_tools rosdep
+    conda install -c conda-forge ros-dev-tools
     ```
 
     !!! tip "Developing on Windows"
