@@ -199,6 +199,10 @@
 | ros-kilted-controller-manager | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 5.1.0, 5.2.0, 5.5.0, 5.6.0  |
 | ros-kilted-controller-manager-msgs | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 5.1.0, 5.2.0, 5.5.0, 5.6.0  |
 | ros-kilted-costmap-queue | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 1.4.0, 1.4.1, 1.4.2  |
+| ros-kilted-cras-bag-tools | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-kilted-cras-cpp-common | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-kilted-cras-lint | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-kilted-cras-topic-tools | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-cudnn-cmake-module | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-cv-bridge | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 4.1.0  |
 | ros-kilted-cx-ament-index-plugin | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
@@ -1579,4 +1583,4 @@
 | ros-kilted-zstd-image-transport | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 5.0.2, 5.1.0, 5.1.1  |
 | ros-kilted-zstd-point-cloud-transport | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-kilted-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.32.0  |
-| Number of available packages |  704 / 1579 | 643 / 1579 | 692 / 1579 | 704 / 1579 | 692 / 1579 | 0 / 1579 |
+| Number of available packages |  704 / 1583 | 643 / 1583 | 692 / 1583 | 704 / 1583 | 692 / 1583 | 0 / 1583 |

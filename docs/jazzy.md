@@ -1836,6 +1836,7 @@
 | ros-jazzy-yasmin-viewer | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zbar-ros | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zbar-ros-interfaces | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
+| ros-jazzy-zed-description | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zed-msgs | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zenoh-bridge-dds | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } | :x: { data-sort='0' } |   |
 | ros-jazzy-zenoh-cpp-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.2.0, 0.2.3, 0.2.5, 0.2.7, 0.2.8  |
@@ -1845,4 +1846,4 @@
 | ros-jazzy-zstd-image-transport | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 4.0.3, 4.0.4, 4.0.5, 4.0.6  |
 | ros-jazzy-zstd-point-cloud-transport | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 4.0.1, 4.0.2  |
 | ros-jazzy-zstd-vendor | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :heavy_check_mark: { data-sort='1' } | :x: { data-sort='0' } | 0.26.3, 0.26.6, 0.26.7, 0.26.8, 0.26.9  |
-| Number of available packages |  765 / 1845 | 690 / 1845 | 753 / 1845 | 764 / 1845 | 754 / 1845 | 0 / 1845 |
+| Number of available packages |  765 / 1846 | 690 / 1846 | 753 / 1846 | 764 / 1846 | 754 / 1846 | 0 / 1846 |
