@@ -13,6 +13,8 @@ nav:
       - ROS2 Humble: humble.md
       - ROS2 Jazzy: jazzy.md
       - ROS2 Kilted: kilted.md
+      - ROS2 Lyrical: lyrical.md
+      - ROS2 Rolling: rolling.md
       - JupyterRos: JupyterRos.md
     - Support: support.md
     - Contributing: Contributing.md

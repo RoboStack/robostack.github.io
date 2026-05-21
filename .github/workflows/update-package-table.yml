@@ -31,6 +31,12 @@ jobs:
     - name: Create table kilted
       run: |
         pixi run compare-completeness kilted robostack-kilted
+    - name: Create table rolling
+      run: |
+        pixi run compare-completeness rolling https://prefix.dev/robostack-rolling
+    - name: Create table lyrical
+      run: |
+        pixi run compare-completeness lyrical https://prefix.dev/robostack-lyrical
     - name: Commit changes
       id: commit
       run: |
@@ -42,6 +48,8 @@ jobs:
         git add docs/humble.md
         git add docs/jazzy.md
         git add docs/kilted.md
+        git add docs/rolling.md
+        git add docs/lyrical.md
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
