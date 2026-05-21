@@ -1,6 +1,5 @@
 import os
 import yaml
-import json
 import requests
 import argparse
 
@@ -16,7 +15,11 @@ channel = args.channel
 f = open(os.path.join("docs", distro + ".md"), 'w')
 
 rosdistro_pkgs = "https://raw.githubusercontent.com/ros/rosdistro/master/{distro}/distribution.yaml".format(distro=distro)
-conda_pkgs_url = "https://conda.anaconda.org/{channel}/{arch}/repodata.json"
+
+if channel.startswith(("http://", "https://")):
+    conda_pkgs_url = channel.rstrip("/") + "/{arch}/repodata.json"
+else:
+    conda_pkgs_url = "https://conda.anaconda.org/{channel}/{arch}/repodata.json"
 
 rosdistro_pkgs = yaml.safe_load(requests.get(rosdistro_pkgs).text)
 
@@ -35,14 +38,17 @@ def to_ros(pkg):
     return f"ros-{distro}-{pkg.replace('_', '-')}"
 
 def get_conda_pkgs(arch="linux-64"):
-    conda_pkgs = requests.get(conda_pkgs_url.format(arch=arch, channel=channel)).json()
+    response = requests.get(conda_pkgs_url.format(arch=arch, channel=channel))
+    if response.status_code == 404:
+        return {}
+    response.raise_for_status()
+    conda_pkgs = response.json()
     conda_pkgs_versions = {}
     for pkgname, pkg in {**conda_pkgs.get('packages.conda', {}), **conda_pkgs.get('packages', {})}.items():
         if pkg["name"] in conda_pkgs_versions:
             conda_pkgs_versions[pkg["name"]].add(pkg["version"])
         else:
             conda_pkgs_versions[pkg["name"]] = {pkg["version"]}
-    print(conda_pkgs_versions)
     return conda_pkgs_versions
 
 f.write("| Package | ")
