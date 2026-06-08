@@ -17,6 +17,8 @@ You can also contribute by following the guidelines in our [contribution](Contri
 * [ROS2 Humble](https://github.com/RoboStack/ros-humble/issues/new/choose)
 * [ROS2 Jazzy](https://github.com/RoboStack/ros-jazzy/issues/new/choose)
 * [ROS2 Kilted](https://github.com/RoboStack/ros-kilted/issues/new/choose)
+* [ROS2 Lyrical](https://github.com/RoboStack/ros-lyrical/issues/new/choose)
+* [ROS2 Rolling](https://github.com/RoboStack/ros-rolling/issues/new/choose)
 * [ROS2 Galactic](https://github.com/RoboStack/ros-galactic/issues/new/choose) (not actively maintained anymore)
 * [ROS2 Foxy](https://github.com/RoboStack/ros-foxy/issues/new/choose) (not actively maintained anymore)
 
