@@ -70,6 +70,26 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
         # Add the robostack channel to the environemnt
         micromamba config append channels robostack-kilted --env
         ```
+    === "ROS 2 Lyrical"
+        ```bash
+        # Create a ros-lyrical desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-lyrical ros-lyrical-desktop
+        # Activate the environment
+        micromamba activate ros_env
+        # Add the robostack channel to the environemnt
+        micromamba config append channels robostack-lyrical --env
+        ```
+
+    === "ROS 2 Rolling"
+        ```bash
+        # Create a ros-rolling desktop environment
+        micromamba create -n ros_env -c conda-forge -c robostack-rolling ros-rolling-desktop
+        # Activate the environment
+        micromamba activate ros_env
+        # Add the robostack channel to the environemnt
+        micromamba config append channels robostack-rolling --env
+        ```
+
 
     ## Installing tools for local development
     ```bash title="Default tools to help with local development of ROS packages"
@@ -144,6 +164,26 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
         conda activate ros_env
         # Add the robostack channel to the environemnt
         conda config --env --add channels robostack-kilted
+        ```
+    
+    === "ROS 2 Lyrical"
+        ```bash
+        # Create a ros-lyrical desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-lyrical ros-lyrical-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-lyrical
+        ``` 
+    
+    === "ROS 2 Rolling"
+        ```bash
+        # Create a ros-rolling desktop environment
+        conda create -n ros_env -c conda-forge -c robostack-rolling ros-rolling-desktop
+        # Activate the environment
+        conda activate ros_env
+        # Add the robostack channel to the environemnt
+        conda config --env --add channels robostack-rolling
         ```
 
     ## Installing tools for local development
@@ -248,6 +288,8 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
     humble = { features = ["humble", "build"] }
     jazzy = { features = ["jazzy", "build"] }
     kilted = { features = ["kilted", "build"] }
+    lyrical = { features = ["lyrical", "build"] }
+    rolling = { features = ["rolling", "build"] }
 
     ### ROS Noetic ####
     [feature.noetic]
@@ -277,6 +319,20 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
 
     [feature.kilted.dependencies]
     ros-kilted-desktop = "*"
+
+    ### ROS Lyrical ####
+    [feature.lyrical]
+    channels = ["https://prefix.dev/robostack-lyrical"]
+
+    [feature.lyrical.dependencies]
+    ros-lyrical-desktop = "*"
+
+    ### ROS Rolling ####
+    [feature.rolling]
+    channels = ["https://prefix.dev/robostack-rolling"]
+
+    [feature.rolling.dependencies]
+    ros-rolling-desktop = "*"
     ```
 
     ```bash
@@ -295,6 +351,12 @@ Note that the instructions for Conda and Micromamba are virtually identical apar
 
     # ROS kilted
     pixi shell -e kilted
+
+    # ROS lyrical
+    pixi shell -e lyrical
+
+    # ROS rolling
+    pixi shell -e rolling
     ```
 
 ## Testing installation
@@ -408,12 +470,12 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     **ROS 2**
     ```bash title="Terminal"
     cd robostack
-    pixi run -e humble rviz2 # OR jazzy, kilted
+    pixi run -e humble rviz2 # OR jazzy, kilted, lyrical, rolling
     ```
     alternatively,
     ```bash title="Terminal"
     cd robostack
-    pixi shell -e humble  # OR jazzy, kilted
+    pixi shell -e humble  # OR jazzy, kilted, lyrical, rolling
     rviz2
     ```
 
