@@ -66,3 +66,17 @@ In most cases those should be already installed in your system, but in case they
 - Debian/Ubuntu-based distributions: `sudo apt-get install libgl1-mesa-dri libglx-mesa0 libegl-mesa0`
 - Fedora-based distributions: `sudo dnf install mesa-libGL mesa-libEGL mesa-dri-drivers`
 
+### What to do if pixi fails to solve the environment due to system requirements (e.g., __glibc)?
+
+When adding packages, you might get dependency conflicts containing an error like `└─ __glibc >=2.34,<3.0.a0, for which no candidates were found`.
+
+You can fix this by explicitly defining your system's actual capabilities in your pixi.toml file. 
+Add or update the `[system-requirements]` section to include your required baseline:
+
+```toml
+[system-requirements]
+libc = { family = "glibc", version = "2.31" }
+linux = "5.15"
+```
+
+Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
