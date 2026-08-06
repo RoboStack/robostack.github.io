@@ -18,11 +18,8 @@ extra_javascript = [
 # The nav below only structures the documentation sidebar.
 nav = [
   { "Overview" = "Overview.md" },
+  # { "What's New" = "WhatsNew.md" },
   { "Getting Started" = "GettingStarted.md" },
-  { "Alternative to Pixi" = [
-    { "Micromamba" = "micromamba.md" },
-    { "Conda" = "conda.md" },
-  ] },
   { "Available Packages" = [
     { "ROS1 Noetic" = "noetic.md" },
     { "ROS2 Foxy" = "foxy.md" },
@@ -57,7 +54,6 @@ features = [
 [project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
 [project.markdown_extensions.pymdownx.superfences]
-[project.markdown_extensions.pymdownx.details]
 
 [project.markdown_extensions.pymdownx.highlight]
 anchor_linenums = true

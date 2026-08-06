@@ -80,7 +80,3 @@ linux = "5.15"
 ```
 
 Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
-
-### Why ROS and Conda?
-
-We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager. We provide ROS binaries for Linux, macOS (Intel and Apple Silicon), Windows and ARM (Linux). Installing other recent packages via conda-forge side-by-side works easily, e.g. you can install TensorFlow/PyTorch in the same environment as ROS Noetic without any issues. As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu. As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows. No root access is required, all packages live in your home directory. We have recently written up a paper and blog post with more information.
