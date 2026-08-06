@@ -13,8 +13,11 @@ extra_javascript = [
   "javascripts/tables.js",
 ]
 
+# The header links to the frontpage (logo), the package page and the
+# documentation via the overridden header partial in overrides/partials/.
+# The nav below only structures the documentation sidebar.
 nav = [
-  { "Home" = "index.md" },
+  { "Overview" = "Overview.md" },
   # { "What's New" = "WhatsNew.md" },
   { "Getting Started" = "GettingStarted.md" },
   { "Available Packages" = [
@@ -36,6 +39,7 @@ nav = [
 [project.theme]
 # Keeps the Material for MkDocs look, so `.md-grid` in docs/extra.css still applies.
 variant = "classic"
+custom_dir = "overrides"
 features = [
   "content.code.copy",
   "content.action.edit",
