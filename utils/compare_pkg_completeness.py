@@ -14,6 +14,12 @@ channel = args.channel
 
 f = open(os.path.join("docs", distro + ".md"), 'w')
 
+# Zensical takes a page's title from its first heading and falls back to the file
+# name, so without this the pages would be titled "Humble" instead of
+# "ROS2 Humble". Keep in sync with the nav labels in zensical.toml.
+ROS1_DISTROS = {"melodic", "noetic"}
+f.write("# ROS{} {}\n\n".format(1 if distro in ROS1_DISTROS else 2, distro.capitalize()))
+
 rosdistro_pkgs = "https://raw.githubusercontent.com/ros/rosdistro/master/{distro}/distribution.yaml".format(distro=distro)
 
 if channel.startswith(("http://", "https://")):

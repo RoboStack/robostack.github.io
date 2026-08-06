@@ -1,0 +1,64 @@
+[project]
+site_name = "RoboStack"
+site_url = "https://robostack.github.io/"
+repo_url = "https://github.com/RoboStack/robostack.github.io"
+edit_uri = "edit/master/docs/"
+
+# Published URLs are `GettingStarted.html`, not `GettingStarted/`. Don't change this.
+use_directory_urls = false
+
+extra_css = ["extra.css"]
+extra_javascript = [
+  "https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js",
+  "javascripts/tables.js",
+]
+
+nav = [
+  { "Home" = "index.md" },
+  # { "What's New" = "WhatsNew.md" },
+  { "Getting Started" = "GettingStarted.md" },
+  { "Available Packages" = [
+    { "ROS1 Noetic" = "noetic.md" },
+    { "ROS2 Foxy" = "foxy.md" },
+    { "ROS2 Galactic" = "galactic.md" },
+    { "ROS2 Humble" = "humble.md" },
+    { "ROS2 Jazzy" = "jazzy.md" },
+    { "ROS2 Kilted" = "kilted.md" },
+    { "ROS2 Lyrical" = "lyrical.md" },
+    { "ROS2 Rolling" = "rolling.md" },
+    { "JupyterRos" = "JupyterRos.md" },
+  ] },
+  { "Support" = "support.md" },
+  { "Contributing" = "Contributing.md" },
+  { "FAQ" = "FAQ.md" },
+]
+
+[project.theme]
+# Keeps the Material for MkDocs look, so `.md-grid` in docs/extra.css still applies.
+variant = "classic"
+features = [
+  "content.code.copy",
+  "content.action.edit",
+  "content.action.view",
+  "content.tabs.link",
+  "navigation.instant",
+  "navigation.path",
+]
+
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.superfences]
+
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+
+# Both keys are required: an empty table falls back to pymdownx's own emojione/to_png
+# defaults, which would turn every check mark in the package tables into a remote PNG.
+[project.markdown_extensions.pymdownx.emoji]
+emoji_index = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
