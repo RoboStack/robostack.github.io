@@ -1,0 +1,23 @@
+Interface icons
+===============
+
+Copied unmodified (apart from stripping <title>) from the icon sets that ship
+with the Zensical theme, so they match anything a page writes as
+:material-linux: and so the table does not depend on a third-party CDN.
+
+linux.svg, apple.svg, windows.svg, channel.svg, docs.svg, github.svg
+  Source: Material Design Icons, via zensical/templates/.icons/material/
+          linux, apple, microsoft-windows, package-variant-closed,
+          file-document-outline, github
+  Licence: Pictogrammers Free License
+           https://github.com/Templarian/MaterialDesign/blob/master/LICENSE
+  Credit: Pictogrammers
+
+wasm.svg
+  Source: Simple Icons, via zensical/templates/.icons/simple/webassembly.svg
+  Licence: CC0 1.0 Universal
+           https://creativecommons.org/publicdomain/zero/1.0/
+  Credit: Simple Icons contributors
+
+They are applied as CSS mask-image in docs/extra.css rather than <img>, so they
+take their colour from the surrounding text and invert correctly on hover.

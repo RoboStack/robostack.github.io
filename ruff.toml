@@ -1,0 +1,23 @@
+# Applies to the scripts in utils/. There is no package here, just two
+# generators, so the rule set stays close to ruff's defaults plus the checks
+# that catch real mistakes: unused imports, shadowed builtins, missing
+# annotations, and imports drifting out of order.
+line-length = 100
+target-version = "py311"
+
+[lint]
+select = [
+    "E",    # pycodestyle
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import order
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "BLE",  # blind except — both uses here are deliberate and annotated
+    "SIM",  # simplify
+    "ANN",  # missing annotations
+    "RUF",  # ruff's own checks
+]
+
+[format]
+quote-style = "double"
