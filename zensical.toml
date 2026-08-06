@@ -24,8 +24,11 @@ extra_javascript = [
 # entry if the flagship changes.
 nav = [
   { "Overview" = "Overview.md" },
-  # { "What's New" = "WhatsNew.md" },
   { "Getting Started" = "GettingStarted.md" },
+  { "Alternative to Pixi" = [
+    { "Micromamba" = "micromamba.md" },
+    { "Conda" = "conda.md" },
+  ] },
   { "Distributions" = "lyrical.md" },
   { "JupyterRos" = "JupyterRos.md" },
   { "Support" = "support.md" },
@@ -51,6 +54,7 @@ features = [
 [project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
 [project.markdown_extensions.pymdownx.superfences]
+[project.markdown_extensions.pymdownx.details]
 
 [project.markdown_extensions.pymdownx.highlight]
 anchor_linenums = true

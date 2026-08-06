@@ -1,0 +1,144 @@
+# Install robostack packages with conda
+
+## First, install conda
+
+To get started, you'll need a base conda installation. We recommend using the [Miniforge](https://github.com/conda-forge/miniforge) installer.
+
+On Debian- and RPM-based distributions, you can also use the [Debian and RPM repository for miniconda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/rpm-debian.html). To source the base environment:
+
+```bash
+source /opt/conda/etc/profile.d/conda.sh
+```
+
+!!! warning "Avoid using the `defaults` channel"
+    The packages from the `defaults` channel (https://www.anaconda.com), set up by Anaconda and Miniconda, are subject to the [Anaconda Terms of Service](https://www.anaconda.com/legal/terms/terms-of-service). See [Conda Package Repository and Channels](https://conda.org/blog/2024-08-14-conda-ecosystem-explained/#conda-package-repository-and-channels) for details.
+
+    To avoid accidental violation of the Anaconda ToS, remove the `defaults` channel:
+    ```bash
+    conda config --env --remove channels defaults
+    ```
+
+!!! important "Do not install ROS packages in the `base` environment"
+    Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base.
+
+!!! important "Do not source the system ROS environment"
+    When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+
+## Installing ROS
+
+!!! note
+    There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
+=== "ROS 1 Noetic"
+    ```bash
+    # Create a ros-noetic desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-noetic
+    ```
+=== "ROS 2 Humble"
+    ```bash
+    # Create a ros-humble desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-humble
+    ```
+=== "ROS 2 Jazzy"
+    ```bash
+    # Create a ros-jazzy desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-jazzy
+    ```
+
+=== "ROS 2 Kilted"
+    ```bash
+    # Create a ros-kilted desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-kilted
+    ```
+
+=== "ROS 2 Lyrical"
+    ```bash
+    # Create a ros-lyrical desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-lyrical ros-lyrical-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-lyrical
+    ``` 
+
+=== "ROS 2 Rolling"
+    ```bash
+    # Create a ros-rolling desktop environment
+    conda create -n ros_env -c conda-forge -c robostack-rolling ros-rolling-desktop
+    # Activate the environment
+    conda activate ros_env
+    # Add the robostack channel to the environemnt
+    conda config --env --add channels robostack-rolling
+    ```
+
+## Installing tools for local development
+
+```bash title="Default tools to help with local development of ROS packages"
+conda activate ros_env
+conda install -c conda-forge ros-dev-tools
+```
+
+!!! tip "Developing on Windows"
+    - Windows users also need Visual Studio 2022 with C++ support
+    - You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
+
+## Testing installation
+
+After installation, you should test if you are able to run `rviz`/`rviz2` and other ROS tools.
+
+!!! note "Reminder"
+    The ROS environment activation is included automatically. There is no need to add a `source` command in the `~/.bashrc`
+
+=== **ROS 1**
+
+    ```bash title="First terminal"
+    conda activate ros_env
+    roscore
+    ```
+
+    ```bash title="Second terminal"
+    conda activate ros_env
+    rviz
+    ```
+
+=== "ROS 2"
+    !!! note
+        ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
+
+    ```bash title="Terminal"
+    conda activate ros_env
+    rviz2
+    ```
+
+If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
+
+## Updating
+
+Updating all packages in your environment is as easy as:
+
+```bash
+conda update --all
+```
+
+## Deactivating
+
+The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment.
+
+```bash
+conda deactivate
+```
