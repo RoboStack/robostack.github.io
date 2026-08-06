@@ -1,0 +1,200 @@
+/* ==========================================================================
+   RoboStack - Colors & Type
+   Design tokens adapted from the prefix.dev / Pixi theme.
+   The display font falls back to Fraunces; the proprietary Moranga font
+   files are not shipped with this repository.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@400;600&family=DM+Mono:wght@400;500&display=swap");
+
+:root {
+  /* ---------- Brand ---------- */
+  --rs-primary:        #ffd432; /* yellow */
+  --rs-primary-alt:    #ffca16; /* yellow border / hover */
+  --rs-secondary:      #5773ff; /* link blue */
+  --rs-good:           #70c038;
+  --rs-bad:            #ff6b38;
+  --rs-ink:            #001d38; /* near-black navy - the "text" color */
+  --rs-ink-deep:       #000f24;
+
+  /* ---------- Warm neutrals (the cream/paper tones) ---------- */
+  --rs-cream-50:   #f8f6f2; /* page bg */
+  --rs-cream-100:  #f1ede4; /* card borders, rails */
+  --rs-cream-200:  #e2e2df;
+  --rs-cream-300:  #b5b7ba;
+  --rs-cream-400:  #8b8e93;
+  --rs-cream-500:  #777a7f;
+  --rs-cream-600:  #62656a;
+  --rs-cream-700:  #383d3f;
+  --rs-cream-800:  #2b2d2f;
+  --rs-cream-900:  #191910;
+
+  /* ---------- Dark-mode neutrals ---------- */
+  --rs-dark-50:   #f8f6f2;
+  --rs-dark-100:  #f1ede4;
+  --rs-dark-200:  #dee0e3;
+  --rs-dark-300:  #b2b7bd;
+  --rs-dark-400:  #868e93;
+  --rs-dark-500:  #5e656e;
+  --rs-dark-600:  #383d42;
+  --rs-dark-700:  #181f25; /* card bg in dark */
+  --rs-dark-800:  #111518;
+  --rs-dark-900:  #101519; /* page bg in dark */
+
+  /* ---------- Semantic - light theme (default) ---------- */
+  --fg-1:          var(--rs-ink);              /* primary text */
+  --fg-2:          var(--rs-cream-600);        /* secondary / muted */
+  --fg-3:          var(--rs-cream-400);        /* placeholder / disabled */
+  --fg-link:       #3957ff;
+  --fg-on-brand:   var(--rs-ink);              /* text on yellow */
+
+  --bg-page:       var(--rs-cream-50);         /* #f8f6f2 */
+  --bg-surface:    #ffffff;                    /* cards */
+  --bg-inset:      var(--rs-cream-100);        /* rails, code-block backdrops */
+  --bg-brand:      var(--rs-primary);          /* big yellow blocks */
+
+  --border-1:      var(--rs-cream-100);        /* default 1px card border */
+  --border-2:      var(--rs-cream-200);
+  --border-brand:  var(--rs-primary-alt);
+
+  /* ---------- Elevation / shadows ---------- */
+  --shadow-card:   0 4px 8px 0 rgba(59, 61, 63, 0.02);
+  --shadow-soft:   0 0 40px 0 rgba(0, 29, 56, 0.06);
+  --shadow-hover-yellow: 5px 5px var(--rs-primary), 10px 10px #fff9d6;
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;   /* default for buttons, inputs */
+  --radius-lg: 16px;   /* cards */
+  --radius-xl: 24px;
+  --radius-2xl: 32px;  /* large feature cards */
+  --radius-pill: 9999px;
+
+  /* ---------- Spacing scale (4px base) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ---------- Type families ---------- */
+  --font-display:   "Fraunces", ui-serif, Georgia, serif;
+  --font-body:      "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-mono:      "JetBrains Mono", "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-handwritten: "Caveat", cursive;
+
+  /* ---------- Type scale (semantic) ---------- */
+  --fs-display-xl: 56px; --lh-display-xl: 1.05; --ls-display-xl: -0.01em;
+  --fs-display-l:  40px; --lh-display-l:  1.2;
+  --fs-display-m:  32px; --lh-display-m:  1.125;
+  --fs-display-s:  24px; --lh-display-s:  1.33;
+  --fs-lead:       20px; --lh-lead:       1.4;
+  --fs-body-l:     18px; --lh-body-l:     1.55;
+  --fs-body-m:     16px; --lh-body-m:     1.5;
+  --fs-body-s:     14px; --lh-body-s:     1.5;
+  --fs-caption:    12px; --lh-caption:    1.33;
+  --fs-mono-s:     12px; --lh-mono-s:     1.5;
+  --fs-mono-xs:    10px; --lh-mono-xs:    1.4;
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-1: 150ms;
+  --dur-2: 250ms;
+  --dur-3: 400ms;
+  --dur-hover-card: 500ms;
+}
+
+/* ---------- Dark theme overrides ---------- */
+.dark, [data-theme="dark"] {
+  --fg-1:          var(--rs-dark-50);
+  --fg-2:          var(--rs-dark-300);
+  --fg-3:          var(--rs-dark-500);
+  --fg-link:       #9aaaff;
+  --bg-page:       var(--rs-dark-900);
+  --bg-surface:    var(--rs-dark-700);
+  --bg-inset:      var(--rs-dark-800);
+  --border-1:      var(--rs-dark-900);
+  --border-2:      var(--rs-dark-600);
+}
+
+/* ---------- Base element styles ---------- */
+* { box-sizing: border-box; }
+html { font-family: var(--font-body); color: var(--fg-1); background: var(--bg-page); }
+body { margin: 0; font-size: var(--fs-body-m); line-height: var(--lh-body-m); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--rs-primary); color: var(--rs-ink); }
+
+h1, .h1 {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--fs-display-xl); line-height: var(--lh-display-xl);
+  letter-spacing: var(--ls-display-xl);
+  color: var(--fg-1); margin: 0;
+}
+h2, .h2 {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--fs-display-l); line-height: var(--lh-display-l);
+  color: var(--fg-1); margin: 0;
+}
+h3, .h3 {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--fs-display-m); line-height: var(--lh-display-m);
+  color: var(--fg-1); margin: 0;
+}
+h4, .h4 {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--fs-display-s); line-height: var(--lh-display-s);
+  color: var(--fg-1); margin: 0;
+}
+.lead {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--fs-lead); line-height: var(--lh-lead);
+}
+p { margin: 0 0 var(--space-4) 0; color: var(--fg-1); }
+.muted { color: var(--fg-2); }
+small, .caption {
+  font-family: var(--font-body); font-size: var(--fs-caption); line-height: var(--lh-caption);
+  color: var(--fg-2);
+}
+code, kbd, .mono {
+  font-family: var(--font-mono); font-size: var(--fs-mono-s);
+}
+.handwritten { font-family: var(--font-handwritten); font-weight: 400; }
+
+a { color: var(--fg-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------- Utility classes ---------- */
+.rs-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.rs-card-yellow {
+  background: var(--rs-primary);
+  border: 1px solid var(--border-brand);
+  border-radius: var(--radius-lg);
+  color: var(--fg-on-brand);
+}
+.rs-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 300; font-size: 18px; line-height: 25px;
+  padding: 3px 10px 4px; border-radius: var(--radius-md);
+  background: var(--rs-primary); color: var(--rs-ink);
+  border: 1.5px solid transparent;
+  transition: background var(--dur-2) var(--ease-out), border-color var(--dur-2) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  cursor: pointer;
+}
+.rs-btn:hover { border-color: var(--rs-ink); }
+.rs-btn-secondary { background: var(--rs-ink); color: var(--rs-primary); border-color: transparent; }
+.rs-btn-secondary:hover { background: var(--rs-ink-deep); }
+.rs-btn-subtle { background: transparent; color: var(--rs-primary-alt); border-color: var(--rs-primary-alt); }
+.rs-btn-subtle:hover { background: var(--rs-ink-deep); color: var(--rs-primary); border-color: var(--rs-primary); }
