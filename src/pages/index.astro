@@ -1,0 +1,535 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import Citation from '../components/home/Citation.astro';
+import DistroCard from '../components/home/DistroCard.astro';
+import PropCard from '../components/home/PropCard.astro';
+import QuickStart from '../components/home/QuickStart.astro';
+import RsButton from '../components/home/RsButton.astro';
+---
+
+<StarlightPage frontmatter={{ title: 'RoboStack', template: 'splash', tableOfContents: false }}>
+  {/* `not-content` opts the whole page out of Starlight's Markdown spacing;
+      every margin here is set by the components themselves. */}
+  <div class="home not-content">
+    <section class="section section--hero">
+      <div class="hero">
+        <div>
+          <h1>Manage ROS with ease</h1>
+          <p class="hero-lead">
+            Run any ROS distro in an isolated, per-project environment. On Linux, macOS and
+            Windows.
+          </p>
+          <div class="hero-actions">
+            <RsButton href="/lyrical.html">Browse the packages</RsButton>
+            <RsButton href="/GettingStarted.html" variant="subtle">Get started</RsButton>
+          </div>
+        </div>
+        <QuickStart />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="benefits-head">
+        <div class="eyebrow">Why RoboStack</div>
+        <h2>The ROS setup that stays out of your way</h2>
+      </div>
+      <div class="grid2">
+        <PropCard title="Any OS, any version">
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path
+              d="M8 21h8m-4-4v4"></path></svg
+          >
+          Run any ROS distro on Fedora, Arch, macOS with Apple Silicon or Windows. The
+          one-Ubuntu-version-per-distro rule simply doesn't apply here.
+        </PropCard>
+        <PropCard title="No sudo, nothing global">
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M12 22c5-1.5 8-5 8-10V5l-8-3-8 3v7c0 5 3 8.5 8 10z"></path><path
+              d="M9 12l2 2 4-4"></path></svg
+          >
+          Each project gets its own environment. Run two distros side by side, delete a folder and
+          it's gone. No Docker, no dual-boot, no VM.
+        </PropCard>
+        <PropCard title="Minutes, not an afternoon">
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2z"></path></svg
+          >
+          Every package ships as a prebuilt binary. No compiling from source, no hunting down build
+          dependencies - install and launch rviz.
+        </PropCard>
+        <PropCard title="The whole conda and PyPI ecosystem">
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M12 2 3 7l9 5 9-5-9-5z"></path><path d="M3 12l9 5 9-5"></path><path
+              d="M3 17l9 5 9-5"></path></svg
+          >
+          PyTorch, Jupyter and OpenCV from conda-forge live in the same environment as ROS. Robotics
+          and machine learning, one <code>pixi add</code> apart.
+        </PropCard>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card stats">
+        <div class="stat">
+          <div class="stat-num">4,800+</div>
+          <div class="stat-label">packages built across active distros</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">active ROS distros</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">platforms, from linux-64 to Apple Silicon</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">0</div>
+          <div class="stat-label">times you'll type sudo</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="distros-head">
+        <div>
+          <div class="eyebrow">Channels</div>
+          <h2>Pick your ROS distro</h2>
+        </div>
+        <RsButton href="/lyrical.html" variant="subtle" small>All distros &rarr;</RsButton>
+      </div>
+      <div class="grid3">
+        <DistroCard
+          href="/humble.html"
+          channel="robostack-humble"
+          dot="var(--fg-1)"
+          name="ROS 2 Humble"
+          description="The battle-tested LTS release most projects build on today."
+        />
+        <DistroCard
+          href="/jazzy.html"
+          channel="robostack-jazzy"
+          dot="var(--rs-good)"
+          name="ROS 2 Jazzy"
+          description="The newest LTS release, the best choice for new projects."
+        />
+        <DistroCard
+          href="/noetic.html"
+          channel="robostack-noetic"
+          dot="var(--sl-color-accent)"
+          name="ROS 1 Noetic"
+          description="The final ROS 1 release, kept alive for legacy stacks."
+        />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid3">
+        <PropCard title="See what's available" href="/lyrical.html" linkLabel="Browse packages">
+          <svg slot="icon" viewBox="0 0 20 20" width="22" height="22" aria-hidden="true"
+            ><path
+              d="M12.78,14.127L17.898,19.245C18.27,19.617 18.873,19.617 19.245,19.245C19.617,18.873 19.617,18.27 19.245,17.898L14.127,12.78C15.124,11.493 15.714,9.87 15.714,8.095C15.714,3.85 12.34,0.476 8.095,0.476C3.85,0.476 0.476,3.85 0.476,8.095C0.476,12.34 3.85,15.714 8.095,15.714C9.87,15.714 11.493,15.124 12.78,14.127ZM13.81,8.095C13.81,11.279 11.279,13.81 8.095,13.81C4.912,13.81 2.381,11.279 2.381,8.095C2.381,4.912 4.912,2.381 8.095,2.381C11.279,2.381 13.81,4.912 13.81,8.095Z"
+            ></path></svg
+          >
+          Every distro has a searchable package list showing exactly which packages are built for
+          which platform - no guessing.
+        </PropCard>
+        <PropCard
+          title="Guides that get you there"
+          href="/GettingStarted.html"
+          linkLabel="Get started"
+        >
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15z"
+            ></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path></svg
+          >
+          A getting started guide that walks you from nothing to a running rviz, plus an FAQ for the
+          sharp edges.
+        </PropCard>
+        <PropCard
+          title="An active community"
+          href="https://discord.gg/kKV8ZxyzY4"
+          linkLabel="Join the Discord"
+        >
+          <svg
+            slot="icon"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            class="stroke"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path
+              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+            ></path></svg
+          >
+          Stuck on something? The maintainers hang out in the robotics channel on prefix.dev's
+          Discord and on GitHub.
+        </PropCard>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card contribute">
+        <div>
+          <h2>Missing a package? Add it in one line</h2>
+          <p>
+            Most packages join RoboStack as a one-line pull request: put the name in a
+            <code>vinca.yaml</code> and CI builds it for every platform.
+          </p>
+        </div>
+        <RsButton href="/Contributing.html">Add a package &rarr;</RsButton>
+      </div>
+    </section>
+
+    <section class="section">
+      <Citation />
+    </section>
+
+    <section class="section section--last">
+      <div class="card cta">
+        <h2>Your robot doesn't care what OS you run</h2>
+        <p class="cta-lead">
+          Four commands from an empty folder to rviz on your machine - whichever machine that is.
+        </p>
+        <div class="cta-actions">
+          <RsButton href="/GettingStarted.html">Get started</RsButton>
+          <RsButton href="/lyrical.html" variant="subtle">Browse the packages</RsButton>
+        </div>
+      </div>
+    </section>
+  </div>
+</StarlightPage>
+
+{/* Page backdrop and measure: the cream paper tone, wider than the docs. */}
+<style is:global>
+  /* Outranks Starlight's own `html:not([data-has-sidebar])` width. */
+  :root:not([data-has-sidebar]) {
+    --sl-content-width: 76rem;
+  }
+  .main-pane,
+  main {
+    background: var(--bg-page);
+  }
+  /* The title panel is empty here (the hero brings its own heading); without
+     this it still contributes padding and a hairline divider. */
+  main > .content-panel:first-child {
+    display: none;
+  }
+</style>
+
+<style>
+  .home {
+    max-width: 1180px;
+    margin: 0 auto;
+    font-family: var(--font-body);
+    color: var(--fg-1);
+    -webkit-font-smoothing: antialiased;
+  }
+  .home h1,
+  .home h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    color: var(--fg-1);
+    margin: 0;
+  }
+
+  .section {
+    padding-top: 64px;
+  }
+  .section--hero {
+    padding-top: 40px;
+  }
+  .section--last {
+    padding-bottom: 72px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg-2);
+  }
+
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ---- Hero ---- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .hero h1 {
+    font-size: 52px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+  .hero-lead {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--fg-copy);
+    margin: 0 0 28px;
+    max-width: 520px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ---- Benefits ---- */
+  .benefits-head {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .benefits-head h2 {
+    font-size: 32px;
+    margin-top: 10px;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .grid2 code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-inset);
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* ---- Stats strip ---- */
+  .stats {
+    display: flex;
+    padding: 34px 24px;
+  }
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 0 12px;
+  }
+  .stat + .stat {
+    border-left: 1px solid var(--border-1);
+  }
+  /* In dark the default card border tone matches the page background and the
+     dividers vanish; the stronger border keeps them readable. */
+  :global([data-theme='dark']) .stat + .stat {
+    border-left-color: var(--border-2);
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 42px;
+    line-height: 1.1;
+    color: var(--fg-1);
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--fg-2);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  /* ---- Distros ---- */
+  .distros-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 22px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .distros-head h2 {
+    font-size: 30px;
+    margin-top: 8px;
+  }
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  /* ---- Contribute banner ---- */
+  /* A tinted card rather than a solid slab: the wash keeps the accent
+     present without a glowing block, and the button carries the CTA. */
+  .contribute {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 32px;
+    flex-wrap: wrap;
+    padding: 30px 34px;
+    background: rgba(46, 70, 216, 0.08);
+    border-color: rgba(46, 70, 216, 0.35);
+  }
+  :global([data-theme='dark']) .contribute {
+    background: rgba(108, 133, 255, 0.1);
+    border-color: rgba(108, 133, 255, 0.35);
+  }
+  .contribute h2 {
+    font-size: 28px;
+    color: var(--fg-1);
+    margin-bottom: 6px;
+  }
+  .contribute p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-copy);
+    margin: 0;
+    max-width: 620px;
+  }
+  .contribute p code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.08);
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+  }
+  :global([data-theme='dark']) .contribute p code {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* ---- Closing CTA ---- */
+  .cta {
+    text-align: center;
+    padding: 52px 32px;
+  }
+  .cta h2 {
+    font-size: 34px;
+    margin-bottom: 12px;
+  }
+  .cta-lead {
+    font-size: 17px;
+    color: var(--fg-copy);
+    margin: 0 auto 26px;
+    max-width: 480px;
+    line-height: 1.55;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 980px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    /* In the stacked layout the terminal's `pre` lines would otherwise set
+       the column's minimum width and push the page into horizontal scroll;
+       the wide layout gives the terminal its natural width instead, so the
+       commands show without scrolling. */
+    .hero > :global(*) {
+      min-width: 0;
+    }
+    .grid3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stats {
+      flex-wrap: wrap;
+      gap: 20px 0;
+    }
+    .stat {
+      flex-basis: 50%;
+    }
+    .stat:nth-child(3) {
+      border-left: none;
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .section {
+      padding-top: 44px;
+    }
+    .section--last {
+      padding-bottom: 48px;
+    }
+    .hero h1 {
+      font-size: 38px;
+    }
+    .hero-lead {
+      font-size: 16px;
+    }
+    .grid3,
+    .grid2 {
+      grid-template-columns: 1fr;
+    }
+    .benefits-head h2 {
+      font-size: 25px;
+    }
+    .stats {
+      flex-direction: column;
+      gap: 20px;
+      padding: 28px 20px;
+    }
+    .stat + .stat {
+      border-left: none;
+    }
+    .contribute {
+      padding: 26px 20px;
+    }
+    .contribute h2 {
+      font-size: 24px;
+    }
+    .cta {
+      padding: 40px 20px;
+    }
+    .cta h2 {
+      font-size: 27px;
+    }
+  }
+</style>

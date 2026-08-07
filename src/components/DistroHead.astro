@@ -1,0 +1,46 @@
+---
+import type { Distro } from '../data/distros';
+import { supportLine, title } from '../data/distros';
+import DistroTabs from './DistroTabs.astro';
+
+interface Props {
+  distro: Distro;
+}
+
+const { distro } = Astro.props;
+---
+
+<DistroTabs current={distro.name} />
+<div class="head">
+  <img src={`/images/distros/${distro.name}.png`} alt="" width="96" height="96" />
+  <div>
+    <h1 id="_top">ROS{distro.ros} {title(distro)}</h1>
+    <p class="support">{supportLine(distro)}</p>
+  </div>
+</div>
+
+<style>
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  img {
+    width: 4.2rem;
+    height: 4.2rem;
+    border-radius: 0.5rem;
+  }
+  h1 {
+    margin: 0;
+    font-size: var(--sl-text-h2);
+    color: var(--sl-color-white);
+    line-height: var(--sl-line-height-headings);
+    font-weight: 600;
+  }
+  .support {
+    margin: 0.25rem 0 0;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+</style>

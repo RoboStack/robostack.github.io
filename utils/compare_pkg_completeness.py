@@ -1,7 +1,7 @@
 """Build the package dataset behind the Available Packages pages.
 
-Writes `docs/data/<distro>.json`, which `docs/javascripts/packages.js` fetches and
-renders in the browser. Three sources are combined:
+Writes `public/data/<distro>.json`, which `src/scripts/package-table.js` fetches
+and renders in the browser. Three sources are combined:
 
 - `rosdistro`'s `distribution.yaml` for the package list, the released version, and
   the upstream source repository.
@@ -46,7 +46,7 @@ import requests
 import yaml
 from rattler import MatchSpec, PackageRecord
 
-# Keep in sync with PLATFORMS in docs/javascripts/packages.js: the bit positions
+# Keep in sync with PLATFORMS in src/scripts/package-table.js: the bit positions
 # here are the bit positions the page reads.
 PLATFORMS: list[str] = [
     "linux-64",
@@ -366,7 +366,7 @@ def main() -> None:
     print(f"{args.distro} ({args.channel}):", file=sys.stderr)
     document = build(args.distro, args.channel)
 
-    path = os.path.join("docs", "data", f"{args.distro}.json")
+    path = os.path.join("public", "data", f"{args.distro}.json")
     write(document, path)
 
     total = len(document["packages"])

@@ -13,7 +13,7 @@ jobs:
     - name: Checkout robostack.github.io
       uses: actions/checkout@v4
     - uses: prefix-dev/setup-pixi@v0.10.0
-    # foxy and galactic are end-of-life; docs/data/{foxy,galactic}.json are
+    # foxy and galactic are end-of-life; public/data/{foxy,galactic}.json are
     # committed snapshots and deliberately not regenerated here.
     - name: Create table noetic
       run: |
@@ -38,12 +38,12 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add docs/data/noetic.json
-        git add docs/data/humble.json
-        git add docs/data/jazzy.json
-        git add docs/data/kilted.json
-        git add docs/data/rolling.json
-        git add docs/data/lyrical.json
+        git add public/data/noetic.json
+        git add public/data/humble.json
+        git add public/data/jazzy.json
+        git add public/data/kilted.json
+        git add public/data/rolling.json
+        git add public/data/lyrical.json
         git commit -m "Update tables"
       continue-on-error: true
     - name: Push changes
