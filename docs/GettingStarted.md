@@ -386,7 +386,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     rviz2
     ```
 
-    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](FAQ.md)
+    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
     ## Updating
     Updating all packages in your environment is as easy as:
@@ -423,7 +423,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     rviz2
     ```
 
-    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](FAQ.md)
+    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
     ## Updating
     Updating all packages in your environment is as easy as:
@@ -479,7 +479,7 @@ After installation, you should test if you are able to run `rviz`/`rviz2` and ot
     rviz2
     ```
 
-    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](FAQ.md)
+    If you run into any issues or for any frequently asked questions, you can check the [FAQ page](https://robostack.github.io/FAQ.html)
 
     ## Updating
     Updating all packages in your environment is as easy as:

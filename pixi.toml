@@ -6,8 +6,8 @@ platforms = ["osx-arm64", "linux-64", "win-64"]
 [tasks]
 compare-completeness = { cmd = "python utils/compare_pkg_completeness.py", description = "Add two arguments to give it the DISTRO and CHANNEL"}
 serve = { cmd = "zensical serve", description = "Serve the docs locally" }
-build-docs = { cmd = "zensical build --strict", description = "Build the site" }
-gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy site' site", depends-on = ["build-docs"], description = "Build the site and publish it to the gh-pages branch" }
+build-docs = { cmd = "zensical build --strict", description = "Build the docs" }
+gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy docs' site", depends-on = ["build-docs"], description = "Build the docs and publish them to the gh-pages branch" }
 
 [dependencies]
 zensical = ">=0.0.53,<0.0.54"
