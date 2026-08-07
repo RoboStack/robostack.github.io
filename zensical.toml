@@ -9,25 +9,22 @@ use_directory_urls = false
 
 extra_css = ["extra.css"]
 extra_javascript = [
-  "https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js",
-  "javascripts/tables.js",
+  # Renders the Available Packages tables from data/<distro>.json.
+  "javascripts/packages.js",
 ]
 
+# Distributions points at the flagship distro, currently Lyrical. The other
+# distro pages are deliberately not listed: the tab strip on the page itself
+# switches between them, so the sidebar stays short. They are still built,
+# linked and indexed. The pages and their tab strip come from
+# utils/make_distro_pages.py — add or retire a distro there, and update this
+# entry if the flagship changes.
 nav = [
   { "Home" = "index.md" },
   # { "What's New" = "WhatsNew.md" },
   { "Getting Started" = "GettingStarted.md" },
-  { "Available Packages" = [
-    { "ROS1 Noetic" = "noetic.md" },
-    { "ROS2 Foxy" = "foxy.md" },
-    { "ROS2 Galactic" = "galactic.md" },
-    { "ROS2 Humble" = "humble.md" },
-    { "ROS2 Jazzy" = "jazzy.md" },
-    { "ROS2 Kilted" = "kilted.md" },
-    { "ROS2 Lyrical" = "lyrical.md" },
-    { "ROS2 Rolling" = "rolling.md" },
-    { "JupyterRos" = "JupyterRos.md" },
-  ] },
+  { "Distributions" = "lyrical.md" },
+  { "JupyterRos" = "JupyterRos.md" },
   { "Support" = "support.md" },
   { "Contributing" = "Contributing.md" },
   { "FAQ" = "FAQ.md" },
@@ -58,7 +55,7 @@ anchor_linenums = true
 alternate_style = true
 
 # Both keys are required: an empty table falls back to pymdownx's own emojione/to_png
-# defaults, which would turn every check mark in the package tables into a remote PNG.
+# defaults, which fetch every emoji from a remote CDN as a PNG.
 [project.markdown_extensions.pymdownx.emoji]
 emoji_index = "zensical.extensions.emoji.twemoji"
 emoji_generator = "zensical.extensions.emoji.to_svg"
