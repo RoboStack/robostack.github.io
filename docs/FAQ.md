@@ -68,15 +68,18 @@ In most cases those should be already installed in your system, but in case they
 
 ### What to do if pixi fails to solve the environment due to system requirements (e.g., __glibc)?
 
-When adding packages, you might get dependency conflicts containing an error like `└─ __glibc >=2.34,<3.0.a0, for which no candidates were found`.
+When adding packages, you might get dependency conflicts like:
 
-You can fix this by explicitly defining your system's actual capabilities in your pixi.toml file. 
-Add or update the `[system-requirements]` section to include your required baseline:
-
-```toml
-[system-requirements]
-libc = { family = "glibc", version = "2.31" }
-linux = "5.15"
+```bash
+└─ __glibc >=2.34,<3.0.a0, for which no candidates were found.
 ```
 
-Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
+You can fix this by explicitly defining your system's actual capabilities in your pixi.toml file.
+Update the `workspace.platforms` section to include your required baseline like shown below. See [pixi docs](https://pixi.prefix.dev/latest/workspace/multi_platform_configuration/#declaring-virtual-packages-per-platform) for more info.
+
+```toml
+[workspace]
+platforms = [
+    { name="rover", platform = "linux-64", glibc = "2.39"}
+]
+```
