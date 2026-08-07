@@ -1,0 +1,451 @@
+{% extends "main.html" %}
+
+{#-
+  The frontpage, written in plain HTML. Registered via docs/index.md.
+  Hero with quick start terminal, benefit cards, a stats strip, distro
+  cards, resource cards and a closing CTA.
+  Styles build on the design tokens in docs/static/colors_and_type.css;
+  both are loaded inside the content block so they survive instant
+  navigation, which only swaps the page content.
+-#}
+{% block content %}
+<link rel="stylesheet" href="{{ 'static/colors_and_type.css' | url }}">
+<style>
+  /* Page backdrop: the cream paper tone from the design system */
+  body, .md-main { background: var(--bg-page); }
+  /* colors_and_type.css styles bare a tags; keep the theme header out of it */
+  .md-header a, .md-header a:hover { color: currentColor; text-decoration: none; }
+  .md-content__inner { margin-bottom: 0; padding-bottom: 0; }
+  .md-content__inner::before { display: none; }
+
+  .rs-home {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+    font-family: var(--font-body);
+    color: var(--fg-1);
+    -webkit-font-smoothing: antialiased;
+  }
+  .rs-home a, .rs-home a:hover, .rs-home a:focus { text-decoration: none; }
+
+  .rs-home h1, .rs-home h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    color: var(--fg-1);
+    margin: 0;
+  }
+
+  .rs-section { padding-top: 64px; }
+  .rs-section--hero { padding-top: 56px; }
+  .rs-section--last { padding-bottom: 72px; }
+
+  /* ---- Buttons ---- */
+  .rs-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-display); font-weight: 300;
+    font-size: 20px; line-height: 1.35;
+    padding: 9px 20px 10px; border-radius: var(--radius-md);
+    border: 1.5px solid transparent; white-space: nowrap;
+    transition: all var(--dur-2) var(--ease-out);
+  }
+  .rs-btn-primary { background: var(--rs-primary); color: var(--rs-ink) !important; }
+  .rs-btn-primary:hover { border-color: var(--rs-ink); }
+  .rs-btn-subtle { background: transparent; color: var(--rs-ink) !important; border-color: var(--rs-ink); }
+  .rs-btn-subtle:hover { background: var(--rs-ink); color: var(--rs-primary) !important; }
+  .rs-btn-sm { font-size: 18px; padding: 6px 16px 7px; }
+
+  /* ---- Badges ---- */
+  .rs-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; line-height: 1;
+    padding: 5px 10px; border-radius: var(--radius-pill);
+    color: var(--rs-cream-700); background: #fff;
+    border: 1px solid var(--border-2); white-space: nowrap;
+  }
+  .rs-badge--yellow { background: var(--rs-primary); border-color: var(--border-brand); color: var(--rs-ink); }
+  .rs-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  .rs-eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--fg-2);
+  }
+
+  /* ---- Cards ---- */
+  .rs-card {
+    position: relative;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  a.rs-card { transition: box-shadow var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out); }
+  a.rs-card:hover { box-shadow: var(--shadow-hover-yellow); transform: translateY(-2px); }
+
+  /* ---- Hero ---- */
+  .rs-hero {
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px; align-items: center;
+  }
+  .rs-hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 20px; }
+  .rs-hero-lead { font-size: 18px; line-height: 1.55; color: var(--rs-cream-700); margin: 0 0 28px; max-width: 520px; }
+  .rs-hero-lead strong { font-weight: 600; }
+  .rs-hero-lead code {
+    font-family: var(--font-mono); font-size: 15px;
+    background: var(--bg-inset); padding: 1px 6px; border-radius: var(--radius-xs);
+  }
+  .rs-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .rs-quickstart { padding: 24px; }
+  .rs-quickstart .rs-eyebrow { margin-bottom: 14px; }
+
+  /* ---- Terminal ---- */
+  .rs-term {
+    background: var(--rs-ink); border: 1px solid var(--rs-ink-deep);
+    border-radius: var(--radius-md); overflow: hidden; font-family: var(--font-mono);
+  }
+  .rs-term-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .rs-term-dots { display: flex; align-items: center; gap: 7px; }
+  .rs-term-dots span { width: 11px; height: 11px; border-radius: 50%; }
+  .rs-term-label { margin-left: 8px; color: var(--rs-cream-400); font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+  .rs-copy {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 7px; color: #cfd2d6;
+    font-family: var(--font-body); font-size: 12px; font-weight: 600; padding: 4px 9px;
+  }
+  .rs-copy.rs-copied { background: rgba(112,192,56,0.18); color: #9fe06a; }
+  .rs-term-body { padding: 16px; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+  .rs-term-body div { white-space: pre; color: #e8eaed; }
+  .rs-term-body .rs-prompt { color: var(--rs-primary); user-select: none; }
+  .rs-term-body .rs-accent { color: var(--rs-primary); }
+
+  /* ---- Benefits ---- */
+  .rs-benefits-head { text-align: center; margin-bottom: 30px; }
+  .rs-benefits-head h2 { font-size: 32px; margin-top: 10px; }
+  .rs-grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+  /* ---- Stats strip ---- */
+  .rs-stats { display: flex; padding: 34px 24px; }
+  .rs-stat { flex: 1; text-align: center; padding: 0 12px; }
+  .rs-stat + .rs-stat { border-left: 1px solid var(--border-1); }
+  .rs-stat-num {
+    font-family: var(--font-display); font-weight: 300;
+    font-size: 42px; line-height: 1.1; color: var(--fg-1);
+  }
+  .rs-stat-label { font-size: 13px; color: var(--fg-2); margin-top: 4px; line-height: 1.4; }
+
+  /* ---- Distros ---- */
+  .rs-distros-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 22px; gap: 12px; flex-wrap: wrap;
+  }
+  .rs-distros-head h2 { font-size: 30px; margin-top: 8px; }
+  .rs-grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  /* Beat the theme's .md-typeset a / a code colors on the card links */
+  .rs-home a.rs-distro, .rs-home a.rs-distro:hover, .rs-home a.rs-distro:focus { color: var(--fg-1); }
+  .rs-home .rs-distro-channel code { color: var(--fg-1); }
+  .rs-distro { padding: 22px; }
+  .rs-distro-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .rs-distro-channel { display: flex; align-items: center; gap: 10px; }
+  .rs-distro-channel .rs-dot { width: 12px; height: 12px; }
+  .rs-distro-channel code {
+    font-family: var(--font-mono); font-size: 14px; font-weight: 600;
+    background: none; padding: 0; color: var(--fg-1);
+  }
+  .rs-distro-name { font-family: var(--font-display); font-weight: 300; font-size: 26px; margin-bottom: 6px; }
+  .rs-distro-sub { font-size: 13px; color: var(--fg-2); line-height: 1.5; margin-bottom: 14px; }
+  .rs-distro-link { font-size: 13px; font-weight: 600; color: var(--rs-cream-700); }
+
+  /* ---- Value props ---- */
+  .rs-prop { padding: 24px; }
+  .rs-prop-icon {
+    width: 44px; height: 44px; border-radius: var(--radius-md);
+    background: var(--bg-inset); display: flex; align-items: center;
+    justify-content: center; margin-bottom: 16px;
+  }
+  .rs-prop-icon svg { fill: var(--rs-ink); }
+  .rs-prop-icon svg.rs-stroke { fill: none; stroke: var(--rs-ink); }
+  .rs-prop-title { font-family: var(--font-display); font-weight: 400; font-size: 21px; margin-bottom: 8px; }
+  .rs-prop p { font-size: 14.5px; line-height: 1.55; color: var(--rs-cream-700); margin: 0; }
+  .rs-home a.rs-prop, .rs-home a.rs-prop:hover, .rs-home a.rs-prop:focus { color: var(--fg-1); }
+  .rs-prop-link { display: inline-block; font-size: 13px; font-weight: 600; color: var(--rs-cream-700); margin-top: 12px; }
+
+  /* ---- Contribute banner ---- */
+  .rs-contribute {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px 32px; flex-wrap: wrap; padding: 30px 34px;
+    background: var(--rs-primary); border-color: var(--border-brand);
+  }
+  .rs-contribute h2 { font-size: 28px; color: var(--rs-ink); margin-bottom: 6px; }
+  .rs-contribute p { font-size: 15px; line-height: 1.55; color: var(--rs-ink); margin: 0; max-width: 620px; }
+  .rs-contribute p code {
+    font-family: var(--font-mono); font-size: 13px;
+    background: rgba(0,0,0,0.08); padding: 1px 6px; border-radius: var(--radius-xs);
+  }
+
+  /* ---- Closing CTA ---- */
+  .rs-cta { text-align: center; padding: 52px 32px; }
+  .rs-cta h2 { font-size: 34px; margin-bottom: 12px; }
+  .rs-cta-lead { font-size: 17px; color: var(--rs-cream-700); margin: 0 auto 26px; max-width: 480px; line-height: 1.55; }
+  .rs-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  @media screen and (max-width: 980px) {
+    .rs-hero { grid-template-columns: 1fr; gap: 28px; }
+    .rs-grid3 { grid-template-columns: repeat(2, 1fr); }
+    .rs-stats { flex-wrap: wrap; gap: 20px 0; }
+    .rs-stat { flex-basis: 50%; }
+    /* the knob is child 1, so the third stat is child 4 */
+    .rs-stat:nth-child(4) { border-left: none; }
+  }
+  @media screen and (max-width: 720px) {
+    .rs-home { padding: 0 16px; }
+    .rs-section { padding-top: 44px; }
+    .rs-section--last { padding-bottom: 48px; }
+    .rs-hero h1 { font-size: 38px; }
+    .rs-hero-lead { font-size: 16px; }
+    .rs-grid3, .rs-grid2 { grid-template-columns: 1fr; }
+    .rs-benefits-head h2 { font-size: 25px; }
+    .rs-stats { flex-direction: column; gap: 20px; padding: 28px 20px; }
+    .rs-stat + .rs-stat { border-left: none; }
+    .rs-contribute { padding: 26px 20px; }
+    .rs-contribute h2 { font-size: 24px; }
+    .rs-cta { padding: 40px 20px; }
+    .rs-cta h2 { font-size: 27px; }
+  }
+</style>
+
+<div class="rs-home">
+
+  <!-- Hero -->
+  <section class="rs-section rs-section--hero">
+    <div class="rs-hero">
+      <div>
+        <h1>Manage ROS with ease</h1>
+        <p class="rs-hero-lead">
+          Run any ROS distro in an isolated, per-project environment.
+          On Linux, macOS and Windows.
+        </p>
+        <div class="rs-hero-actions">
+          <a class="rs-btn rs-btn-primary" href="{{ 'packages/index.html' | url }}">Browse the packages</a>
+          <a class="rs-btn rs-btn-subtle" href="{{ 'GettingStarted.html' | url }}">Get started</a>
+        </div>
+      </div>
+      <div class="rs-card rs-quickstart">
+        <div class="rs-eyebrow">Quick start</div>
+        <div class="rs-term">
+          <div class="rs-term-bar">
+            <div class="rs-term-dots">
+              <span style="background: #ff6b5e;"></span>
+              <span style="background: var(--rs-primary);"></span>
+              <span style="background: var(--rs-good);"></span>
+              <span class="rs-term-label">terminal</span>
+            </div>
+            <button class="rs-copy" type="button"
+              data-copy="pixi init ros_ws -c https://prefix.dev/robostack-humble&#10;cd ros_ws&#10;pixi add ros-humble-desktop&#10;pixi run rviz2">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M20,7L10,7C8.343,7 7,8.343 7,10L7,20C7,21.657 8.343,23 10,23L20,23C21.657,23 23,21.657 23,20L23,10C23,8.343 21.657,7 20,7ZM20,9C20.552,9 21,9.448 21,10C21,10 21,20 21,20C21,20.552 20.552,21 20,21C20,21 10,21 10,21C9.448,21 9,20.552 9,20C9,20 9,10 9,10C9,9.448 9.448,9 10,9C10,9 20,9 20,9Z"></path><path d="M4,15C3.45,15 3,14.55 3,14L3,4C3,3.45 3.45,3 4,3L14,3C14.55,3 15,3.45 15,4C15,4.552 15.448,5 16,5C16.552,5 17,4.552 17,4C17,2.35 15.65,1 14,1L4,1C2.35,1 1,2.35 1,4L1,14C1,15.65 2.35,17 4,17C4.552,17 5,16.552 5,16C5,15.448 4.552,15 4,15Z"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="rs-term-body">
+            <div><span class="rs-prompt">$ </span>pixi init ros_ws -c https://prefix.dev/robostack-humble</div>
+            <div><span class="rs-prompt">$ </span>cd ros_ws</div>
+            <div><span class="rs-prompt">$ </span>pixi add ros-humble-desktop</div>
+            <div><span class="rs-prompt">$ </span><span class="rs-accent">pixi run rviz2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="rs-section">
+    <div class="rs-benefits-head">
+      <div class="rs-eyebrow">Why RoboStack</div>
+      <h2>The ROS setup that stays out of your way</h2>
+    </div>
+    <div class="rs-grid2">
+      <div class="rs-card rs-prop">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8m-4-4v4"></path></svg>
+        </div>
+        <div class="rs-prop-title">Any OS, any version</div>
+        <p>Run any ROS distro on Fedora, Arch, macOS with Apple Silicon or Windows. The one-Ubuntu-version-per-distro rule simply doesn't apply here.</p>
+      </div>
+      <div class="rs-card rs-prop">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22c5-1.5 8-5 8-10V5l-8-3-8 3v7c0 5 3 8.5 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </div>
+        <div class="rs-prop-title">No sudo, nothing global</div>
+        <p>Each project gets its own environment. Run two distros side by side, delete a folder and it's gone. No Docker, no dual-boot, no VM.</p>
+      </div>
+      <div class="rs-card rs-prop">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2z"></path></svg>
+        </div>
+        <div class="rs-prop-title">Minutes, not an afternoon</div>
+        <p>Every package ships as a prebuilt binary. No compiling from source, no hunting down build dependencies - install and launch rviz.</p>
+      </div>
+      <div class="rs-card rs-prop">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7l9 5 9-5-9-5z"></path><path d="M3 12l9 5 9-5"></path><path d="M3 17l9 5 9-5"></path></svg>
+        </div>
+        <div class="rs-prop-title">The whole conda ecosystem</div>
+        <p>PyTorch, Jupyter and OpenCV from conda-forge live in the same environment as ROS. Robotics and machine learning, one <code style="font-family: var(--font-mono); font-size: 13px;">pixi add</code> apart.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats strip -->
+  <section class="rs-section">
+    <div class="rs-card rs-stats">
+      <div class="rs-stat">
+        <div class="rs-stat-num">4,800+</div>
+        <div class="rs-stat-label">packages built across active distros</div>
+      </div>
+      <div class="rs-stat">
+        <div class="rs-stat-num">6</div>
+        <div class="rs-stat-label">active ROS distros</div>
+      </div>
+      <div class="rs-stat">
+        <div class="rs-stat-num">6</div>
+        <div class="rs-stat-label">platforms, from linux-64 to Apple Silicon</div>
+      </div>
+      <div class="rs-stat">
+        <div class="rs-stat-num">0</div>
+        <div class="rs-stat-label">times you'll type sudo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Distros -->
+  <section class="rs-section">
+    <div class="rs-distros-head">
+      <div>
+        <div class="rs-eyebrow">Channels</div>
+        <h2>Pick your ROS distro</h2>
+      </div>
+      <a class="rs-btn rs-btn-subtle rs-btn-sm" href="{{ 'packages/index.html' | url }}">All distros &rarr;</a>
+    </div>
+    <div class="rs-grid3">
+      <a class="rs-card rs-distro" href="{{ 'humble.html' | url }}">
+        <div class="rs-distro-top">
+          <span class="rs-distro-channel"><span class="rs-dot" style="background: var(--rs-ink);"></span><code>robostack-humble</code></span>
+          <span class="rs-badge rs-badge--yellow">flagship</span>
+        </div>
+        <div class="rs-distro-name">ROS 2 Humble</div>
+        <div class="rs-distro-sub">The battle-tested LTS release most projects build on today.</div>
+        <span class="rs-distro-link">Package list &rarr;</span>
+      </a>
+      <a class="rs-card rs-distro" href="{{ 'jazzy.html' | url }}">
+        <div class="rs-distro-top">
+          <span class="rs-distro-channel"><span class="rs-dot" style="background: var(--rs-good);"></span><code>robostack-jazzy</code></span>
+        </div>
+        <div class="rs-distro-name">ROS 2 Jazzy</div>
+        <div class="rs-distro-sub">The newest LTS release, the best choice for new projects.</div>
+        <span class="rs-distro-link">Package list &rarr;</span>
+      </a>
+      <a class="rs-card rs-distro" href="{{ 'noetic.html' | url }}">
+        <div class="rs-distro-top">
+          <span class="rs-distro-channel"><span class="rs-dot" style="background: var(--rs-secondary);"></span><code>robostack-noetic</code></span>
+        </div>
+        <div class="rs-distro-name">ROS 1 Noetic</div>
+        <div class="rs-distro-sub">The final ROS 1 release, kept alive for legacy stacks.</div>
+        <span class="rs-distro-link">Package list &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section class="rs-section">
+    <div class="rs-grid3">
+      <a class="rs-card rs-prop" href="{{ 'packages/index.html' | url }}">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 20 20" width="22" height="22" aria-hidden="true"><path d="M12.78,14.127L17.898,19.245C18.27,19.617 18.873,19.617 19.245,19.245C19.617,18.873 19.617,18.27 19.245,17.898L14.127,12.78C15.124,11.493 15.714,9.87 15.714,8.095C15.714,3.85 12.34,0.476 8.095,0.476C3.85,0.476 0.476,3.85 0.476,8.095C0.476,12.34 3.85,15.714 8.095,15.714C9.87,15.714 11.493,15.124 12.78,14.127ZM13.81,8.095C13.81,11.279 11.279,13.81 8.095,13.81C4.912,13.81 2.381,11.279 2.381,8.095C2.381,4.912 4.912,2.381 8.095,2.381C11.279,2.381 13.81,4.912 13.81,8.095Z"></path></svg>
+        </div>
+        <div class="rs-prop-title">See what's available</div>
+        <p>Every distro has a searchable package list showing exactly which packages are built for which platform - no guessing.</p>
+        <span class="rs-prop-link">Browse packages &rarr;</span>
+      </a>
+      <a class="rs-card rs-prop" href="{{ 'GettingStarted.html' | url }}">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 4.5v15z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path></svg>
+        </div>
+        <div class="rs-prop-title">Guides that get you there</div>
+        <p>A getting started guide that walks you from nothing to a running rviz, plus an FAQ for the sharp edges.</p>
+        <span class="rs-prop-link">Get started &rarr;</span>
+      </a>
+      <a class="rs-card rs-prop" href="https://discord.gg/kKV8ZxyzY4">
+        <div class="rs-prop-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" class="rs-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </div>
+        <div class="rs-prop-title">An active community</div>
+        <p>Stuck on something? The maintainers hang out in the robotics channel on prefix.dev's Discord and on GitHub.</p>
+        <span class="rs-prop-link">Join the Discord &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Contribute banner -->
+  <section class="rs-section">
+    <div class="rs-card rs-contribute">
+      <div>
+        <h2>Missing a package? Add it in one line</h2>
+        <p>Most packages join RoboStack as a one-line pull request: put the name in a <code>vinca.yaml</code> and CI builds it for every platform.</p>
+      </div>
+      <a class="rs-btn rs-btn-subtle" href="{{ 'Contributing.html' | url }}">Add a package &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="rs-section rs-section--last">
+    <div class="rs-card rs-cta">
+      <h2>Your robot doesn't care what OS you run</h2>
+      <p class="rs-cta-lead">Four commands from an empty folder to rviz on your machine - whichever machine that is.</p>
+      <div class="rs-cta-actions">
+        <a class="rs-btn rs-btn-primary" href="{{ 'GettingStarted.html' | url }}">Get started</a>
+        <a class="rs-btn rs-btn-subtle" href="{{ 'packages/index.html' | url }}">Browse the packages</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  /* Delegated so it keeps working when instant navigation swaps the page
+     content; the flag prevents double-binding on repeat visits. */
+  if (!window.rsCopyBound) {
+    window.rsCopyBound = true;
+    document.addEventListener("click", function (event) {
+      var button = event.target.closest(".rs-copy");
+      if (!button) { return; }
+      var text = button.getAttribute("data-copy");
+      var showCopied = function () {
+        button.classList.add("rs-copied");
+        button.querySelector("span").textContent = "Copied";
+        setTimeout(function () {
+          button.classList.remove("rs-copied");
+          button.querySelector("span").textContent = "Copy";
+        }, 1400);
+      };
+      var fallback = function () {
+        var area = document.createElement("textarea");
+        area.value = text;
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        document.body.removeChild(area);
+        showCopied();
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(showCopied, fallback);
+      } else {
+        fallback();
+      }
+    });
+  }
+</script>
+{% endblock %}

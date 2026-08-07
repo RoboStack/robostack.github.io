@@ -8,8 +8,8 @@ compare-completeness = { cmd = "python utils/compare_pkg_completeness.py", descr
 make-distro-pages = { cmd = "python utils/make_distro_pages.py", description = "Regenerate the docs/<distro>.md stubs and their tab strip" }
 lint = { cmd = "ruff check utils && ruff format --check utils", description = "Lint and format-check the scripts in utils/" }
 serve = { cmd = "zensical serve", description = "Serve the docs locally" }
-build-docs = { cmd = "zensical build --strict", description = "Build the docs" }
-gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy docs' site", depends-on = ["build-docs"], description = "Build the docs and publish them to the gh-pages branch" }
+build-docs = { cmd = "zensical build --strict", description = "Build the site" }
+gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy site' site", depends-on = ["build-docs"], description = "Build the site and publish it to the gh-pages branch" }
 
 [dependencies]
 zensical = ">=0.0.53,<0.0.54"

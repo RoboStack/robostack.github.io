@@ -1,5 +1,8 @@
 site
 
+# Local design prototype (contains proprietary fonts, not meant to be published)
+RoboStack Website/
+
 # pixi environments
 .pixi
 *.egg-info

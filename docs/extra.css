@@ -534,3 +534,27 @@
    beats the user agent's [hidden] { display: none } — so the empty state stayed
    on screen even with the attribute set. This restores the attribute's effect. */
 .md-typeset .rs-empty[hidden] { display: none; }
+
+/* Section links (Packages, Documentation) inside the header bar */
+.rs-header-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 0 0.6rem;
+  white-space: nowrap;
+}
+.rs-header-links a {
+  color: currentColor;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  transition: opacity 125ms;
+}
+.rs-header-links a:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+@media screen and (max-width: 59.9844em) {
+  .rs-header-links {
+    display: none;
+  }
+}

@@ -13,6 +13,9 @@ extra_javascript = [
   "javascripts/packages.js",
 ]
 
+# The header links to the frontpage (logo), the package page and the
+# documentation via the overridden header partial in overrides/partials/.
+# The nav below only structures the documentation sidebar.
 # Distributions points at the flagship distro, currently Lyrical. The other
 # distro pages are deliberately not listed: the tab strip on the page itself
 # switches between them, so the sidebar stays short. They are still built,
@@ -20,7 +23,7 @@ extra_javascript = [
 # utils/make_distro_pages.py — add or retire a distro there, and update this
 # entry if the flagship changes.
 nav = [
-  { "Home" = "index.md" },
+  { "Overview" = "Overview.md" },
   # { "What's New" = "WhatsNew.md" },
   { "Getting Started" = "GettingStarted.md" },
   { "Distributions" = "lyrical.md" },
@@ -33,6 +36,7 @@ nav = [
 [project.theme]
 # Keeps the Material for MkDocs look, so `.md-grid` in docs/extra.css still applies.
 variant = "classic"
+custom_dir = "overrides"
 features = [
   "content.code.copy",
   "content.action.edit",
