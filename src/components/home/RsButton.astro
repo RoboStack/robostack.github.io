@@ -1,0 +1,55 @@
+---
+interface Props {
+  /** Renders an anchor when given, a button otherwise. */
+  href?: string;
+  variant?: 'primary' | 'subtle';
+  small?: boolean;
+  [attr: string]: unknown;
+}
+
+const { href, variant = 'primary', small = false, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class:list={['btn', `btn--${variant}`, { 'btn--sm': small }]} href={href} {...rest}
+  ><slot /></Tag
+>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.35;
+    padding: 9px 20px 10px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all var(--dur-2) var(--ease-out);
+    cursor: pointer;
+  }
+  .btn--primary {
+    background: var(--sl-color-accent);
+    color: var(--fg-on-accent);
+  }
+  .btn--primary:hover {
+    border-color: var(--sl-color-accent-high);
+  }
+  .btn--subtle {
+    background: transparent;
+    color: var(--fg-1);
+    border-color: var(--fg-1);
+  }
+  .btn--subtle:hover {
+    background: var(--fg-1);
+    color: var(--bg-page);
+  }
+  .btn--sm {
+    font-size: 18px;
+    padding: 6px 16px 7px;
+  }
+</style>

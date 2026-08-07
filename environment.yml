@@ -1,6 +1,0 @@
-name: robostack-docs-env
-channels:
-- conda-forge
-dependencies:
-  - zensical
-  - ghp-import

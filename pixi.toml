@@ -5,14 +5,25 @@ platforms = ["osx-arm64", "linux-64", "win-64"]
 
 [tasks]
 compare-completeness = { cmd = "python utils/compare_pkg_completeness.py", description = "Add two arguments to give it the DISTRO and CHANNEL"}
-serve = { cmd = "zensical serve", description = "Serve the docs locally" }
-build-docs = { cmd = "zensical build --strict", description = "Build the docs" }
-gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy docs' site", depends-on = ["build-docs"], description = "Build the docs and publish them to the gh-pages branch" }
+lint = { cmd = "ruff check utils && ruff format --check utils", description = "Lint and format-check the scripts in utils/" }
+npm-install = { cmd = "npm install", description = "Install the site's npm dependencies" }
+serve = { cmd = "npm run dev", depends-on = ["npm-install"], description = "Serve the site locally" }
+build-docs = { cmd = "npm run build", depends-on = ["npm-install"], description = "Build the site" }
+gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy site' dist", depends-on = ["build-docs"], description = "Build the site and publish it to the gh-pages branch" }
 
 [dependencies]
-zensical = ">=0.0.53,<0.0.54"
+# Runs Astro/Starlight, which builds and serves the site
+nodejs = ">=26.6.0,<26.7"
 # Provides the gh-pages push that `mkdocs gh-deploy` used to do
 ghp-import = ">=2.1.0,<3"
 # Required by copy-staging-packages.yml
 requests = ">=2.34.2,<3"
 anaconda-client = ">=1.14.1,<2"
+# Required by utils/compare_pkg_completeness.py — was previously only pulled in
+# transitively, so a solve that dropped it would have broken the table build.
+pyyaml = ">=6,<7"
+# Resolves which ROS distro mutex each artifact was built against, by matching
+# its dependency spec against the real mutex records rather than parsing
+# version strings. Only used when regenerating public/data, not to serve the site.
+py-rattler = ">=0.25,<0.26"
+ruff = ">=0.16,<0.17"

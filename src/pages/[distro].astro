@@ -1,0 +1,52 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { Aside, Code } from '@astrojs/starlight/components';
+import PackageTable from '../components/PackageTable.astro';
+import type { Distro } from '../data/distros';
+import { browseUrl, DISTROS, monthYear, title } from '../data/distros';
+
+export function getStaticPaths() {
+  return DISTROS.map((distro) => ({ params: { distro: distro.name }, props: { distro } }));
+}
+
+interface Props {
+  distro: Distro;
+}
+
+const { distro } = Astro.props;
+const browse = browseUrl(distro);
+const install = [
+  `pixi workspace channel add ${distro.base}/${distro.channel}`,
+  `pixi add ros-${distro.name}-<package>`,
+].join('\n');
+---
+
+<StarlightPage
+  frontmatter={{ title: `ROS${distro.ros} ${title(distro)}`, tableOfContents: false }}
+>
+  {
+    /* Phrased about upstream, not about our rebuilds. Noetic is end of life
+       upstream but its table is still regenerated on the usual schedule, so
+       "no longer rebuilt" would be wrong for it. */
+    distro.status === 'eol' && (
+      <Aside type="caution" title="End of life">
+        {title(distro)} reached end of life in {monthYear(distro.eol ?? '')}. Upstream no longer
+        releases updates for it, so this table shows what was built while it was supported.
+      </Aside>
+    )
+  }
+  <p>
+    Every package in the <a href={`https://index.ros.org/#${distro.name}`}>ROS index</a> for{' '}
+    {distro.name}, and whether it is available on the <a href={browse}><code>{distro.channel}</code></a>{' '}
+    channel yet.
+  </p>
+  <Code lang="sh" code={install} />
+  <PackageTable distro={distro} />
+</StarlightPage>
+
+{/* The matrix needs more room than Starlight's default measure. */}
+<style is:global>
+  :root {
+    --sl-content-width: 66rem;
+  }
+</style>

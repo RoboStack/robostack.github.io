@@ -1,0 +1,116 @@
+/* ==========================================================================
+   RoboStack theme on top of Starlight.
+
+   Two layers live here:
+   - the `--sl-*` accent palette that recolors Starlight's own UI, and
+   - the `--rs-*` design tokens (adapted from the prefix.dev / Pixi theme)
+     that the frontpage and distro-page components build on.
+
+   Lora stands in for the proprietary Moranga display font, whose files are
+   not shipped with this repository. Lora's lightest weight is 400, so
+   font-weight: 300 declarations render at 400.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+/* ---------- Starlight palette ----------
+   One accent ramp (the link blue) and one warm neutral scale, replacing
+   Starlight's cool blue-gray defaults so the docs share the frontpage's
+   paper character. Text steps keep a slight ink-navy cast; surface steps
+   (5-7, black) are warm cream / charcoal. */
+:root {
+  --sl-color-accent-low: #dee5ff;
+  --sl-color-accent: #2e46d8;
+  --sl-color-accent-high: #1f3399;
+
+  --sl-color-white: var(--rs-ink);
+  --sl-color-gray-1: hsl(212, 35%, 16%);
+  --sl-color-gray-2: hsl(212, 18%, 26%);
+  --sl-color-gray-3: hsl(212, 9%, 40%);
+  --sl-color-gray-4: hsl(212, 6%, 58%);
+  --sl-color-gray-5: hsl(40, 14%, 80%);
+  --sl-color-gray-6: hsl(42, 31%, 92%);
+  --sl-color-gray-7: hsl(40, 28%, 94%);
+  --sl-color-black: hsl(40, 30%, 96%);
+}
+:root[data-theme="dark"] {
+  --sl-color-accent-low: #182253;
+  --sl-color-accent: #6c85ff;
+  --sl-color-accent-high: #c3cdff;
+
+  --sl-color-white: hsl(40, 25%, 95%);
+  --sl-color-gray-1: hsl(40, 14%, 91%);
+  --sl-color-gray-2: hsl(40, 8%, 75%);
+  --sl-color-gray-3: hsl(40, 5%, 54%);
+  --sl-color-gray-4: hsl(38, 6%, 34%);
+  --sl-color-gray-5: hsl(35, 9%, 21%);
+  --sl-color-gray-6: hsl(32, 10%, 14%);
+  --sl-color-black: hsl(30, 11%, 9%);
+}
+
+/* ---------- RoboStack design tokens ---------- */
+:root {
+  /* Brand */
+  --rs-good: #71b82e; /* bright step of the success-green ramp */
+  --rs-ink: #001d38; /* near-black navy - the "text" color */
+  --rs-ink-deep: #000f24;
+  --fg-on-accent: #ffffff; /* text on accent-blue surfaces */
+
+  /* Warm neutrals (the cream/paper tones) */
+  --rs-cream-50: #f8f6f2;
+  --rs-cream-100: #f1ede4;
+  --rs-cream-200: #e2e2df;
+  --rs-cream-400: #8b8e93;
+  --rs-cream-600: #62656a;
+  --rs-cream-700: #383d3f;
+
+  /* Dark-mode neutrals, warm to match the light theme's cream */
+  --rs-dark-50: #f8f6f2;
+  --rs-dark-300: hsl(40, 8%, 72%);
+  --rs-dark-600: hsl(35, 8%, 27%);
+  --rs-dark-700: hsl(33, 10%, 15%); /* card bg in dark */
+  --rs-dark-800: hsl(32, 10%, 11%);
+  --rs-dark-900: hsl(30, 11%, 8%); /* page bg in dark */
+
+  /* Semantic - light theme (default) */
+  --fg-1: var(--rs-ink); /* primary text */
+  --fg-2: var(--rs-cream-600); /* secondary / muted */
+  --fg-copy: var(--rs-cream-700); /* card body copy and card links */
+  --bg-page: var(--rs-cream-50);
+  --bg-surface: #ffffff; /* cards */
+  --bg-inset: var(--rs-cream-100); /* rails, code-block backdrops */
+  --border-1: var(--rs-cream-100); /* default 1px card border */
+  --border-2: var(--rs-cream-200);
+
+  /* Elevation */
+  --shadow-card: 0 4px 8px 0 rgba(59, 61, 63, 0.02);
+  --shadow-hover-accent: 5px 5px var(--sl-color-accent), 10px 10px var(--sl-color-accent-low);
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-md: 12px; /* buttons, inputs */
+  --radius-lg: 16px; /* cards */
+  --radius-pill: 9999px;
+
+  /* Type families */
+  --font-display: "Lora", ui-serif, Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-2: 250ms;
+  --dur-3: 400ms;
+}
+
+:root[data-theme="dark"] {
+  --fg-1: var(--rs-dark-50);
+  --fg-2: var(--rs-dark-300);
+  --fg-copy: var(--rs-dark-300);
+  --fg-on-accent: #0b1638; /* the dark accent step is light, so ink on it */
+  --bg-page: var(--rs-dark-900);
+  --bg-surface: var(--rs-dark-700);
+  --bg-inset: var(--rs-dark-800);
+  --border-1: var(--rs-dark-900);
+  --border-2: var(--rs-dark-600);
+}

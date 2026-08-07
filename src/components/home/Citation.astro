@@ -1,0 +1,73 @@
+---
+import RsButton from './RsButton.astro';
+
+/** Citation card for the paper behind RoboStack, moved here from the old
+ * Overview docs page. */
+const bibtex = `@article{FischerRAM2021,
+    title={A RoboStack Tutorial: Using the Robot Operating System Alongside the Conda and Jupyter Data Science Ecosystems},
+    author={Tobias Fischer and Wolf Vollprecht and Silvio Traversaro and Sean Yen and Carlos Herrero and Michael Milford},
+    journal={IEEE Robotics and Automation Magazine},
+    year={2021},
+    doi={10.1109/MRA.2021.3128367},
+}`;
+---
+
+<div class="cite">
+  <div>
+    <h2>Using RoboStack in research?</h2>
+    <p>If you use RoboStack in an academic article, please cite the paper behind it.</p>
+  </div>
+  <div class="actions">
+    <RsButton href="https://arxiv.org/abs/2104.12910" variant="subtle" small>
+      Read the paper &rarr;
+    </RsButton>
+    <RsButton variant="subtle" small data-copy={bibtex}>
+      <span class="copy-label">Copy BibTeX</span>
+    </RsButton>
+  </div>
+</div>
+
+<script src="../../scripts/copy-buttons.js"></script>
+
+<style>
+  .cite {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 32px;
+    flex-wrap: wrap;
+    padding: 30px 34px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--fg-1);
+    margin: 0 0 6px;
+  }
+  p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-copy);
+    margin: 0;
+    max-width: 620px;
+  }
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 720px) {
+    .cite {
+      padding: 26px 20px;
+    }
+    h2 {
+      font-size: 24px;
+    }
+  }
+</style>

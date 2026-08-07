@@ -1,0 +1,85 @@
+---
+interface Props {
+  href: string;
+  channel: string;
+  /** CSS color for the channel dot. */
+  dot: string;
+  name: string;
+  description: string;
+}
+
+const { href, channel, dot, name, description } = Astro.props;
+---
+
+<a class="card" href={href}>
+  <div class="top">
+    <span class="channel"><span class="dot" style={`background: ${dot};`}></span><code>{channel}</code></span>
+  </div>
+  <div class="name">{name}</div>
+  <div class="sub">{description}</div>
+  <span class="link">Package list &rarr;</span>
+</a>
+
+<style>
+  .card {
+    display: block;
+    padding: 22px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    color: var(--fg-1);
+    text-decoration: none;
+    transition:
+      box-shadow var(--dur-3) var(--ease-out),
+      transform var(--dur-3) var(--ease-out);
+  }
+  .card:hover {
+    box-shadow: var(--shadow-hover-accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .channel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .channel code {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    background: none;
+    padding: 0;
+    color: var(--fg-1);
+  }
+  .name {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--fg-2);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-copy);
+  }
+</style>

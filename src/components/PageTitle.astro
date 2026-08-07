@@ -1,0 +1,18 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { DISTROS } from '../data/distros';
+import DistroHead from './DistroHead.astro';
+
+/**
+ * Override of Starlight's PageTitle. Two kinds of pages carry their own
+ * title area instead of the plain heading:
+ * - the distro pages render the distro switcher, artwork and support dates,
+ * - the frontpage renders nothing here; its hero brings its own heading.
+ * Every other page falls through to the stock component.
+ */
+const slug = Astro.url.pathname.replace(/^\//, '').replace(/\.html$/, '');
+const distro = DISTROS.find((d) => d.name === slug);
+const isFrontpage = slug === '' || slug === 'index';
+---
+
+{distro ? <DistroHead distro={distro} /> : isFrontpage ? null : <Default />}

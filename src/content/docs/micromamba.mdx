@@ -1,0 +1,159 @@
+---
+title: Install RoboStack packages with micromamba
+slug: micromamba
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## First, Install Micromamba
+
+```bash
+"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+```
+
+For details, see the official [Micromamba Installation](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html#automatic-install) instructions.
+
+By default, the installer will set up `conda-forge`, the prefix location at `~/micromamba`, and initialise shell variables in your `~/.bashrc`.
+
+Once installed, you can update micromamba with:
+
+```bash
+micromamba self-update
+```
+
+:::caution[Do not install ROS packages in the `base` environment]
+Make sure to _not_ install the ROS packages in your base environment as this leads to issues down the track. On the other hand, conda and mamba must not be installed in the `ros_env`, they should only be installed in base.
+:::
+
+:::caution[Do not source the system ROS environment]
+When there is an installation available of ROS on the system, in non-conda environments, there will be interference with the environments as the `PYTHONPATH` set in the setup script conflicts with the conda environment.
+:::
+
+## Installing ROS
+
+There are different channels depending on the version of ROS that you wish to install, to add these channels and install your desired version, you can run the following:
+
+<Tabs>
+  <TabItem label="ROS 1 Noetic">
+    ```bash
+    # Create a ros-noetic desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-noetic ros-noetic-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-noetic --env
+    ```
+  </TabItem>
+  <TabItem label="ROS 2 Humble">
+    ```bash
+    # Create a ros-humble desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-humble ros-humble-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-humble --env
+    ```
+  </TabItem>
+  <TabItem label="ROS 2 Jazzy">
+    ```bash
+    # Create a ros-jazzy desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-jazzy --env
+    ```
+  </TabItem>
+  <TabItem label="ROS 2 Kilted">
+    ```bash
+    # Create a ros-kilted desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-kilted ros-kilted-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-kilted --env
+    ```
+  </TabItem>
+  <TabItem label="ROS 2 Lyrical">
+    ```bash
+    # Create a ros-lyrical desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-lyrical ros-lyrical-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-lyrical --env
+    ```
+  </TabItem>
+  <TabItem label="ROS 2 Rolling">
+    ```bash
+    # Create a ros-rolling desktop environment
+    micromamba create -n ros_env -c conda-forge -c robostack-rolling ros-rolling-desktop
+    # Activate the environment
+    micromamba activate ros_env
+    # Add the robostack channel to the environemnt
+    micromamba config append channels robostack-rolling --env
+    ```
+  </TabItem>
+</Tabs>
+
+## Installing tools for local development
+
+```bash title="Default tools to help with local development of ROS packages"
+micromamba activate ros_env
+micromamba install -c conda-forge ros-dev-tools
+```
+
+:::tip[Developing on Windows]
+- Windows users also need Visual Studio 2022 with C++ support
+- You can download them here: [https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170](https://docs.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170)
+:::
+
+## Testing installation
+
+After installation, you should test if you are able to run `rviz`/`rviz2` and other ROS tools.
+
+:::note[Reminder]
+The ROS environment activation is included automatically. There is no need to add a `source` command in the `~/.bashrc`
+:::
+
+<Tabs>
+  <TabItem label="ROS 1">
+    ```bash title="First terminal"
+    micromamba activate ros_env
+    roscore
+    ```
+
+    ```bash title="Second terminal"
+    micromamba activate ros_env
+    rviz
+    ```
+  </TabItem>
+  <TabItem label="ROS 2">
+    :::note
+    ROS 2 has the benefit of not needing a `roscore`, so only a single terminal is needed to run a tool.
+    :::
+
+    ```bash title="Terminal"
+    micromamba activate ros_env
+    rviz2
+    ```
+  </TabItem>
+</Tabs>
+
+If you run into any issues or for any frequently asked questions, you can check the [FAQ page](/FAQ.html)
+
+## Updating
+
+Updating all packages in your environment is as easy as:
+
+```bash
+micromamba update --all
+```
+
+## Deactivating
+
+The (de)activation of the ros workspace goes in together with the conda environment. So running the corresponding (de)activation command will also (un)source the ros environment.
+
+```bash
+micromamba deactivate
+```

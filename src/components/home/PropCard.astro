@@ -1,0 +1,82 @@
+---
+/**
+ * A value-prop card: icon in an inset square, a display-face title, body copy
+ * from the default slot, and optionally a link line when `href` is given -
+ * then the whole card is the link.
+ */
+interface Props {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { title, href, linkLabel } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class="card" href={href}>
+  <div class="icon"><slot name="icon" /></div>
+  <div class="title">{title}</div>
+  <p><slot /></p>
+  {linkLabel && <span class="link">{linkLabel} &rarr;</span>}
+</Tag>
+
+<style>
+  .card {
+    position: relative;
+    display: block;
+    padding: 24px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    color: var(--fg-1);
+    text-decoration: none;
+  }
+  a.card {
+    transition:
+      box-shadow var(--dur-3) var(--ease-out),
+      transform var(--dur-3) var(--ease-out);
+  }
+  a.card:hover {
+    box-shadow: var(--shadow-hover-accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--bg-inset);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .icon :global(svg) {
+    fill: var(--fg-1);
+  }
+  .icon :global(svg.stroke) {
+    fill: none;
+    stroke: var(--fg-1);
+  }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 21px;
+    margin-bottom: 8px;
+  }
+  p {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-copy);
+    margin: 0;
+  }
+  .link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-copy);
+    margin-top: 12px;
+  }
+</style>
