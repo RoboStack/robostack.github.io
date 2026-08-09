@@ -84,12 +84,21 @@ In most cases those should be already installed in your system, but in case they
 
 ## What to do if pixi fails to solve the environment due to system requirements (e.g., __glibc)?
 
-When adding packages, you might get dependency conflicts containing an error like `└─ __glibc >=2.34,<3.0.a0, for which no candidates were found`.
+When adding packages, you might get dependency conflicts like:
+
+```bash
+└─ __glibc >=2.34,<3.0.a0, for which no candidates were found.
+```
 
 You can fix this by explicitly defining your system's actual capabilities in your pixi.toml file.
-Add or update the `[system-requirements]` section to include your required baseline:
+Update the `workspace.platforms` section to include your required baseline like shown below. See [pixi docs](https://pixi.prefix.dev/latest/workspace/multi_platform_configuration/#declaring-virtual-packages-per-platform) for more info.
 
 ```toml
+[workspace]
+platforms = [
+    { name="rover", platform = "linux-64", glibc = "2.39"}
+]
+```
 [system-requirements]
 libc = { family = "glibc", version = "2.31" }
 linux = "5.15"
@@ -99,4 +108,10 @@ Note: Set the glibc version to match the oldest machine or robot that needs to r
 
 ## Why ROS and Conda?
 
-We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager. We provide ROS binaries for Linux, macOS (Intel and Apple Silicon), Windows and ARM (Linux). Installing other recent packages via conda-forge side-by-side works easily, e.g. you can install TensorFlow/PyTorch in the same environment as ROS Noetic without any issues. As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu. As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows. No root access is required, all packages live in your home directory. We have recently written up a paper and blog post with more information.
+We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager.
+We provide ROS binaries for Linux, macOS (Intel and Apple Silicon), Windows and ARM (Linux).
+Installing other recent packages via conda-forge side-by-side works easily, e.g. you can install TensorFlow/PyTorch in the same environment as ROS Noetic without any issues.
+As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu.
+As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows.
+No root access is required, all packages live in your home directory.
+We have recently written up a paper and blog post with more information.
