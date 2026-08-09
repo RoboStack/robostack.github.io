@@ -1,0 +1,57 @@
+---
+import { tabOrder } from '../data/distros';
+
+interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+---
+
+<nav class="distros" aria-label="Distributions">
+  {
+    tabOrder().map((d) => (
+      <a
+        class:list={['distro', { 'distro--active': d.name === current }]}
+        href={`/${d.name}.html`}
+        aria-current={d.name === current ? 'page' : undefined}
+      >
+        {d.name}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .distros {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 -1px var(--sl-color-gray-5) inset;
+    margin-bottom: 1.4rem;
+  }
+  .distros::-webkit-scrollbar {
+    display: none;
+  }
+  .distro {
+    flex-shrink: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0.125rem 0.125rem 0 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    padding: 0.7em 1.25em 0.55em;
+    white-space: nowrap;
+    text-decoration: none;
+    transition:
+      color 0.25s,
+      border-color 0.25s;
+  }
+  .distro:hover {
+    color: var(--sl-color-white);
+  }
+  .distro--active {
+    color: var(--sl-color-white);
+    border-bottom-color: var(--sl-color-white);
+  }
+</style>
