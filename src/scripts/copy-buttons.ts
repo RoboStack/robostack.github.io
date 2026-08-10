@@ -1,7 +1,9 @@
 /* Binds every button carrying `data-copy`: writes the text to the clipboard
  * and briefly flips the button's `.copy-label` to confirm. */
 
-for (const button of document.querySelectorAll("button[data-copy]")) {
+for (const button of document.querySelectorAll<HTMLButtonElement>(
+  "button[data-copy]",
+)) {
   button.addEventListener("click", async () => {
     const text = button.dataset.copy ?? "";
     try {

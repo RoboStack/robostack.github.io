@@ -28,21 +28,25 @@ gh-deploy = {
   description = "Build the site and publish it to the gh-pages branch",
 }
 prettier-format = {
-  cmd = "prettier --write .",
+  cmd = "pnpm exec prettier --write .",
   depends-on = ["pnpm-install"],
   description = "Format the repository with prettier",
 }
 prettier-check = {
-  cmd = "prettier --check .",
+  cmd = "pnpm exec prettier --check .",
   depends-on = ["pnpm-install"],
   description = "Check the repository's formatting with prettier",
+}
+astro-check = {
+  cmd = "pnpm exec astro check --minimumSeverity warning --minimumFailingSeverity warning",
+  depends-on = ["pnpm-install"],
+  description = "Type-check the site",
 }
 
 [feature.lint.dependencies]
 ruff = ">=0.16,<0.17"
 typos = ">=1.49.0,<2"
 zizmor = ">=1.29.0,<2"
-prettier = ">=3.9.3,<4"
 
 [feature.lint.tasks]
 ruff-check = {
@@ -62,7 +66,7 @@ zizmor = {
   description = "Lint the GitHub workflows",
 }
 lint = {
-  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "prettier-check"],
+  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "prettier-check", "astro-check"],
   description = "Run all lint checks",
 }
 
