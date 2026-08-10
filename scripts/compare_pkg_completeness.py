@@ -24,7 +24,7 @@ would work today, but the specs appear in two forms (`0.9.* humble_*` and
 The JSON is positional to keep it small; `packages.js` unpacks it by index, so the
 order in `PackageRecordJson` is load-bearing.
 
-Usage: python utils/compare_pkg_completeness.py <distro> <channel>
+Usage: python scripts/compare_pkg_completeness.py <distro> <channel>
        channel is an anaconda.org channel name or a full base URL.
 """
 
@@ -42,7 +42,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, TypeAlias
 
-import requests
+import niquests
 import yaml
 from rattler import MatchSpec, PackageRecord
 
@@ -69,7 +69,7 @@ Artifact: TypeAlias = dict[str, Any]
 # one build, and a spec only has to match one of them.
 MutexRecords: TypeAlias = dict[str, list[PackageRecord]]
 
-session = requests.Session()
+session = niquests.Session()
 
 
 @dataclass
@@ -126,7 +126,9 @@ def package_metadata(distro: str) -> dict[str, tuple[str, str]]:
     try:
         index = fetch_yaml(f"{ROSDISTRO}/index-v4.yaml")
         url = index["distributions"][distro]["distribution_cache"]
-        cache = yaml.load(gzip.decompress(session.get(url).content), Loader=LOADER)
+        # An unconsumed body types as None; the empty fallback fails decompression
+        # and lands in the same warning path.
+        cache = yaml.load(gzip.decompress(session.get(url).content or b""), Loader=LOADER)
     except Exception as error:  # noqa: BLE001 - any upstream failure is non-fatal
         print(f"  warning: no distribution cache ({error})", file=sys.stderr)
         return {}

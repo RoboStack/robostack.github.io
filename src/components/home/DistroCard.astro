@@ -13,7 +13,11 @@ const { href, channel, dot, name, description } = Astro.props;
 
 <a class="card" href={href}>
   <div class="top">
-    <span class="channel"><span class="dot" style={`background: ${dot};`}></span><code>{channel}</code></span>
+    <span class="channel"
+      ><span class="dot" style={`background: ${dot};`}></span><code
+        >{channel}</code
+      ></span
+    >
   </div>
   <div class="name">{name}</div>
   <div class="sub">{description}</div>

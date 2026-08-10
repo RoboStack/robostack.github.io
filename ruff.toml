@@ -1,5 +1,5 @@
-# Applies to the scripts in utils/. There is no package here, just two
-# generators, so the rule set stays close to ruff's defaults plus the checks
+# Applies to the scripts in scripts/. There is no package here, just
+# standalone scripts, so the rule set stays close to ruff's defaults plus the checks
 # that catch real mistakes: unused imports, shadowed builtins, missing
 # annotations, and imports drifting out of order.
 line-length = 100

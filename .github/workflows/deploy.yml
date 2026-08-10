@@ -1,0 +1,19 @@
+name: deploy
+on:
+  push:
+    branches:
+      - main
+  workflow_run:
+    workflows: ["Update package table"]
+    types: [completed]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # `ghp-import --push` pushes the built site to the gh-pages branch
+    permissions:
+      contents: write
+    steps:
+      # ghp-import pushes with the credentials persisted by checkout
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+      - run: pixi run gh-deploy

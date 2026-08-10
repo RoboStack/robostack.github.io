@@ -1,6 +1,6 @@
 ---
-import type { Distro } from '../data/distros';
-import { browseUrl } from '../data/distros';
+import type { Distro } from "../data/distros";
+import { browseUrl } from "../data/distros";
 
 interface Props {
   distro: Distro;
@@ -10,7 +10,8 @@ const { distro } = Astro.props;
 const browse = browseUrl(distro);
 ---
 
-{/*
+{
+  /*
   The `data-eol` attribute suppresses the per-row "Add to channel" button.
   Inviting contributions to a distro upstream has stopped supporting would
   waste someone's afternoon.
@@ -18,26 +19,30 @@ const browse = browseUrl(distro);
   `not-content` opts the runtime-rendered table UI out of Starlight's
   Markdown sibling spacing, which would otherwise push extra margins between
   the filter buttons and controls.
-*/}
+*/
+}
 <div
   class="rs-packages not-content"
   data-distro={distro.name}
-  data-eol={distro.status === 'eol' ? '1' : undefined}
+  data-eol={distro.status === "eol" ? "1" : undefined}
 >
   <noscript>
-    This table is rendered in the browser. Without JavaScript, browse the channel directly at
-    <a href={browse}>{browse.replace('https://', '')}</a>.
+    This table is rendered in the browser. Without JavaScript, browse the
+    channel directly at
+    <a href={browse}>{browse.replace("https://", "")}</a>.
   </noscript>
 </div>
 
-<script src="../scripts/package-table.js"></script>
+<script src="../scripts/package-table.ts"></script>
 
-{/*
+{
+  /*
   Global rather than scoped: every element below the mount is created at
   runtime by package-table.js, and Astro's scoped selectors only match
   server-rendered markup. Everything is namespaced under .rs-packages or an
   rs- class it generates.
-*/}
+*/
+}
 <style is:global>
   .rs-packages {
     /* Windowing needs a known row height. Read back by package-table.js so
@@ -59,7 +64,7 @@ const browse = browseUrl(distro);
     font-size: var(--sl-text-sm);
   }
 
-  :root[data-theme='dark'] .rs-packages {
+  :root[data-theme="dark"] .rs-packages {
     --rs-yes-bg: #22380f;
     --rs-yes-fg: #9ad668;
     --rs-warn-bg: hsl(25, 55%, 15%);
@@ -484,25 +489,25 @@ const browse = browseUrl(distro);
     mask-size: contain;
   }
   .rs-icon--linux {
-    mask-image: url('/images/icons/linux.svg');
+    mask-image: url("/images/icons/linux.svg");
   }
   .rs-icon--apple {
-    mask-image: url('/images/icons/apple.svg');
+    mask-image: url("/images/icons/apple.svg");
   }
   .rs-icon--windows {
-    mask-image: url('/images/icons/windows.svg');
+    mask-image: url("/images/icons/windows.svg");
   }
   .rs-icon--wasm {
-    mask-image: url('/images/icons/wasm.svg');
+    mask-image: url("/images/icons/wasm.svg");
   }
   .rs-icon--channel {
-    mask-image: url('/images/icons/channel.svg');
+    mask-image: url("/images/icons/channel.svg");
   }
   .rs-icon--docs {
-    mask-image: url('/images/icons/docs.svg');
+    mask-image: url("/images/icons/docs.svg");
   }
   .rs-icon--github {
-    mask-image: url('/images/icons/github.svg');
+    mask-image: url("/images/icons/github.svg");
   }
 
   /* Availability marks. Every column except Package holds one, so the cells

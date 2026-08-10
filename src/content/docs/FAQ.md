@@ -77,7 +77,7 @@ mamba install -c conda-forge libgl-devel
 ```
 
 For actually running OpenGL-applications on Linux, you also need to make sure that your distribution has installed the packages containing the OpenGL drivers for you GPU.
-In most cases those should be already installed in your system, but in case they are not (tipically for headless systems or barebone containers) you can tipically add them with:
+In most cases those should be already installed in your system, but in case they are not (typically for headless systems or barebone containers) you can typically add them with:
 
 - Debian/Ubuntu-based distributions: `sudo apt-get install libgl1-mesa-dri libglx-mesa0 libegl-mesa0`
 - Fedora-based distributions: `sudo dnf install mesa-libGL mesa-libEGL mesa-dri-drivers`
@@ -99,9 +99,11 @@ platforms = [
     { name="rover", platform = "linux-64", glibc = "2.39"}
 ]
 ```
+
 [system-requirements]
 libc = { family = "glibc", version = "2.31" }
 linux = "5.15"
+
 ```
 
 Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
@@ -115,3 +117,4 @@ As no system libraries are used, you can also easily install ROS Noetic on any r
 As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows.
 No root access is required, all packages live in your home directory.
 We have recently written up a paper and blog post with more information.
+```

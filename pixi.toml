@@ -3,27 +3,89 @@ authors = ["Tobias Fischer <info@tobiasfischer.info>"]
 channels = ["https://prefix.dev/conda-forge"]
 platforms = ["osx-arm64", "linux-64", "win-64"]
 
-[tasks]
-compare-completeness = { cmd = "python utils/compare_pkg_completeness.py", description = "Add two arguments to give it the DISTRO and CHANNEL"}
-lint = { cmd = "ruff check utils && ruff format --check utils", description = "Lint and format-check the scripts in utils/" }
-npm-install = { cmd = "npm install", description = "Install the site's npm dependencies" }
-serve = { cmd = "npm run dev", depends-on = ["npm-install"], description = "Serve the site locally" }
-build-docs = { cmd = "npm run build", depends-on = ["npm-install"], description = "Build the site" }
-gh-deploy = { cmd = "ghp-import -n -p -f -m 'Deploy site' dist", depends-on = ["build-docs"], description = "Build the site and publish it to the gh-pages branch" }
-
-[dependencies]
-# Runs Astro/Starlight, which builds and serves the site
-nodejs = ">=26.6.0,<26.7"
-# Provides the gh-pages push that `mkdocs gh-deploy` used to do
+[feature.site.dependencies]
+pnpm = ">=11.21.0,<12"
 ghp-import = ">=2.1.0,<3"
-# Required by copy-staging-packages.yml
-requests = ">=2.34.2,<3"
-anaconda-client = ">=1.14.1,<2"
-# Required by utils/compare_pkg_completeness.py — was previously only pulled in
-# transitively, so a solve that dropped it would have broken the table build.
-pyyaml = ">=6,<7"
-# Resolves which ROS distro mutex each artifact was built against, by matching
-# its dependency spec against the real mutex records rather than parsing
-# version strings. Only used when regenerating public/data, not to serve the site.
-py-rattler = ">=0.25,<0.26"
+
+[feature.site.tasks]
+pnpm-install = {
+  cmd = "pnpm install",
+  description = "Install the site's npm dependencies",
+}
+serve = {
+  cmd = "pnpm run dev",
+  depends-on = ["pnpm-install"],
+  description = "Serve the site locally",
+}
+build-docs = {
+  cmd = "pnpm run build",
+  depends-on = ["pnpm-install"],
+  description = "Build the site",
+}
+gh-deploy = {
+  cmd = "ghp-import --no-jekyll --push --force --message 'Deploy site' dist",
+  depends-on = ["build-docs"],
+  description = "Build the site and publish it to the gh-pages branch",
+}
+prettier-format = {
+  cmd = "pnpm exec prettier --write .",
+  depends-on = ["pnpm-install"],
+  description = "Format the repository with prettier",
+}
+prettier-check = {
+  cmd = "pnpm exec prettier --check .",
+  depends-on = ["pnpm-install"],
+  description = "Check the repository's formatting with prettier",
+}
+astro-check = {
+  cmd = "pnpm exec astro check --minimumSeverity warning --minimumFailingSeverity warning",
+  depends-on = ["pnpm-install"],
+  description = "Type-check the site",
+}
+
+[feature.lint.dependencies]
 ruff = ">=0.16,<0.17"
+typos = ">=1.49.0,<2"
+zizmor = ">=1.29.0,<2"
+ty = ">=0.0.69,<0.0.70"
+
+[feature.lint.tasks]
+ruff-check = {
+  cmd = "ruff check scripts",
+  description = "Lint the scripts in scripts/",
+}
+format-check = {
+  cmd = "ruff format --check scripts",
+  description = "Format-check the scripts in scripts/",
+}
+typos = {
+  cmd = "typos",
+  description = "Check the repository for typos",
+}
+zizmor = {
+  cmd = "zizmor .github/workflows",
+  description = "Lint the GitHub workflows",
+}
+ty-check = {
+  cmd = "ty check scripts",
+  description = "Type-check the scripts in scripts/",
+}
+lint = {
+  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "ty-check", "prettier-check", "astro-check"],
+  description = "Run all lint checks",
+}
+
+[feature.scripts.dependencies]
+anaconda-client = ">=1.14.1,<2"
+pyyaml = ">=6,<7"
+py-rattler = ">=0.25,<0.26"
+niquests = ">=3.21.0,<4"
+
+[feature.scripts.tasks]
+compare-completeness = {
+  cmd = "python scripts/compare_pkg_completeness.py",
+  description = "Add two arguments to give it the DISTRO and CHANNEL",
+}
+
+[environments]
+default = ["site", "lint", "scripts"]

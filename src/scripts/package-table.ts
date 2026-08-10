@@ -17,7 +17,12 @@
  * styles live in PackageTable.astro.
  */
 
-const PLATFORMS = {
+interface PlatformMeta {
+  icon: string;
+  arch: string;
+}
+
+const PLATFORMS: Record<string, PlatformMeta> = {
   "linux-64": { icon: "linux", arch: "x64" },
   "linux-aarch64": { icon: "linux", arch: "arm" },
   "osx-64": { icon: "apple", arch: "x64" },
@@ -38,29 +43,91 @@ const FILTERS = [
 const OVERSCAN = 6;
 const CONTRIBUTING = "/Contributing.html#adding-new-packages-via-pull-requests";
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"]/g, (c) => {
-    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-  });
+/* One entry per mutex, aligned with doc.mutexes: 0 when nothing is built for
+ * that mutex, otherwise a platform bitmask plus the version built. */
+type BuildSlot = 0 | [number, string];
+
+/* name, description, license, index version, last-built timestamp, index into
+ * doc.repos (-1 for none), build slots. */
+type PackageEntry = [
+  string,
+  string,
+  string,
+  string,
+  number,
+  number,
+  BuildSlot[],
+];
+
+interface Doc {
+  distro: string;
+  channel: string;
+  platforms: string[];
+  mutexPackage: string;
+  mutexes: string[];
+  repos: string[];
+  packages: PackageEntry[];
+}
+
+interface Upgrade {
+  version: string;
+  mutex: string;
+}
+
+interface Row {
+  name: string;
+  desc: string;
+  license: string;
+  indexVersion: string;
+  updated: number;
+  repo: string;
+  builds: BuildSlot[];
+  haystack: string;
+  // Derived per mutex by applyMutex().
+  mask: number;
+  version: string;
+  built: number;
+  total: number;
+  behind: boolean;
+  older: string[];
+  upgrade: Upgrade | null;
+  never: boolean;
+}
+
+interface ActivePlatform {
+  id: string;
+  bit: number;
+}
+
+const ESCAPES: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+};
+
+function escapeHtml(value: unknown): string {
+  return String(value).replace(/[&<>"]/g, (c) => ESCAPES[c]);
 }
 
 // rosdistro versions carry a release increment ("2.0.2-1"); drop it to
 // compare against the plain version conda publishes.
-function baseVersion(value) {
+function baseVersion(value: string): string {
   return String(value || "").split("-")[0];
 }
 
-function versionParts(value) {
+function versionParts(value: string): number[] {
   return baseVersion(value)
     .split(".")
     .map((part) => (/^\d+$/.test(part) ? parseInt(part, 10) : -1));
 }
 
-function compareVersions(a, b) {
+function compareVersions(a: string, b: string): number {
   const x = versionParts(a);
   const y = versionParts(b);
   for (let i = 0; i < Math.max(x.length, y.length); i++) {
-    const delta = (x[i] === undefined ? -1 : x[i]) - (y[i] === undefined ? -1 : y[i]);
+    const delta =
+      (x[i] === undefined ? -1 : x[i]) - (y[i] === undefined ? -1 : y[i]);
     if (delta) return delta < 0 ? -1 : 1;
   }
   return 0;
@@ -70,12 +137,12 @@ function compareVersions(a, b) {
  * <img>: a mask takes its colour from the surrounding text, so the same file
  * works for a muted column header and for a link that inverts on hover. Size
  * is per use, since headers, row links and the add button all differ. */
-function icon(name, size) {
+function icon(name: string, size: number): string {
   return `<span class="rs-icon rs-icon--${name}" style="width:${size}px;height:${size}px" aria-hidden="true"></span>`;
 }
 
-function Table(mount, doc) {
-  const all = doc.packages.map((pkg) => ({
+function Table(mount: HTMLElement, doc: Doc): void {
+  const all: Row[] = doc.packages.map((pkg) => ({
     name: pkg[0],
     desc: pkg[1],
     license: pkg[2],
@@ -84,29 +151,48 @@ function Table(mount, doc) {
     repo: pkg[5] >= 0 ? doc.repos[pkg[5]] : "",
     builds: pkg[6], // aligned with doc.mutexes
     haystack: (pkg[0] + " " + pkg[1]).toLowerCase(),
+    mask: 0,
+    version: "",
+    built: 0,
+    total: 0,
+    behind: false,
+    older: [],
+    upgrade: null,
+    never: false,
   }));
 
-  const state = { query: "", filter: "all", sort: "name", mutex: 0, rows: [] };
-  let active, counts, columns, thead, tbody, rowHeight;
+  const state = {
+    query: "",
+    filter: "all",
+    sort: "name",
+    mutex: 0,
+    rows: [] as Row[],
+  };
+  let active: ActivePlatform[] = [];
+  let counts: Record<string, number> = {};
+  let columns = 0;
+  let thead: HTMLTableSectionElement;
+  let tbody: HTMLTableSectionElement;
+  let rowHeight = 68;
 
   /* A platform column with nothing built for the selected mutex is thousands
    * of identical empty cells, so it is dropped and reported instead. This is
    * recomputed per mutex: humble builds nothing for wasm on 0.1, so that
    * column genuinely does not exist there. */
-  function activePlatforms() {
+  function activePlatforms(): ActivePlatform[] {
     return doc.platforms
       .map((id, bit) => ({ id, bit }))
       .filter((p) =>
         all.some((row) => {
           const slot = row.builds[state.mutex];
-          return slot && slot[0] & (1 << p.bit);
-        })
+          return slot ? (slot[0] & (1 << p.bit)) !== 0 : false;
+        }),
       );
   }
 
   /* Derives every per-mutex value onto the rows. Called whenever the mutex
    * changes; O(n) over 2,300 rows, which is far cheaper than re-fetching. */
-  function applyMutex() {
+  function applyMutex(): void {
     active = activePlatforms();
     columns = active.length + 1;
     const bits = active.map((p) => p.bit);
@@ -118,7 +204,9 @@ function Table(mount, doc) {
       row.built = bits.reduce((n, bit) => n + ((row.mask >> bit) & 1), 0);
       row.total = bits.length;
       row.behind =
-        !!row.version && !!row.indexVersion && compareVersions(row.version, row.indexVersion) < 0;
+        !!row.version &&
+        !!row.indexVersion &&
+        compareVersions(row.version, row.indexVersion) < 0;
       // Which other mutexes do have it, so a gap reads as "built, but not
       // for this mutex" rather than "never built". Newer and older are kept
       // apart because only one of them is actionable: a package waiting on a
@@ -130,7 +218,7 @@ function Table(mount, doc) {
       // Never built for any mutex. Distinct from "not built for the selected
       // mutex": that one is answered by changing the mutex, this one only by
       // someone adding the package.
-      row.never = !row.builds.some((slot) => slot);
+      row.never = !row.builds.some((slot) => Boolean(slot));
       for (let i = 0; i < doc.mutexes.length; i++) {
         const other = row.builds[i];
         if (i === state.mutex || !other) continue;
@@ -140,11 +228,18 @@ function Table(mount, doc) {
         }
         // A newer mutex: worth reporting when it offers this package at all,
         // or offers a newer version of it than the selected mutex does.
-        if (!row.upgrade || compareVersions(other[1], row.upgrade.version) > 0) {
+        if (
+          !row.upgrade ||
+          compareVersions(other[1], row.upgrade.version) > 0
+        ) {
           row.upgrade = { version: other[1], mutex: doc.mutexes[i] };
         }
       }
-      if (row.upgrade && row.version && compareVersions(row.upgrade.version, row.version) <= 0) {
+      if (
+        row.upgrade &&
+        row.version &&
+        compareVersions(row.upgrade.version, row.version) <= 0
+      ) {
         row.upgrade = null;
       }
     });
@@ -162,16 +257,16 @@ function Table(mount, doc) {
 
   /* The upgrade filter only exists while an older mutex is selected — on the
    * newest there is nothing newer to move to. */
-  function filters() {
+  function filters(): { id: string; label: string }[] {
     return counts.upgrade
       ? FILTERS.concat([{ id: "upgrade", label: "Newer on a newer mutex" }])
       : FILTERS;
   }
 
-  function matchesFilter(row, filter) {
+  function matchesFilter(row: Row, filter: string): boolean {
     switch (filter) {
       case "full":
-        return row.total && row.built === row.total;
+        return row.total > 0 && row.built === row.total;
       case "partial":
         return row.built > 0 && row.built < row.total;
       case "missing":
@@ -185,12 +280,14 @@ function Table(mount, doc) {
     }
   }
 
-  function apply() {
+  function apply(): void {
     const query = state.query.trim().toLowerCase();
     const rows = all.filter(
-      (row) => matchesFilter(row, state.filter) && (!query || row.haystack.indexOf(query) !== -1)
+      (row) =>
+        matchesFilter(row, state.filter) &&
+        (!query || row.haystack.indexOf(query) !== -1),
     );
-    const sorters = {
+    const sorters: Record<string, (a: Row, b: Row) => number> = {
       name: (a, b) => a.name.localeCompare(b.name),
       coverage: (a, b) => b.built - a.built || a.name.localeCompare(b.name),
       gaps: (a, b) => a.built - b.built || a.name.localeCompare(b.name),
@@ -199,7 +296,7 @@ function Table(mount, doc) {
     state.rows = rows.sort(sorters[state.sort] || sorters.name);
   }
 
-  function chrome() {
+  function chrome(): void {
     const available = counts.full + counts.partial;
     const percent = all.length ? Math.round((available / all.length) * 100) : 0;
     // Behind-index packages are a subset of the available ones — a package
@@ -209,7 +306,9 @@ function Table(mount, doc) {
     const availablePct = all.length ? (available / all.length) * 100 : 0;
     const behindPct = all.length ? (counts.behind / all.length) * 100 : 0;
     const currentPct = Math.max(0, availablePct - behindPct);
-    const hidden = doc.platforms.filter((id, bit) => !active.some((p) => p.bit === bit));
+    const hidden = doc.platforms.filter(
+      (_id, bit) => !active.some((p) => p.bit === bit),
+    );
 
     mount.innerHTML =
       '<div class="rs-summary">' +
@@ -283,7 +382,9 @@ function Table(mount, doc) {
       "</div>" +
       "</div>" +
       '<p class="rs-count"><span class="rs-count__showing"></span>' +
-      (hidden.length ? " " + hidden.join(", ") + " hidden — nothing built for this mutex." : "") +
+      (hidden.length
+        ? " " + hidden.join(", ") + " hidden — nothing built for this mutex."
+        : "") +
       "</p>" +
       '<div class="rs-tablewrap"><table>' +
       "<colgroup><col>" +
@@ -308,14 +409,18 @@ function Table(mount, doc) {
       '<p class="rs-notice__title">No matches</p>' +
       "<p>No packages match that search or filter.</p></div>";
 
-    thead = mount.querySelector("thead");
-    tbody = mount.querySelector("tbody");
+    thead = mount.querySelector("thead")!;
+    tbody = mount.querySelector("tbody")!;
     // One source of truth for the row height, so the windowing maths cannot
     // drift from the stylesheet.
-    rowHeight = parseInt(window.getComputedStyle(mount).getPropertyValue("--rs-row-h"), 10) || 68;
+    rowHeight =
+      parseInt(
+        window.getComputedStyle(mount).getPropertyValue("--rs-row-h"),
+        10,
+      ) || 68;
   }
 
-  function mutexPicker() {
+  function mutexPicker(): string {
     if (!doc.mutexes.length) return "";
     return (
       '<p class="rs-mutex"><label>Built against ' +
@@ -343,13 +448,15 @@ function Table(mount, doc) {
           " newer on a newer mutex</span>"
         : "") +
       (counts.older
-        ? '<span class="rs-mutex__note">' + counts.older + " built only for an older mutex</span>"
+        ? '<span class="rs-mutex__note">' +
+          counts.older +
+          " built only for an older mutex</span>"
         : "") +
       "</p>"
     );
   }
 
-  function link(href, title, name) {
+  function link(href: string, title: string, name: string): string {
     return (
       '<a class="rs-link" href="' +
       href +
@@ -361,7 +468,7 @@ function Table(mount, doc) {
     );
   }
 
-  function rowHtml(row) {
+  function rowHtml(row: Row): string {
     const conda = "ros-" + doc.distro + "-" + row.name;
     // The ROS index spells package names with underscores; conda uses hyphens.
     const rosName = row.name.replace(/-/g, "_");
@@ -429,7 +536,11 @@ function Table(mount, doc) {
     return (
       "<tr><td>" +
       '<span class="rs-dot rs-dot--' +
-      (row.built === 0 ? "missing" : row.built === row.total ? "full" : "partial") +
+      (row.built === 0
+        ? "missing"
+        : row.built === row.total
+          ? "full"
+          : "partial") +
       '"></span>' +
       '<span class="rs-name">' +
       '<span class="rs-pkg">' +
@@ -446,15 +557,20 @@ function Table(mount, doc) {
               "/packages/" +
               encodeURIComponent(conda),
             conda + " on " + doc.channel,
-            "channel"
+            "channel",
           )
         : "") +
       link(
-        "https://index.ros.org/p/" + encodeURIComponent(rosName) + "/#" + doc.distro,
+        "https://index.ros.org/p/" +
+          encodeURIComponent(rosName) +
+          "/#" +
+          doc.distro,
         rosName + " on the ROS index",
-        "docs"
+        "docs",
       ) +
-      (row.repo ? link(row.repo, row.repo.replace(/^https?:\/\//, ""), "github") : "") +
+      (row.repo
+        ? link(row.repo, row.repo.replace(/^https?:\/\//, ""), "github")
+        : "") +
       // Pushed to the far right of the package cell, so it uses the slack
       // in that column instead of squeezing the name.
       (row.never && !mount.dataset.eol
@@ -494,7 +610,7 @@ function Table(mount, doc) {
   }
 
   // A single empty row standing in for `count` rows that are not rendered.
-  function padding(count) {
+  function padding(count: number): string {
     return count > 0
       ? '<tr class="rs-pad" aria-hidden="true"><td colspan="' +
           columns +
@@ -504,7 +620,7 @@ function Table(mount, doc) {
       : "";
   }
 
-  function renderRows() {
+  function renderRows(): void {
     const rows = state.rows;
     // <thead> keeps its place regardless of how tall the padding rows are,
     // so its bottom edge is a stable origin for the visible window.
@@ -515,18 +631,20 @@ function Table(mount, doc) {
     // scroll further, which grows it again.
     const first = Math.min(
       Math.max(0, rows.length - visible),
-      Math.max(0, Math.floor(above / rowHeight) - OVERSCAN)
+      Math.max(0, Math.floor(above / rowHeight) - OVERSCAN),
     );
     const last = Math.min(rows.length, first + visible);
 
     tbody.innerHTML =
-      padding(first) + rows.slice(first, last).map(rowHtml).join("") + padding(rows.length - last);
+      padding(first) +
+      rows.slice(first, last).map(rowHtml).join("") +
+      padding(rows.length - last);
   }
 
   /* The stylesheet declares the row height, but td padding can outweigh it,
    * and zoom or a font change shifts it again. Measuring a real row keeps the
    * padding rows honest whatever the CSS ends up doing. */
-  function syncRowHeight() {
+  function syncRowHeight(): boolean {
     const row = tbody.querySelector("tr:not(.rs-pad)");
     if (!row) return false;
     const measured = Math.round(row.getBoundingClientRect().height);
@@ -535,15 +653,16 @@ function Table(mount, doc) {
     return true;
   }
 
-  function refresh() {
+  function refresh(): void {
     apply();
-    mount.querySelector(".rs-count__showing").textContent =
+    mount.querySelector(".rs-count__showing")!.textContent =
       "Showing " +
       state.rows.length.toLocaleString() +
       " of " +
       all.length.toLocaleString() +
       " index packages.";
-    mount.querySelector(".rs-empty").hidden = state.rows.length > 0;
+    mount.querySelector<HTMLElement>(".rs-empty")!.hidden =
+      state.rows.length > 0;
     // Filtering to a shorter list can strand the reader below the new end of
     // the table; pull back to its top only when that has actually happened.
     const rect = thead.getBoundingClientRect();
@@ -553,30 +672,34 @@ function Table(mount, doc) {
     renderRows();
   }
 
-  function bind() {
-    mount.querySelector("input").addEventListener("input", (e) => {
-      state.query = e.target.value;
+  function bind(): void {
+    const search = mount.querySelector<HTMLInputElement>("input")!;
+    search.addEventListener("input", () => {
+      state.query = search.value;
       refresh();
     });
-    mount.querySelector(".rs-tools select").addEventListener("change", (e) => {
-      state.sort = e.target.value;
+    const sort = mount.querySelector<HTMLSelectElement>(".rs-tools select")!;
+    sort.addEventListener("change", () => {
+      state.sort = sort.value;
       refresh();
     });
-    mount.querySelector(".rs-filters").addEventListener("click", (e) => {
-      const button = e.target.closest("[data-filter]");
+    mount.querySelector(".rs-filters")!.addEventListener("click", (e) => {
+      const button = (e.target as Element).closest<HTMLElement>(
+        "[data-filter]",
+      );
       if (!button) return;
-      state.filter = button.dataset.filter;
-      mount.querySelectorAll("[data-filter]").forEach((b) => {
+      state.filter = button.dataset.filter ?? "all";
+      mount.querySelectorAll<HTMLElement>("[data-filter]").forEach((b) => {
         const on = b.dataset.filter === state.filter;
         b.setAttribute("aria-pressed", String(on));
         b.classList.toggle("rs-filter--on", on);
       });
       refresh();
     });
-    const picker = mount.querySelector("[data-mutex]");
+    const picker = mount.querySelector<HTMLSelectElement>("[data-mutex]");
     if (picker) {
-      picker.addEventListener("change", (e) => {
-        state.mutex = parseInt(e.target.value, 10) || 0;
+      picker.addEventListener("change", () => {
+        state.mutex = parseInt(picker.value, 10) || 0;
         // Columns and every count change with the mutex, so the whole chrome
         // is rebuilt rather than patched.
         applyMutex();
@@ -585,7 +708,7 @@ function Table(mount, doc) {
     }
   }
 
-  function rebuild() {
+  function rebuild(): void {
     chrome();
     bind();
     refresh();
@@ -595,10 +718,13 @@ function Table(mount, doc) {
   applyMutex();
   rebuild();
 
-  window.addEventListener("scroll", () => requestAnimationFrame(renderRows), { passive: true });
+  window.addEventListener("scroll", () => requestAnimationFrame(renderRows), {
+    passive: true,
+  });
   window.addEventListener("resize", renderRows);
   document.addEventListener("keydown", (e) => {
-    const search = mount.querySelector("input");
+    const search = mount.querySelector<HTMLInputElement>("input");
+    if (!search) return;
     if (e.key === "/" && document.activeElement !== search) {
       e.preventDefault();
       search.focus();
@@ -610,20 +736,20 @@ function Table(mount, doc) {
   });
 }
 
-const mount = document.querySelector(".rs-packages[data-distro]");
+const mount = document.querySelector<HTMLElement>(".rs-packages[data-distro]");
 if (mount) {
-  const distro = mount.dataset.distro;
+  const distro = mount.dataset.distro ?? "";
   mount.innerHTML = "<p>Loading packages…</p>";
 
   fetch("/data/" + distro + ".json")
     .then((response) => {
       if (!response.ok) throw new Error("HTTP " + response.status);
-      return response.json();
+      return response.json() as Promise<Doc>;
     })
     .then((payload) => {
       Table(mount, payload);
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       mount.innerHTML =
         '<div class="rs-notice rs-notice--error">' +
         '<p class="rs-notice__title">Could not load the package list</p>' +

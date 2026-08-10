@@ -1,0 +1,9 @@
+rules:
+  # deploy.yml intentionally reruns after "Update package table" completes,
+  # and its checkout keeps credentials because `ghp-import --push` uses them.
+  dangerous-triggers:
+    ignore:
+      - deploy.yml
+  artipacked:
+    ignore:
+      - deploy.yml

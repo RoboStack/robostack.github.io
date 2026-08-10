@@ -1,4 +1,4 @@
-name: Update distro tables
+name: Update package table
 
 on:
   schedule:
@@ -8,47 +8,52 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
+    # The push step writes the regenerated tables back to the repository
+    permissions:
+      contents: write
     steps:
-    - name: Checkout robostack.github.io
-      uses: actions/checkout@v4
-    - uses: prefix-dev/setup-pixi@v0.10.0
-    # foxy and galactic are end-of-life; public/data/{foxy,galactic}.json are
-    # committed snapshots and deliberately not regenerated here.
-    - name: Create table noetic
-      run: |
-        pixi run compare-completeness noetic robostack-noetic
-    - name: Create table humble
-      run: |
-        pixi run compare-completeness humble robostack-humble
-    - name: Create table jazzy
-      run: |
-        pixi run compare-completeness jazzy robostack-jazzy
-    - name: Create table kilted
-      run: |
-        pixi run compare-completeness kilted robostack-kilted
-    - name: Create table rolling
-      run: |
-        pixi run compare-completeness rolling https://prefix.dev/robostack-rolling
-    - name: Create table lyrical
-      run: |
-        pixi run compare-completeness lyrical https://prefix.dev/robostack-lyrical
-    - name: Commit changes
-      id: commit
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add public/data/noetic.json
-        git add public/data/humble.json
-        git add public/data/jazzy.json
-        git add public/data/kilted.json
-        git add public/data/rolling.json
-        git add public/data/lyrical.json
-        git commit -m "Update tables"
-      continue-on-error: true
-    - name: Push changes
-      if: steps.commit.outcome == 'success'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+      - name: Checkout robostack.github.io
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+      # foxy and galactic are end-of-life; public/data/{foxy,galactic}.json are
+      # committed snapshots and deliberately not regenerated here.
+      - name: Create table noetic
+        run: |
+          pixi run compare-completeness noetic robostack-noetic
+      - name: Create table humble
+        run: |
+          pixi run compare-completeness humble robostack-humble
+      - name: Create table jazzy
+        run: |
+          pixi run compare-completeness jazzy robostack-jazzy
+      - name: Create table kilted
+        run: |
+          pixi run compare-completeness kilted robostack-kilted
+      - name: Create table rolling
+        run: |
+          pixi run compare-completeness rolling https://prefix.dev/robostack-rolling
+      - name: Create table lyrical
+        run: |
+          pixi run compare-completeness lyrical https://prefix.dev/robostack-lyrical
+      - name: Commit changes
+        id: commit
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add public/data/noetic.json
+          git add public/data/humble.json
+          git add public/data/jazzy.json
+          git add public/data/kilted.json
+          git add public/data/rolling.json
+          git add public/data/lyrical.json
+          git commit -m "Update tables"
+        continue-on-error: true
+      - name: Push changes
+        if: steps.commit.outcome == 'success'
+        uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

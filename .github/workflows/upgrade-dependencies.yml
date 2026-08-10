@@ -1,0 +1,41 @@
+name: Upgrade dependencies
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+  schedule:
+    # At 05:00 on day 1 of the month
+    - cron: 0 5 1 * *
+
+jobs:
+  pixi-upgrade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+        with:
+          run-install: false
+      - name: Upgrade dependencies
+        run: |
+          set -o pipefail
+          pixi upgrade --json | pixi exec pixi-diff-to-markdown >> diff.md
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: upgrade pixi dependencies"
+          title: Upgrade pixi dependencies
+          body-path: diff.md
+          branch: upgrade-pixi
+          base: main
+          labels: pixi
+          delete-branch: true
+          add-paths: |
+            pixi.toml
+            pixi.lock

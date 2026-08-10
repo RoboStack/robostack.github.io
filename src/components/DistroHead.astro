@@ -1,7 +1,7 @@
 ---
-import type { Distro } from '../data/distros';
-import { supportLine, title } from '../data/distros';
-import DistroTabs from './DistroTabs.astro';
+import type { Distro } from "../data/distros";
+import { supportLine, title } from "../data/distros";
+import DistroTabs from "./DistroTabs.astro";
 
 interface Props {
   distro: Distro;
@@ -12,7 +12,12 @@ const { distro } = Astro.props;
 
 <DistroTabs current={distro.name} />
 <div class="head">
-  <img src={`/images/distros/${distro.name}.png`} alt="" width="96" height="96" />
+  <img
+    src={`/images/distros/${distro.name}.png`}
+    alt=""
+    width="96"
+    height="96"
+  />
   <div>
     <h1 id="_top">ROS{distro.ros} {title(distro)}</h1>
     <p class="support">{supportLine(distro)}</p>
