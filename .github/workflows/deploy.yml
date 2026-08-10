@@ -3,9 +3,11 @@ on:
   push:
     branches:
       - main
-  workflow_run:
-    workflows: ["Update package table"]
-    types: [completed]
+  # The package tables live only in the deployed site, not in git; the schedule
+  # is what keeps them fresh.
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
 
 # ghp-import force-pushes gh-pages; two runs racing each other could publish
 # the older build last.
@@ -16,9 +18,8 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Only redeploy for a table refresh that actually succeeded; a push to main
-    # deploys unconditionally.
-    if: github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
+    # workflow_dispatch can be pointed at any branch; only main may deploy.
+    if: github.ref == 'refs/heads/main'
     # `ghp-import --push` pushes the built site to the gh-pages branch
     permissions:
       contents: write
@@ -26,4 +27,16 @@ jobs:
       # ghp-import pushes with the credentials persisted by checkout
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+      # Regenerates every distro with a dataChannel in src/data/distros.json;
+      # a distro without one (foxy, galactic) is a committed snapshot. A failed
+      # distro does not stop the deploy: the ensure-tables task inside
+      # build-docs falls back to the currently deployed copy for whatever is
+      # missing, and the run is marked failed at the end.
+      - name: Update tables
+        id: update
+        continue-on-error: true
+        run: pixi run update-tables
       - run: pixi run gh-deploy
+      - name: Surface update failures
+        if: steps.update.outcome == 'failure'
+        run: exit 1
