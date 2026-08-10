@@ -1,10 +1,10 @@
 ---
 /** The hero's quick-start card: a mock terminal with a copy button. */
 const commands = [
-  'pixi init ros_ws -c https://prefix.dev/robostack-humble',
-  'cd ros_ws',
-  'pixi add ros-humble-desktop',
-  'pixi run rviz2',
+  "pixi init ros_ws -c https://prefix.dev/robostack-humble",
+  "cd ros_ws",
+  "pixi add ros-humble-desktop",
+  "pixi run rviz2",
 ];
 ---
 
@@ -18,8 +18,13 @@ const commands = [
         <span style="background: var(--rs-good);"></span>
         <span class="term-label">terminal</span>
       </div>
-      <button class="copy" type="button" data-copy={commands.join('\n')}>
-        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"
+      <button class="copy" type="button" data-copy={commands.join("\n")}>
+        <svg
+          viewBox="0 0 24 24"
+          width="13"
+          height="13"
+          fill="currentColor"
+          aria-hidden="true"
           ><path
             d="M20,7L10,7C8.343,7 7,8.343 7,10L7,20C7,21.657 8.343,23 10,23L20,23C21.657,23 23,21.657 23,20L23,10C23,8.343 21.657,7 20,7ZM20,9C20.552,9 21,9.448 21,10C21,10 21,20 21,20C21,20.552 20.552,21 20,21C20,21 10,21 10,21C9.448,21 9,20.552 9,20C9,20 9,10 9,10C9,9.448 9.448,9 10,9C10,9 20,9 20,9Z"
           ></path><path
@@ -34,7 +39,11 @@ const commands = [
         commands.map((command, i) => (
           <div>
             <span class="prompt">$ </span>
-            {i === commands.length - 1 ? <span class="accent">{command}</span> : command}
+            {i === commands.length - 1 ? (
+              <span class="accent">{command}</span>
+            ) : (
+              command
+            )}
           </div>
         ))
       }

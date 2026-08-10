@@ -99,9 +99,11 @@ platforms = [
     { name="rover", platform = "linux-64", glibc = "2.39"}
 ]
 ```
+
 [system-requirements]
 libc = { family = "glibc", version = "2.31" }
 linux = "5.15"
+
 ```
 
 Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
@@ -115,3 +117,4 @@ As no system libraries are used, you can also easily install ROS Noetic on any r
 As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows.
 No root access is required, all packages live in your home directory.
 We have recently written up a paper and blog post with more information.
+```

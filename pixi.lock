@@ -65,6 +65,7 @@ environments:
       - conda: https://prefix.dev/conda-forge/linux-64/pcre2-10.47-haa7fec5_0.conda
       - conda: https://prefix.dev/conda-forge/linux-64/pillow-12.3.0-py314h8ec4b1a_0.conda
       - conda: https://prefix.dev/conda-forge/linux-64/pnpm-11.21.0-hcdd682b_0.conda
+      - conda: https://prefix.dev/conda-forge/linux-64/prettier-3.9.3-h7e4c9f4_0.conda
       - conda: https://prefix.dev/conda-forge/linux-64/pthread-stubs-0.4-hb03c661_1003.conda
       - conda: https://prefix.dev/conda-forge/linux-64/py-rattler-0.25.0-py310h70157a2_2.conda
       - conda: https://prefix.dev/conda-forge/linux-64/pydantic-core-2.46.4-py314h2e6c369_0.conda
@@ -276,6 +277,7 @@ environments:
       - conda: https://prefix.dev/conda-forge/osx-arm64/openssl-3.6.3-hd24854e_1.conda
       - conda: https://prefix.dev/conda-forge/osx-arm64/pillow-12.3.0-py314hab283cf_0.conda
       - conda: https://prefix.dev/conda-forge/osx-arm64/pnpm-11.21.0-h7c87c79_0.conda
+      - conda: https://prefix.dev/conda-forge/osx-arm64/prettier-3.9.3-h57cd9b8_0.conda
       - conda: https://prefix.dev/conda-forge/osx-arm64/pthread-stubs-0.4-h84a0fba_1003.conda
       - conda: https://prefix.dev/conda-forge/osx-arm64/py-rattler-0.25.0-py310hbaa5893_2.conda
       - conda: https://prefix.dev/conda-forge/osx-arm64/pydantic-core-2.46.4-py314h54f3292_0.conda
@@ -402,6 +404,7 @@ environments:
       - conda: https://prefix.dev/conda-forge/win-64/openssl-3.6.3-hf411b9b_1.conda
       - conda: https://prefix.dev/conda-forge/win-64/pillow-12.3.0-py314h61b30b5_0.conda
       - conda: https://prefix.dev/conda-forge/win-64/pnpm-11.21.0-hfe981f5_0.conda
+      - conda: https://prefix.dev/conda-forge/win-64/prettier-3.9.3-h2c448b4_0.conda
       - conda: https://prefix.dev/conda-forge/win-64/pthread-stubs-0.4-hba3369d_1003.conda
       - conda: https://prefix.dev/conda-forge/win-64/py-rattler-0.25.0-py310hb39080a_2.conda
       - conda: https://prefix.dev/conda-forge/win-64/pydantic-core-2.46.4-py314h9f07db2_0.conda
@@ -1068,6 +1071,18 @@ packages:
   run_exports: {}
   size: 7295803
   timestamp: 1786308701481
+- conda: https://prefix.dev/conda-forge/linux-64/prettier-3.9.3-h7e4c9f4_0.conda
+  sha256: ec8af57fabe73c269b762eb8d3f45505ef3528c22a4d4d3994a9b2d70c9c57d9
+  md5: 52df3de33d8bed542df618f403fa5b85
+  depends:
+  - nodejs
+  - __glibc >=2.17,<3.0.a0
+  - nodejs >=24.18.0,<25.0a0
+  license: MIT
+  license_family: MIT
+  run_exports: {}
+  size: 1370893
+  timestamp: 1782740641804
 - conda: https://prefix.dev/conda-forge/linux-64/pthread-stubs-0.4-hb03c661_1003.conda
   sha256: afc3b27b2cbb0487c1d0e963f96e71181ecfb623a24fb393bb19ff974a6382a1
   md5: df2c27f36bdb0dde779f55b5df76a352
@@ -2894,6 +2909,18 @@ packages:
   run_exports: {}
   size: 7304118
   timestamp: 1786308818747
+- conda: https://prefix.dev/conda-forge/osx-arm64/prettier-3.9.3-h57cd9b8_0.conda
+  sha256: d29fd62828bf3f6bc2373958ba2368f255e1333be4b617e656bca8638da7cdf8
+  md5: 9be48326058aa380b7400617e73d7da6
+  depends:
+  - nodejs
+  - __osx >=11.0
+  - nodejs >=24.18.0,<25.0a0
+  license: MIT
+  license_family: MIT
+  run_exports: {}
+  size: 1371427
+  timestamp: 1782740695269
 - conda: https://prefix.dev/conda-forge/osx-arm64/pthread-stubs-0.4-h84a0fba_1003.conda
   sha256: 1c2338b9b0486af86883b9593d2f3e2845bbf216ea453dfe5d9a228e8dbe4057
   md5: d4852e6054b74645cf49ca10f6349191
@@ -3564,6 +3591,20 @@ packages:
   run_exports: {}
   size: 7296530
   timestamp: 1786308695528
+- conda: https://prefix.dev/conda-forge/win-64/prettier-3.9.3-h2c448b4_0.conda
+  sha256: e22fe68491564ccd6aeb48944051d5c474d1a91690700efa378585e2f3bcd9e9
+  md5: b3226ee7b53d50c1fe646d2166e5b1b9
+  depends:
+  - nodejs
+  - vc >=14.5,<15
+  - vc14_runtime >=14.51.36231
+  - ucrt >=10.0.20348.0
+  - nodejs >=26.4.0,<27.0a0
+  license: MIT
+  license_family: MIT
+  run_exports: {}
+  size: 1372491
+  timestamp: 1782740670892
 - conda: https://prefix.dev/conda-forge/win-64/pthread-stubs-0.4-hba3369d_1003.conda
   sha256: 5546927a2e337d2903d6cdb028fb33723cdbcc45bf9abe1770fbde2c4ea8bce6
   md5: bc97d497656c9c661ffd3043aca90aa4

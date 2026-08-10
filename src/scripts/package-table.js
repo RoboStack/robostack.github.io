@@ -60,7 +60,8 @@ function compareVersions(a, b) {
   const x = versionParts(a);
   const y = versionParts(b);
   for (let i = 0; i < Math.max(x.length, y.length); i++) {
-    const delta = (x[i] === undefined ? -1 : x[i]) - (y[i] === undefined ? -1 : y[i]);
+    const delta =
+      (x[i] === undefined ? -1 : x[i]) - (y[i] === undefined ? -1 : y[i]);
     if (delta) return delta < 0 ? -1 : 1;
   }
   return 0;
@@ -100,7 +101,7 @@ function Table(mount, doc) {
         all.some((row) => {
           const slot = row.builds[state.mutex];
           return slot && slot[0] & (1 << p.bit);
-        })
+        }),
       );
   }
 
@@ -118,7 +119,9 @@ function Table(mount, doc) {
       row.built = bits.reduce((n, bit) => n + ((row.mask >> bit) & 1), 0);
       row.total = bits.length;
       row.behind =
-        !!row.version && !!row.indexVersion && compareVersions(row.version, row.indexVersion) < 0;
+        !!row.version &&
+        !!row.indexVersion &&
+        compareVersions(row.version, row.indexVersion) < 0;
       // Which other mutexes do have it, so a gap reads as "built, but not
       // for this mutex" rather than "never built". Newer and older are kept
       // apart because only one of them is actionable: a package waiting on a
@@ -140,11 +143,18 @@ function Table(mount, doc) {
         }
         // A newer mutex: worth reporting when it offers this package at all,
         // or offers a newer version of it than the selected mutex does.
-        if (!row.upgrade || compareVersions(other[1], row.upgrade.version) > 0) {
+        if (
+          !row.upgrade ||
+          compareVersions(other[1], row.upgrade.version) > 0
+        ) {
           row.upgrade = { version: other[1], mutex: doc.mutexes[i] };
         }
       }
-      if (row.upgrade && row.version && compareVersions(row.upgrade.version, row.version) <= 0) {
+      if (
+        row.upgrade &&
+        row.version &&
+        compareVersions(row.upgrade.version, row.version) <= 0
+      ) {
         row.upgrade = null;
       }
     });
@@ -188,7 +198,9 @@ function Table(mount, doc) {
   function apply() {
     const query = state.query.trim().toLowerCase();
     const rows = all.filter(
-      (row) => matchesFilter(row, state.filter) && (!query || row.haystack.indexOf(query) !== -1)
+      (row) =>
+        matchesFilter(row, state.filter) &&
+        (!query || row.haystack.indexOf(query) !== -1),
     );
     const sorters = {
       name: (a, b) => a.name.localeCompare(b.name),
@@ -209,7 +221,9 @@ function Table(mount, doc) {
     const availablePct = all.length ? (available / all.length) * 100 : 0;
     const behindPct = all.length ? (counts.behind / all.length) * 100 : 0;
     const currentPct = Math.max(0, availablePct - behindPct);
-    const hidden = doc.platforms.filter((id, bit) => !active.some((p) => p.bit === bit));
+    const hidden = doc.platforms.filter(
+      (id, bit) => !active.some((p) => p.bit === bit),
+    );
 
     mount.innerHTML =
       '<div class="rs-summary">' +
@@ -283,7 +297,9 @@ function Table(mount, doc) {
       "</div>" +
       "</div>" +
       '<p class="rs-count"><span class="rs-count__showing"></span>' +
-      (hidden.length ? " " + hidden.join(", ") + " hidden — nothing built for this mutex." : "") +
+      (hidden.length
+        ? " " + hidden.join(", ") + " hidden — nothing built for this mutex."
+        : "") +
       "</p>" +
       '<div class="rs-tablewrap"><table>' +
       "<colgroup><col>" +
@@ -312,7 +328,11 @@ function Table(mount, doc) {
     tbody = mount.querySelector("tbody");
     // One source of truth for the row height, so the windowing maths cannot
     // drift from the stylesheet.
-    rowHeight = parseInt(window.getComputedStyle(mount).getPropertyValue("--rs-row-h"), 10) || 68;
+    rowHeight =
+      parseInt(
+        window.getComputedStyle(mount).getPropertyValue("--rs-row-h"),
+        10,
+      ) || 68;
   }
 
   function mutexPicker() {
@@ -343,7 +363,9 @@ function Table(mount, doc) {
           " newer on a newer mutex</span>"
         : "") +
       (counts.older
-        ? '<span class="rs-mutex__note">' + counts.older + " built only for an older mutex</span>"
+        ? '<span class="rs-mutex__note">' +
+          counts.older +
+          " built only for an older mutex</span>"
         : "") +
       "</p>"
     );
@@ -429,7 +451,11 @@ function Table(mount, doc) {
     return (
       "<tr><td>" +
       '<span class="rs-dot rs-dot--' +
-      (row.built === 0 ? "missing" : row.built === row.total ? "full" : "partial") +
+      (row.built === 0
+        ? "missing"
+        : row.built === row.total
+          ? "full"
+          : "partial") +
       '"></span>' +
       '<span class="rs-name">' +
       '<span class="rs-pkg">' +
@@ -446,15 +472,20 @@ function Table(mount, doc) {
               "/packages/" +
               encodeURIComponent(conda),
             conda + " on " + doc.channel,
-            "channel"
+            "channel",
           )
         : "") +
       link(
-        "https://index.ros.org/p/" + encodeURIComponent(rosName) + "/#" + doc.distro,
+        "https://index.ros.org/p/" +
+          encodeURIComponent(rosName) +
+          "/#" +
+          doc.distro,
         rosName + " on the ROS index",
-        "docs"
+        "docs",
       ) +
-      (row.repo ? link(row.repo, row.repo.replace(/^https?:\/\//, ""), "github") : "") +
+      (row.repo
+        ? link(row.repo, row.repo.replace(/^https?:\/\//, ""), "github")
+        : "") +
       // Pushed to the far right of the package cell, so it uses the slack
       // in that column instead of squeezing the name.
       (row.never && !mount.dataset.eol
@@ -515,12 +546,14 @@ function Table(mount, doc) {
     // scroll further, which grows it again.
     const first = Math.min(
       Math.max(0, rows.length - visible),
-      Math.max(0, Math.floor(above / rowHeight) - OVERSCAN)
+      Math.max(0, Math.floor(above / rowHeight) - OVERSCAN),
     );
     const last = Math.min(rows.length, first + visible);
 
     tbody.innerHTML =
-      padding(first) + rows.slice(first, last).map(rowHtml).join("") + padding(rows.length - last);
+      padding(first) +
+      rows.slice(first, last).map(rowHtml).join("") +
+      padding(rows.length - last);
   }
 
   /* The stylesheet declares the row height, but td padding can outweigh it,
@@ -595,7 +628,9 @@ function Table(mount, doc) {
   applyMutex();
   rebuild();
 
-  window.addEventListener("scroll", () => requestAnimationFrame(renderRows), { passive: true });
+  window.addEventListener("scroll", () => requestAnimationFrame(renderRows), {
+    passive: true,
+  });
   window.addEventListener("resize", renderRows);
   document.addEventListener("keydown", (e) => {
     const search = mount.querySelector("input");

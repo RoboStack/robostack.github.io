@@ -2,17 +2,19 @@
 interface Props {
   /** Renders an anchor when given, a button otherwise. */
   href?: string;
-  variant?: 'primary' | 'subtle';
+  variant?: "primary" | "subtle";
   small?: boolean;
   [attr: string]: unknown;
 }
 
-const { href, variant = 'primary', small = false, ...rest } = Astro.props;
-const Tag = href ? 'a' : 'button';
+const { href, variant = "primary", small = false, ...rest } = Astro.props;
+const Tag = href ? "a" : "button";
 ---
 
-<Tag class:list={['btn', `btn--${variant}`, { 'btn--sm': small }]} href={href} {...rest}
-  ><slot /></Tag
+<Tag
+  class:list={["btn", `btn--${variant}`, { "btn--sm": small }]}
+  href={href}
+  {...rest}><slot /></Tag
 >
 
 <style>

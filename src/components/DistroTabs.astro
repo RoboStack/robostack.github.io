@@ -1,5 +1,5 @@
 ---
-import { tabOrder } from '../data/distros';
+import { tabOrder } from "../data/distros";
 
 interface Props {
   current: string;
@@ -12,9 +12,9 @@ const { current } = Astro.props;
   {
     tabOrder().map((d) => (
       <a
-        class:list={['distro', { 'distro--active': d.name === current }]}
+        class:list={["distro", { "distro--active": d.name === current }]}
         href={`/${d.name}.html`}
-        aria-current={d.name === current ? 'page' : undefined}
+        aria-current={d.name === current ? "page" : undefined}
       >
         {d.name}
       </a>
