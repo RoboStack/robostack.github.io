@@ -14,12 +14,12 @@ pnpm-install = {
 }
 serve = {
   cmd = "pnpm run dev",
-  depends-on = ["pnpm-install"],
+  depends-on = ["pnpm-install", "ensure-tables"],
   description = "Serve the site locally",
 }
 build-docs = {
   cmd = "pnpm run build",
-  depends-on = ["pnpm-install"],
+  depends-on = ["pnpm-install", "ensure-tables"],
   description = "Build the site",
 }
 gh-deploy = {
@@ -94,6 +94,10 @@ compare-completeness = {
 update-tables = {
   cmd = "python scripts/compare_pkg_completeness.py --all",
   description = "Regenerate the package tables for every distro the pipeline maintains",
+}
+ensure-tables = {
+  cmd = "python scripts/ensure_tables.py",
+  description = "Download the deployed package tables where the local copy is missing or older than 6 hours",
 }
 
 [environments]

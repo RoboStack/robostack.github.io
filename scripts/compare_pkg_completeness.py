@@ -388,12 +388,12 @@ def build(distro: str, channel: str) -> dict[str, Any]:
 def write(document: dict[str, Any], path: Path) -> None:
     """Write the document with one package per line.
 
-    Compact JSON on a single line would make every rebuild a one-line diff covering
-    the whole file. One package per line costs a byte each and keeps the six-hourly
-    CI commits reviewable.
+    Compact JSON on a single line would turn any comparison into a one-line diff
+    covering the whole file. One package per line costs a byte each and keeps the
+    committed snapshots and local before/after diffs reviewable.
 
     `newline="\\n"` matters too. Without it Python writes CRLF on Windows and the
-    file diffs in full against what CI generates on Linux.
+    file diffs in full against what Linux generates.
     """
     head = {k: v for k, v in document.items() if k != "packages"}
     body = ",\n".join(json.dumps(p, separators=(",", ":")) for p in document["packages"])

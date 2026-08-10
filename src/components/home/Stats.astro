@@ -5,8 +5,9 @@ import { DISTROS, PLATFORMS } from "../../data/distros";
 /**
  * The stats strip: a row of figures in a card, divided by hairlines.
  *
- * The numbers are computed at build time from the committed table data, so
- * the six-hourly refresh moves them instead of them going stale. A package
+ * The numbers are computed at build time from the table data the ensure-tables
+ * task puts in public/data, so the six-hourly deploy moves them instead of
+ * them going stale. A package
  * counts once per distro when any mutex generation has a build for it.
  */
 const maintained = DISTROS.filter((d) => d.maintained);
