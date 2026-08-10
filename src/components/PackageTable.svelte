@@ -54,17 +54,8 @@
    * for that mutex, otherwise a platform bitmask plus the version built. */
   type BuildSlot = 0 | [number, string];
 
-  /* name, description, license, index version, last-built timestamp, index
-   * into doc.repos (-1 for none), build slots. */
-  type PackageEntry = [
-    string,
-    string,
-    string,
-    string,
-    number,
-    number,
-    BuildSlot[],
-  ];
+  /* Positional; doc.fields names the positions. */
+  type PackageEntry = (string | number | BuildSlot[])[];
 
   interface Doc {
     distro: string;
@@ -72,6 +63,7 @@
     platforms: string[];
     mutexPackage: string;
     mutexes: string[];
+    fields: string[];
     repos: string[];
     packages: PackageEntry[];
   }
@@ -84,10 +76,12 @@
   interface Row {
     name: string;
     desc: string;
-    license: string;
     indexVersion: string;
     updated: number;
     repo: string;
+    /* Released into the ROS index. False for packages that only exist on the
+     * channel: no description, index version or source repository. */
+    indexed: boolean;
     builds: BuildSlot[];
     haystack: string;
   }
@@ -160,18 +154,32 @@
   const mutexes = $derived(doc?.mutexes ?? []);
   const currentMutex = $derived(mutexes[mutex] ?? "");
 
-  const all: Row[] = $derived(
-    (doc?.packages ?? []).map((pkg) => ({
-      name: pkg[0],
-      desc: pkg[1],
-      license: pkg[2],
-      indexVersion: pkg[3],
-      updated: pkg[4],
-      repo: pkg[5] >= 0 ? (doc?.repos[pkg[5]] ?? "") : "",
-      builds: pkg[6], // aligned with doc.mutexes
-      haystack: (pkg[0] + " " + pkg[1]).toLowerCase(),
-    })),
-  );
+  /* The JSON is positional and the head's `fields` list names the positions,
+   * so unpacking goes through it instead of hard-coded indices. That keeps
+   * the committed end-of-life snapshots working across schema changes: they
+   * still carry a `license` field and predate `indexed`, which defaults to
+   * released-into-the-index for them. */
+  const all: Row[] = $derived.by(() => {
+    const data = doc;
+    if (!data) return [];
+    const at: Record<string, number> = {};
+    data.fields.forEach((field, i) => (at[field] = i));
+    return data.packages.map((pkg) => {
+      const name = pkg[at.name] as string;
+      const desc = (pkg[at.desc] ?? "") as string;
+      const repo = pkg[at.repo] as number;
+      return {
+        name,
+        desc,
+        indexVersion: (pkg[at.indexVersion] ?? "") as string,
+        updated: (pkg[at.updated] ?? 0) as number,
+        repo: repo >= 0 ? (data.repos[repo] ?? "") : "",
+        indexed: at.indexed === undefined || Boolean(pkg[at.indexed]),
+        builds: pkg[at.builds] as BuildSlot[], // aligned with doc.mutexes
+        haystack: (name + " " + desc).toLowerCase(),
+      };
+    });
+  });
 
   /* Everything that depends on the selected mutex, derived in one pass:
    * O(n) over 2,300 rows, which is far cheaper than re-fetching. */
@@ -252,7 +260,16 @@
       older: rows.filter((r) => !r.mask && r.older.length).length,
     };
 
-    return { rows, active, counts };
+    // The summary figure is "how much of the ROS index is on RoboStack", so
+    // channel-only packages count in the table but not in this ratio.
+    const indexed = rows.filter((r) => r.indexed);
+    return {
+      rows,
+      active,
+      counts,
+      indexTotal: indexed.length,
+      indexAvailable: indexed.filter((r) => r.built > 0).length,
+    };
   });
 
   const active = $derived(mutexData.active);
@@ -311,19 +328,20 @@
   const slice = $derived(rows.slice(first, last));
   const padBottom = $derived(rows.length - last);
 
-  const available = $derived((counts.full ?? 0) + (counts.partial ?? 0));
+  const indexTotal = $derived(mutexData.indexTotal);
+  const indexAvailable = $derived(mutexData.indexAvailable);
   const percent = $derived(
-    all.length ? Math.round((available / all.length) * 100) : 0,
+    indexTotal ? Math.round((indexAvailable / indexTotal) * 100) : 0,
   );
   // Behind-index packages are a subset of the available ones (a package needs
   // a version on the channel before it can be compared), so the bar splits
   // the filled portion rather than adding to it. Unrounded widths, so the two
   // segments cannot drift apart from the total.
   const availablePct = $derived(
-    all.length ? (available / all.length) * 100 : 0,
+    indexTotal ? (indexAvailable / indexTotal) * 100 : 0,
   );
   const behindPct = $derived(
-    all.length ? ((counts.behind ?? 0) / all.length) * 100 : 0,
+    indexTotal ? ((counts.behind ?? 0) / indexTotal) * 100 : 0,
   );
   const currentPct = $derived(Math.max(0, availablePct - behindPct));
 
@@ -475,7 +493,7 @@
         <i
           class="rs-bar__current"
           style="width:{currentPct.toFixed(2)}%"
-          title="{available -
+          title="{indexAvailable -
             (counts.behind ??
               0)} packages at the version the ROS index released"
         ></i>
@@ -528,7 +546,7 @@
         autocomplete="off"
         spellcheck="false"
         aria-label="Search packages"
-        placeholder="Search {all.length} index packages…"
+        placeholder="Search {all.length} packages…"
         bind:value={query}
         bind:this={searchEl}
       />
@@ -563,7 +581,7 @@
     <p class="rs-count" aria-live="polite">
       <span class="rs-count__showing"
         >Showing {rows.length.toLocaleString()} of {all.length.toLocaleString()}
-        index packages.</span
+        packages.</span
       >
       {#if hiddenPlatforms.length}
         {hiddenPlatforms.join(", ")} hidden: nothing built for this mutex.
@@ -674,14 +692,17 @@
                       "channel",
                     )}
                   {/if}
-                  {@render extLink(
-                    "https://index.ros.org/p/" +
-                      encodeURIComponent(rosName) +
-                      "/#" +
-                      distro,
-                    rosName + " on the ROS index",
-                    "docs",
-                  )}
+                  <!-- Channel-only packages have no ROS index page to link. -->
+                  {#if row.indexed}
+                    {@render extLink(
+                      "https://index.ros.org/p/" +
+                        encodeURIComponent(rosName) +
+                        "/#" +
+                        distro,
+                      rosName + " on the ROS index",
+                      "docs",
+                    )}
+                  {/if}
                   {#if row.repo}
                     {@render extLink(
                       row.repo,

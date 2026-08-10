@@ -5,6 +5,12 @@ on:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 
+# A second run pushing over a still-running first one would fail or interleave
+# commits; queue instead.
+concurrency:
+  group: update-package-table
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,37 +24,21 @@ jobs:
         with:
           persist-credentials: false
       - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
-      # foxy and galactic are end-of-life; public/data/{foxy,galactic}.json are
-      # committed snapshots and deliberately not regenerated here.
-      - name: Create table noetic
+      # Regenerates every distro with a dataChannel in src/data/distros.json;
+      # a distro without one (foxy, galactic) is a committed snapshot. A failed
+      # distro does not stop the others: whatever succeeded is still committed
+      # below, and the run is marked failed at the end.
+      - name: Update tables
+        id: update
+        continue-on-error: true
         run: |
-          pixi run compare-completeness noetic robostack-noetic
-      - name: Create table humble
-        run: |
-          pixi run compare-completeness humble robostack-humble
-      - name: Create table jazzy
-        run: |
-          pixi run compare-completeness jazzy robostack-jazzy
-      - name: Create table kilted
-        run: |
-          pixi run compare-completeness kilted robostack-kilted
-      - name: Create table rolling
-        run: |
-          pixi run compare-completeness rolling https://prefix.dev/robostack-rolling
-      - name: Create table lyrical
-        run: |
-          pixi run compare-completeness lyrical https://prefix.dev/robostack-lyrical
+          pixi run update-tables
       - name: Commit changes
         id: commit
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add public/data/noetic.json
-          git add public/data/humble.json
-          git add public/data/jazzy.json
-          git add public/data/kilted.json
-          git add public/data/rolling.json
-          git add public/data/lyrical.json
+          git add public/data
           git commit -m "Update tables"
         continue-on-error: true
       - name: Push changes
@@ -57,3 +47,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+      - name: Surface update failures
+        if: steps.update.outcome == 'failure'
+        run: exit 1

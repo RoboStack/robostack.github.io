@@ -6,9 +6,19 @@ on:
   workflow_run:
     workflows: ["Update package table"]
     types: [completed]
+
+# ghp-import force-pushes gh-pages; two runs racing each other could publish
+# the older build last.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Only redeploy for a table refresh that actually succeeded; a push to main
+    # deploys unconditionally.
+    if: github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
     # `ghp-import --push` pushes the built site to the gh-pages branch
     permissions:
       contents: write

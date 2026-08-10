@@ -91,6 +91,10 @@ compare-completeness = {
   cmd = "python scripts/compare_pkg_completeness.py",
   description = "Add two arguments to give it the DISTRO and CHANNEL",
 }
+update-tables = {
+  cmd = "python scripts/compare_pkg_completeness.py --all",
+  description = "Regenerate the package tables for every distro the pipeline maintains",
+}
 
 [environments]
 default = ["site", "lint", "scripts"]
