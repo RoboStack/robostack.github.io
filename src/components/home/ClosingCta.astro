@@ -1,0 +1,58 @@
+---
+import RsButton from "./RsButton.astro";
+
+interface Props {
+  packagesHref: string;
+}
+
+const { packagesHref } = Astro.props;
+---
+
+<div class="rs-card cta">
+  <h2>Your robot doesn't care what OS you run</h2>
+  <p class="cta-lead">
+    Four commands from an empty folder to rviz on your machine - whichever
+    machine that is.
+  </p>
+  <div class="cta-actions">
+    <RsButton href="/GettingStarted.html">Get started</RsButton>
+    <RsButton href={packagesHref} variant="subtle">Browse the packages</RsButton
+    >
+  </div>
+</div>
+
+<style>
+  .cta {
+    text-align: center;
+    padding: 52px 32px;
+  }
+  .cta h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 34px;
+    color: var(--fg-1);
+    margin: 0 0 12px;
+  }
+  .cta-lead {
+    font-size: 17px;
+    color: var(--fg-copy);
+    margin: 0 auto 26px;
+    max-width: 480px;
+    line-height: 1.55;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 720px) {
+    .cta {
+      padding: 40px 20px;
+    }
+    .cta h2 {
+      font-size: 27px;
+    }
+  }
+</style>

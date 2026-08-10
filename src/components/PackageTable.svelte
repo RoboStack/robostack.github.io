@@ -115,6 +115,9 @@
   let filter = $state("all");
   let sort = $state("name");
   let mutex = $state(0);
+  /* Narrow screens collapse the platform columns into a per-row pill; this
+   * is the row whose platform detail is currently expanded under it. */
+  let expanded = $state("");
 
   // Windowing state, driven by the scroll handler.
   let first = $state(0);
@@ -321,7 +324,21 @@
     const filtered = mutexData.rows.filter(
       (row) => matchesFilter(row, filter) && (!q || row.haystack.includes(q)),
     );
-    return filtered.sort(SORTERS[sort] ?? SORTERS.name);
+    const sorter = SORTERS[sort] ?? SORTERS.name;
+    if (!q) return filtered.sort(sorter);
+    /* While searching, relevance outranks the chosen sort: exact name match,
+     * then name prefix, then name substring, then matches only in the
+     * description. Without this, "moveit" surfaces
+     * dual-arm-panda-moveit-config before moveit itself. */
+    const tier = (row: MutexRow): number =>
+      row.name === q
+        ? 0
+        : row.name.startsWith(q)
+          ? 1
+          : row.name.includes(q)
+            ? 2
+            : 3;
+    return filtered.sort((a, b) => tier(a) - tier(b) || sorter(a, b));
   });
 
   const last = $derived(Math.min(rows.length, first + visibleCount));
@@ -376,10 +393,11 @@
 
   /* The stylesheet declares the row height, but td padding can outweigh it,
    * and zoom or a font change shifts it again. Measuring a real row keeps the
-   * padding rows honest whatever the CSS ends up doing. */
+   * padding rows honest whatever the CSS ends up doing. An expanded row is
+   * deliberately taller than the rest, so it must not be the sample. */
   $effect(() => {
     void slice;
-    const row = tbodyEl?.querySelector("tr:not(.rs-pad)");
+    const row = tbodyEl?.querySelector("tr:not(.rs-pad):not(.rs-open)");
     if (!row) return;
     const measured = Math.round(row.getBoundingClientRect().height);
     if (measured && measured !== rowHeight) rowHeight = measured;
@@ -503,16 +521,6 @@
           title="{counts.behind} packages older than the version the ROS index released"
         ></i>
       </div>
-      <p class="rs-summary__legend">
-        <span class="rs-key rs-key--full">{counts.full} on every platform</span>
-        <span class="rs-key rs-key--partial">{counts.partial} partial</span>
-        <span class="rs-key rs-key--missing"
-          >{counts.missing} not on channel</span
-        >
-        <span class="rs-key rs-key--behind"
-          >of those, {counts.behind} behind the index</span
-        >
-      </p>
       {#if mutexes.length}
         <p class="rs-mutex">
           <label>
@@ -536,20 +544,29 @@
               >{counts.older} built only for an older mutex</span
             >
           {/if}
+          <span class="rs-mutex__hint">
+            Every package on the channel is built against one version of the
+            <code>{mutexPackage}</code> package; builds for different versions cannot
+            share an environment. A fresh install resolves to the newest.
+          </span>
         </p>
       {/if}
     </div>
 
     <div class="rs-tools">
-      <input
-        type="search"
-        autocomplete="off"
-        spellcheck="false"
-        aria-label="Search packages"
-        placeholder="Search {all.length} packages…"
-        bind:value={query}
-        bind:this={searchEl}
-      />
+      <span class="rs-search">
+        <input
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search packages"
+          placeholder="Search {all.length} packages…"
+          bind:value={query}
+          bind:this={searchEl}
+        />
+        <!-- Advertises the shortcut the keydown handler already provides. -->
+        <kbd class="rs-slash" aria-hidden="true">/</kbd>
+      </span>
       <!--
         Filters and sort travel together, so the sort control stays beside
         them and only drops to its own line when they genuinely overflow.
@@ -565,7 +582,12 @@
               onclick={() => (filter = f.id)}
             >
               {f.label}
-              {counts[f.id]}
+              <!-- The count doubles as the legend: it carries the same colour
+                   the availability dots use, so the chips are the one place
+                   these numbers appear. -->
+              <span class="rs-chipcount rs-chipcount--{f.id}"
+                >{counts[f.id]}</span
+              >
             </button>
           {/each}
         </div>
@@ -579,10 +601,14 @@
     </div>
 
     <p class="rs-count" aria-live="polite">
-      <span class="rs-count__showing"
-        >Showing {rows.length.toLocaleString()} of {all.length.toLocaleString()}
-        packages.</span
-      >
+      <!-- Redundant while nothing is filtered out; the All chip already
+           carries the total. -->
+      {#if rows.length !== all.length}
+        <span class="rs-count__showing"
+          >Showing {rows.length.toLocaleString()} of {all.length.toLocaleString()}
+          packages.</span
+        >
+      {/if}
       {#if hiddenPlatforms.length}
         {hiddenPlatforms.join(", ")} hidden: nothing built for this mutex.
       {/if}
@@ -593,7 +619,7 @@
         <colgroup>
           <col />
           {#each active as p (p.id)}
-            <col style="width:5rem" />
+            <col class="rs-col-plat" />
           {/each}
         </colgroup>
         <thead bind:this={theadEl}>
@@ -622,7 +648,10 @@
             <!-- The ROS index spells package names with underscores; conda
                  uses hyphens. -->
             {@const rosName = row.name.replace(/-/g, "_")}
-            <tr aria-rowindex={first + i + 2}>
+            <tr
+              aria-rowindex={first + i + 2}
+              class:rs-open={expanded === row.name}
+            >
               <td>
                 <span
                   class="rs-dot"
@@ -725,7 +754,43 @@
                     </a>
                   {/if}
                 </span>
+                <!--
+                  Narrow screens have no platform columns; the pill sums them
+                  up and expands into a per-platform list below the
+                  description. It spans both text rows in its own grid
+                  column, so a finger-sized target does not stretch the row.
+                -->
+                <button
+                  type="button"
+                  class="rs-pill"
+                  aria-expanded={expanded === row.name}
+                  aria-label="Platform availability for {row.name}"
+                  onclick={() =>
+                    (expanded = expanded === row.name ? "" : row.name)}
+                >
+                  {row.built}/{row.total}
+                </button>
                 <small>{row.desc || "-"}</small>
+                {#if expanded === row.name}
+                  <span class="rs-detail">
+                    {#each active as p (p.id)}
+                      {@const meta = PLATFORMS[p.id] ?? {
+                        icon: "linux",
+                        arch: "",
+                      }}
+                      {@const on = ((row.mask >> p.bit) & 1) === 1}
+                      <span
+                        class="rs-det"
+                        class:rs-det--yes={on}
+                        class:rs-det--no={!on}
+                        title="{p.id}: {on ? 'available' : 'not on channel'}"
+                      >
+                        {@render iconSpan(meta.icon, 12)}{meta.arch}
+                        {on ? "✓" : "·"}
+                      </span>
+                    {/each}
+                  </span>
+                {/if}
               </td>
               {#each active as p (p.id)}
                 {@const on = ((row.mask >> p.bit) & 1) === 1}
@@ -844,31 +909,6 @@
   .rs-bar__behind {
     background: var(--rs-warn-fg);
   }
-  .rs-summary__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.1rem;
-    margin: 0;
-    font-size: 0.8rem;
-    font-variant-numeric: tabular-nums;
-  }
-  .rs-key--full {
-    color: var(--rs-yes-fg);
-  }
-  .rs-key--partial {
-    color: var(--rs-warn-fg);
-  }
-  .rs-key--missing {
-    color: var(--sl-color-gray-3);
-  }
-  /* Overlaps the three above rather than extending them, so it is set apart
-     by a rule and phrased as a subset. */
-  .rs-key--behind {
-    color: var(--rs-warn-fg);
-    padding-left: 1.1rem;
-    border-left: 1px solid var(--sl-color-gray-5);
-  }
-
   /* Mutex picker: availability is only meaningful against one of these, so
      it sits inside the summary card rather than among the table controls. */
   .rs-mutex {
@@ -892,6 +932,15 @@
   }
   .rs-mutex__note--up {
     color: var(--rs-up-fg);
+  }
+  /* "ros2-distro-mutex" is channel jargon; one muted sentence keeps the
+     picker from being a mystery dropdown. */
+  .rs-mutex__hint {
+    flex-basis: 100%;
+    color: var(--sl-color-gray-3);
+  }
+  .rs-mutex__hint code {
+    font-size: 0.95em;
   }
 
   /* ---- toolbar ----------------------------------------------------------- */
@@ -921,9 +970,39 @@
      width, which clamps the flex base size upward and pushes the whole line
      over the limit. The filters and sort were bumped to a second row even
      when there was room for everything. */
-  .rs-tools input {
+  .rs-search {
+    position: relative;
+    display: flex;
     flex: 1 1 12rem;
     min-width: 0;
+  }
+  .rs-search input {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Advertises the "/" shortcut. Gone while typing, and gone entirely on
+     touch devices, where there is no key to press. */
+  .rs-slash {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.05em 0.45em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    pointer-events: none;
+  }
+  .rs-search:focus-within .rs-slash,
+  .rs-search input:not(:placeholder-shown) ~ .rs-slash {
+    display: none;
+  }
+  @media (hover: none) and (pointer: coarse) {
+    .rs-slash {
+      display: none;
+    }
   }
   /* Filters and sort wrap as one unit, so the sort control keeps its place
      next to them: when the row runs out of space the pair moves below the
@@ -968,6 +1047,30 @@
     border-color: var(--sl-color-accent);
     color: var(--sl-color-black);
   }
+  /* The chip counts double as the colour legend: the same hues the
+     availability dots use. On the active chip the accent background takes
+     over and the count follows the label. */
+  .rs-chipcount {
+    font-variant-numeric: tabular-nums;
+  }
+  .rs-chipcount--full {
+    color: var(--rs-yes-fg);
+  }
+  .rs-chipcount--partial {
+    color: var(--rs-warn-fg);
+  }
+  .rs-chipcount--missing {
+    color: var(--sl-color-gray-3);
+  }
+  .rs-chipcount--behind {
+    color: var(--rs-warn-fg);
+  }
+  .rs-chipcount--upgrade {
+    color: var(--rs-up-fg);
+  }
+  .rs-filter--on .rs-chipcount {
+    color: inherit;
+  }
 
   .rs-count {
     margin: 0 0 0.6rem;
@@ -996,6 +1099,12 @@
     margin: 0;
     font-size: inherit;
     border-collapse: collapse;
+  }
+  /* The fixed layout takes column widths from the <col> elements, so this is
+     where the platform columns get their 5rem - and where the narrow-screen
+     block can take it back, which hiding the cells alone would not. */
+  .rs-packages col.rs-col-plat {
+    width: 5rem;
   }
   .rs-packages th {
     padding: 0.6em 0.9em;
@@ -1224,6 +1333,12 @@
     color: var(--sl-color-black);
     background: var(--sl-color-accent);
   }
+  /* Coarse pointers need more than a 21px square to hit. */
+  @media (hover: none) and (pointer: coarse) {
+    .rs-link {
+      padding: 0.5rem 0.45rem;
+    }
+  }
   /* Icons are masks rather than images, so they inherit the text colour: the
      same file serves a muted column header and a link that inverts on hover. */
   .rs-icon {
@@ -1289,6 +1404,85 @@
     align-items: center;
     gap: 0.25rem;
     color: var(--sl-color-gray-3);
+  }
+
+  /* ---- narrow screens ---------------------------------------------------- */
+  /* Six ~5rem availability columns cannot fit next to the package cell, so
+     below 48rem they collapse into one coverage pill per row that expands
+     into a per-platform list. Desktop never shows the pill. */
+  .rs-pill,
+  .rs-detail {
+    display: none;
+  }
+  @media screen and (max-width: 48rem) {
+    .rs-packages thead th:not(:first-child),
+    .rs-packages tbody td:not(:first-child) {
+      display: none;
+    }
+    /* Only one column left; scrolling sideways would reveal nothing. The
+       hidden columns must also give up their <col> width, or the fixed
+       layout keeps reserving 5rem apiece for them. */
+    .rs-packages table {
+      min-width: 0;
+    }
+    .rs-packages col.rs-col-plat {
+      width: 0;
+    }
+    /* Competes with the pill for the right edge; the Contributing page
+       remains reachable through the missing-package notice on desktop. */
+    .rs-add {
+      display: none;
+    }
+    /* Third grid column for the pill, and room to grow for the expanded
+       platform list. The row height floor stays where it was. */
+    .rs-packages tbody td:first-child {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      height: auto;
+      min-height: var(--rs-row-h);
+    }
+    .rs-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      align-self: center;
+      min-height: 2.75rem; /* a finger-sized target */
+      min-width: 3.2rem;
+      padding: 0 0.7em;
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 2rem;
+      background: var(--sl-color-bg);
+      color: var(--sl-color-gray-2);
+      font: inherit;
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+    }
+    .rs-pill[aria-expanded="true"] {
+      border-color: var(--sl-color-accent);
+      color: var(--sl-color-accent);
+    }
+    .rs-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.9rem;
+      grid-column: 2 / 4;
+      grid-row: 3;
+      padding: 0.3rem 0 0.6rem;
+      font-size: 0.8rem;
+    }
+    .rs-det {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .rs-det--yes {
+      color: var(--rs-yes-fg);
+    }
+    .rs-det--no {
+      color: var(--sl-color-gray-4);
+    }
   }
 
   /* ---- notices ----------------------------------------------------------- */

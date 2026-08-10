@@ -1,0 +1,75 @@
+---
+import type { Distro } from "../../data/distros";
+import { monthYear, tabOrder, title } from "../../data/distros";
+import DistroCard from "./DistroCard.astro";
+
+/**
+ * The three distro cards, derived so a new release reshuffles them on its
+ * own: the two newest releases, then the newest LTS after them. The
+ * descriptions come from the same data: LTS or not, and the support window.
+ */
+const dated = tabOrder().filter((d) => d.status !== "rolling");
+const [newest, previous] = dated;
+const olderLts = dated.slice(2).find((d) => d.lts && d.status === "active");
+
+function supportSpan(d: Distro): string {
+  if (d.status === "eol") return `end of life since ${monthYear(d.eol ?? "")}`;
+  if (d.eol) return `supported until ${monthYear(d.eol)}`;
+  return "support window not yet published";
+}
+
+function kind(d: Distro): string {
+  return d.lts ? "LTS release" : "release";
+}
+
+const cards: { distro: Distro; description: string }[] = [];
+if (newest) {
+  cards.push({
+    distro: newest,
+    description: `The newest ${kind(newest)}, ${supportSpan(newest)}.`,
+  });
+}
+if (previous) {
+  cards.push({
+    distro: previous,
+    description: `The previous ${kind(previous)}, ${supportSpan(previous)}.`,
+  });
+}
+if (olderLts) {
+  cards.push({
+    distro: olderLts,
+    description: `An ${kind(olderLts)}, ${supportSpan(olderLts)}.`,
+  });
+}
+---
+
+<div class="grid">
+  {
+    cards.map(({ distro, description }) => (
+      <DistroCard
+        href={`/${distro.name}.html`}
+        channel={distro.channel}
+        name={`ROS ${distro.ros} ${title(distro)}`}
+        description={description}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media screen and (max-width: 980px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

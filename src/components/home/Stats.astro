@@ -1,0 +1,102 @@
+---
+import { readFile } from "node:fs/promises";
+import { DISTROS, PLATFORMS } from "../../data/distros";
+
+/**
+ * The stats strip: a row of figures in a card, divided by hairlines.
+ *
+ * The numbers are computed at build time from the committed table data, so
+ * the six-hourly refresh moves them instead of them going stale. A package
+ * counts once per distro when any mutex generation has a build for it.
+ */
+const maintained = DISTROS.filter((d) => d.maintained);
+const builtCounts = await Promise.all(
+  maintained.map(async (d) => {
+    // Relative to the project root, where Astro runs: a URL against
+    // import.meta.url would point into the bundled prerender chunk instead.
+    const doc = JSON.parse(
+      await readFile(`public/data/${d.name}.json`, "utf8"),
+    );
+    const builds = doc.fields.indexOf("builds");
+    return doc.packages.filter((p: unknown[][]) => p[builds].some(Boolean))
+      .length;
+  }),
+);
+const built = builtCounts.reduce((sum, n) => sum + n, 0);
+const stats = [
+  {
+    num: built.toLocaleString("en-US"),
+    label: "packages built across active distros",
+  },
+  { num: maintained.length, label: "active ROS distros" },
+  { num: PLATFORMS.length, label: "platforms, from linux-64 to Apple Silicon" },
+  { num: 0, label: "times you'll type sudo" },
+];
+---
+
+<div class="rs-card stats">
+  {
+    stats.map(({ num, label }) => (
+      <div class="stat">
+        <div class="stat-num">{num}</div>
+        <div class="stat-label">{label}</div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .stats {
+    display: flex;
+    padding: 34px 24px;
+  }
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 0 12px;
+  }
+  .stat + .stat {
+    border-left: 1px solid var(--border-1);
+  }
+  /* In dark the default card border tone matches the page background and the
+     dividers vanish; the stronger border keeps them readable. */
+  :global([data-theme="dark"]) .stat + .stat {
+    border-left-color: var(--border-2);
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 42px;
+    line-height: 1.1;
+    color: var(--fg-1);
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--fg-2);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  @media screen and (max-width: 980px) {
+    .stats {
+      flex-wrap: wrap;
+      gap: 20px 0;
+    }
+    .stat {
+      flex-basis: 50%;
+    }
+    .stat:nth-child(3) {
+      border-left: none;
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .stats {
+      flex-direction: column;
+      gap: 20px;
+      padding: 28px 20px;
+    }
+    .stat + .stat {
+      border-left: none;
+    }
+  }
+</style>
