@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
-      - uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
       - env:
           ANACONDA_API_TOKEN: ${{ secrets.ROBOSTACK_NOETIC_ANACONDA_API_TOKEN }}
         run: |
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
-      - uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
+      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
       - env:
           ANACONDA_API_TOKEN: ${{ secrets.ROBOSTACK_HUMBLE_ANACONDA_API_TOKEN }}
         run: |
