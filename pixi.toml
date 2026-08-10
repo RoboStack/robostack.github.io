@@ -47,6 +47,7 @@ astro-check = {
 ruff = ">=0.16,<0.17"
 typos = ">=1.49.0,<2"
 zizmor = ">=1.29.0,<2"
+ty = ">=0.0.69,<0.0.70"
 
 [feature.lint.tasks]
 ruff-check = {
@@ -65,16 +66,20 @@ zizmor = {
   cmd = "zizmor .github/workflows",
   description = "Lint the GitHub workflows",
 }
+ty-check = {
+  cmd = "ty check scripts",
+  description = "Type-check the scripts in scripts/",
+}
 lint = {
-  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "prettier-check", "astro-check"],
+  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "ty-check", "prettier-check", "astro-check"],
   description = "Run all lint checks",
 }
 
 [feature.scripts.dependencies]
-requests = ">=2.34.2,<3"
 anaconda-client = ">=1.14.1,<2"
 pyyaml = ">=6,<7"
 py-rattler = ">=0.25,<0.26"
+niquests = ">=3.21.0,<4"
 
 [feature.scripts.tasks]
 compare-completeness = {

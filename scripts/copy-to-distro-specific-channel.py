@@ -2,7 +2,7 @@ import argparse
 import datetime
 import subprocess
 
-import requests
+import niquests
 
 # Configuration
 BASE_URL = "https://conda.anaconda.org"
@@ -23,7 +23,7 @@ def fetch_repodata(channel: str, platform: str) -> dict | None:
     Fetch the repodata.json file from a given channel and platform.
     """
     url = f"{BASE_URL}/{channel}/{platform}/repodata.json"
-    response = requests.get(url)
+    response = niquests.get(url)
 
     if response.status_code == 200:
         return response.json()
