@@ -7,7 +7,7 @@ Many thanks for taking the time to read this and for contributing to RoboStack!
 
 This project is in early stages and we are looking for contributors to help it grow.
 
-The developers are on the [`robotics` channel on `prefix.dev`'s discord](https://discord.gg/kKV8ZxyzY4) where we discuss steps forward.
+The developers are on the [robotics channel on the prefix.dev Discord](https://discord.gg/kKV8ZxyzY4) where we discuss steps forward.
 
 We welcome all kinds of contribution -- code or non-code -- and value them
 highly. We pledge to treat everyones contribution fairly and with respect and
@@ -55,13 +55,13 @@ To make code review easier, please consider manually porting the new hunks into 
 
 Clone the relevant repo:
 
-```bash
+```bash wrap
 git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git or git clone https://github.com/RoboStack/ros-kilted.git or git clone https://github.com/RoboStack/ros-lyrical.git or git clone https://github.com/RoboStack/ros-rolling.git
 ```
 
 Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
 
-```bash
+```bash wrap
 cd ros-humble  # or: cd ros-noetic or cd ros-jazzy or cd ros-kilted or cd ros-lyrical or cd ros-rolling
 ```
 

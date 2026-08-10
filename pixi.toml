@@ -42,6 +42,11 @@ astro-check = {
   depends-on = ["pnpm-install"],
   description = "Type-check the site",
 }
+svelte-check = {
+  cmd = "pnpm exec svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+  depends-on = ["pnpm-install"],
+  description = "Type-check the Svelte components",
+}
 
 [feature.lint.dependencies]
 ruff = ">=0.16,<0.17"
@@ -71,7 +76,7 @@ ty-check = {
   description = "Type-check the scripts in scripts/",
 }
 lint = {
-  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "ty-check", "prettier-check", "astro-check"],
+  depends-on = ["ruff-check", "format-check", "typos", "zizmor", "ty-check", "prettier-check", "astro-check", "svelte-check"],
   description = "Run all lint checks",
 }
 

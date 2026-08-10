@@ -18,6 +18,29 @@
    Starlight's cool blue-gray defaults so the docs share the frontpage's
    paper character. Text steps keep a slight ink-navy cast; surface steps
    (5-7, black) are warm cream / charcoal. */
+/* Hand the custom families to Starlight, which otherwise falls back to the
+   system stack on every docs page. Starlight appends its own fallbacks. */
+:root {
+  --sl-font: "Inter";
+  --sl-font-mono: "JetBrains Mono";
+}
+
+/* Docs headings share the frontpage's serif display face. */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
+.content-panel h1 {
+  font-family: var(--font-display);
+}
+
+/* Starlight hides the header's social links and theme switcher below 50rem
+   and offers them in the sidebar drawer instead. Pages without a sidebar
+   (the splash landing page) have no drawer, so keep the controls in the
+   header there; they fit because those pages have no menu button either. */
+@media (max-width: 49.999rem) {
+  :root:not([data-has-sidebar]) .header .right-group {
+    display: flex;
+  }
+}
+
 :root {
   --sl-color-accent-low: #dee5ff;
   --sl-color-accent: #2e46d8;

@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.7",
-    "astro": "^7.2.0"
+    "@astrojs/svelte": "^9.0.1",
+    "astro": "^7.2.0",
+    "svelte": "^5.56.8"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-svelte": "^4.1.1",
+    "svelte-check": "^4.7.5",
     "typescript": "^6.0.3"
   }
 }

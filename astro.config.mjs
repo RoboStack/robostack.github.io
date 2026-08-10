@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import svelte from "@astrojs/svelte";
 
 export default defineConfig({
   site: "https://robostack.github.io",
@@ -29,6 +30,7 @@ export default defineConfig({
           "https://github.com/RoboStack/robostack.github.io/edit/master/",
       },
       customCss: ["./src/styles/custom.css"],
+      routeMiddleware: "./src/routeData.ts",
       components: {
         SiteTitle: "./src/components/SiteTitle.astro",
         PageTitle: "./src/components/PageTitle.astro",
@@ -51,5 +53,6 @@ export default defineConfig({
         { label: "FAQ", slug: "FAQ" },
       ],
     }),
+    svelte(),
   ],
 });

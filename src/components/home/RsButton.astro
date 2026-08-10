@@ -54,4 +54,14 @@ const Tag = href ? "a" : "button";
     font-size: 18px;
     padding: 6px 16px 7px;
   }
+  /* Confirmation state for copy buttons (see copy-buttons.ts). Feedback has
+     to be immediate, so no transition: a 250ms fade out of the hover-inverted
+     state reads as a glitch rather than a confirmation. */
+  .btn.copied,
+  .btn.copied:hover {
+    background: transparent;
+    border-color: var(--rs-good);
+    color: var(--rs-good);
+    transition: none;
+  }
 </style>

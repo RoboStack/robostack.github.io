@@ -100,10 +100,12 @@ platforms = [
 ]
 ```
 
+Alternatively, you can declare the baseline with a `[system-requirements]` table:
+
+```toml
 [system-requirements]
 libc = { family = "glibc", version = "2.31" }
 linux = "5.15"
-
 ```
 
 Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
@@ -116,5 +118,4 @@ Installing other recent packages via conda-forge side-by-side works easily, e.g.
 As no system libraries are used, you can also easily install ROS Noetic on any recent Linux Distribution - including older versions of Ubuntu.
 As the packages are pre-built, it saves you from compiling from source, which is especially helpful on macOS and Windows.
 No root access is required, all packages live in your home directory.
-We have recently written up a paper and blog post with more information.
-```
+We have written up a [paper](https://arxiv.org/abs/2104.12910) and [blog post](https://medium.com/robostack/cross-platform-conda-packages-for-ros-fa1974fd1de3) with more information.
