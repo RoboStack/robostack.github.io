@@ -1,7 +1,7 @@
 """Build the package dataset behind the Available Packages pages.
 
-Writes `public/data/<distro>.json`, which `src/scripts/package-table.js` fetches
-and renders in the browser. Three sources are combined:
+Writes `public/data/<distro>.json`, which `src/components/PackageTable.svelte`
+fetches and renders in the browser. Three sources are combined:
 
 - `rosdistro`'s `distribution.yaml` for the package list, the released version, and
   the upstream source repository.
@@ -21,8 +21,8 @@ real mutex records with `py-rattler`. Parsing the version out of the spec string
 would work today, but the specs appear in two forms (`0.9.* humble_*` and
 `>=0.9.0,<0.10.0a0`) and nothing stops a third from showing up.
 
-The JSON is positional to keep it small; `packages.js` unpacks it by index, so the
-order in `PackageRecordJson` is load-bearing.
+The JSON is positional to keep it small; `PackageTable.svelte` unpacks it by
+index, so the order in `PackageRecordJson` is load-bearing.
 
 Usage: python scripts/compare_pkg_completeness.py <distro> <channel>
        channel is an anaconda.org channel name or a full base URL.
@@ -46,8 +46,9 @@ import niquests
 import yaml
 from rattler import MatchSpec, PackageRecord
 
-# Keep in sync with PLATFORMS in src/scripts/package-table.js: the bit positions
-# here are the bit positions the page reads.
+# The bit positions here are the bit positions the page reads. The page takes
+# the platform order from the JSON itself; only the icon map in
+# src/components/PackageTable.svelte is keyed by platform id.
 PLATFORMS: list[str] = [
     "linux-64",
     "linux-aarch64",

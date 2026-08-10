@@ -2,6 +2,8 @@
 public/data/*.json
 # Prettier's MDX v1 parser corrupts code fences nested in JSX components
 *.mdx
+# Markdown stays hand-formatted
+*.md
 # Lockfiles
 pixi.lock
 pnpm-lock.yaml

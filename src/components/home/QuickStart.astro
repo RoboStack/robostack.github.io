@@ -36,14 +36,10 @@ const commands = [
     </div>
     <div class="term-body">
       {
-        commands.map((command, i) => (
+        commands.map((command) => (
           <div>
             <span class="prompt">$ </span>
-            {i === commands.length - 1 ? (
-              <span class="accent">{command}</span>
-            ) : (
-              command
-            )}
+            {command}
           </div>
         ))
       }
@@ -137,8 +133,5 @@ const commands = [
   .prompt {
     color: #8ea4ff;
     user-select: none;
-  }
-  .accent {
-    color: #8ea4ff;
   }
 </style>
