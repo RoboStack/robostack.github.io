@@ -1,0 +1,72 @@
+---
+import RsButton from "./RsButton.astro";
+---
+
+<div class="rs-card contribute">
+  <div>
+    <h2>Missing a package? Add it in one line</h2>
+    <p>
+      {
+        /* The space before the code chip is explicit: Astro drops an
+           indented line break instead of collapsing it to a space. */
+      }
+      Most packages join RoboStack as a one-line pull request: put the name in a{
+        " "
+      }
+      <code>vinca.yaml</code> and CI builds it for every platform.
+    </p>
+  </div>
+  <RsButton href="/Contributing.html">Add a package &rarr;</RsButton>
+</div>
+
+<style>
+  /* A tinted card rather than a solid slab: the wash keeps the accent
+     present without a glowing block, and the button carries the CTA. */
+  .contribute {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 32px;
+    flex-wrap: wrap;
+    padding: 30px 34px;
+    background: rgba(46, 70, 216, 0.08);
+    border-color: rgba(46, 70, 216, 0.35);
+  }
+  :global([data-theme="dark"]) .contribute {
+    background: rgba(108, 133, 255, 0.1);
+    border-color: rgba(108, 133, 255, 0.35);
+  }
+  .contribute h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--fg-1);
+    margin: 0 0 6px;
+  }
+  .contribute p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-copy);
+    margin: 0;
+    max-width: 620px;
+  }
+  .contribute p code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.08);
+    padding: 1px 6px;
+    border-radius: var(--radius-xs);
+  }
+  :global([data-theme="dark"]) .contribute p code {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  @media screen and (max-width: 720px) {
+    .contribute {
+      padding: 26px 20px;
+    }
+    .contribute h2 {
+      font-size: 24px;
+    }
+  }
+</style>

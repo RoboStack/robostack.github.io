@@ -6,8 +6,12 @@ fetches and renders in the browser. Three sources are combined:
 - `rosdistro`'s `distribution.yaml` for the package list, the released version, and
   the upstream source repository.
 - `rosdistro`'s distribution cache for each package's `package.xml`, which is where
-  the descriptions and licences come from.
+  the descriptions come from.
 - The channel's `repodata.json` per platform, for what actually got built.
+
+Packages that exist on the channel but were never released into `rosdistro` (extra
+recipes, mostly) get a row too, marked with `indexed` 0: they have no description
+and no index version, but they are installable and should be findable.
 
 Availability is always relative to a mutex. Everything on a channel is built against
 one version of `ros2-distro-mutex` (`ros-distro-mutex` on ROS 1), and builds for
@@ -21,11 +25,13 @@ real mutex records with `py-rattler`. Parsing the version out of the spec string
 would work today, but the specs appear in two forms (`0.9.* humble_*` and
 `>=0.9.0,<0.10.0a0`) and nothing stops a third from showing up.
 
-The JSON is positional to keep it small; `PackageTable.svelte` unpacks it by
-index, so the order in `PackageRecordJson` is load-bearing.
+The JSON is positional to keep it small; `PackageTable.svelte` unpacks it via the
+`fields` list in the document head, so the two only have to agree on the names.
 
 Usage: python scripts/compare_pkg_completeness.py <distro> <channel>
        channel is an anaconda.org channel name or a full base URL.
+       python scripts/compare_pkg_completeness.py --all
+       regenerates every distro with a `dataChannel` in src/data/distros.json.
 """
 
 from __future__ import annotations
@@ -34,29 +40,27 @@ import argparse
 import concurrent.futures
 import gzip
 import json
-import os
 import re
 import sys
 import xml.etree.ElementTree as ET
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, TypeAlias
 
 import niquests
 import yaml
 from rattler import MatchSpec, PackageRecord
+from urllib3.util.retry import Retry
 
-# The bit positions here are the bit positions the page reads. The page takes
-# the platform order from the JSON itself; only the icon map in
+# The distro list and the platform list are shared with the site through
+# src/data/distros.json.
+DISTROS_JSON = Path(__file__).parent.parent / "src" / "data" / "distros.json"
+
+# The order is the bit-position order the page reads. The page takes the
+# platform order from the generated JSON itself; only the icon map in
 # src/components/PackageTable.svelte is keyed by platform id.
-PLATFORMS: list[str] = [
-    "linux-64",
-    "linux-aarch64",
-    "osx-64",
-    "osx-arm64",
-    "win-64",
-    "emscripten-wasm32",
-]
+PLATFORMS: list[str] = json.loads(DISTROS_JSON.read_text())["platforms"]
 
 ROSDISTRO = "https://raw.githubusercontent.com/ros/rosdistro/master"
 LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
@@ -64,13 +68,23 @@ LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
 # ROS 1 and ROS 2 name their mutex differently, and a channel only ever has one.
 MUTEX_NAMES: tuple[str, ...] = ("ros2-distro-mutex", "ros-distro-mutex")
 
+# Newest mutex generations to keep. Jazzy has published eleven; the old ones
+# dominate the payload while only the recent generations are still useful to
+# select in the table.
+MUTEX_LIMIT = 4
+
 # A raw repodata record, as it comes out of the JSON.
 Artifact: TypeAlias = dict[str, Any]
 # Mutex version -> every artifact published for it. A version can ship more than
 # one build, and a spec only has to match one of them.
 MutexRecords: TypeAlias = dict[str, list[PackageRecord]]
 
-session = niquests.Session()
+# The whole document is a handful of GETs against rosdistro and the channel;
+# retrying transient failures (anaconda.org 5xxs, mostly) keeps one hiccup from
+# failing a whole six-hourly refresh.
+session = niquests.Session(
+    retries=Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
+)
 
 
 @dataclass
@@ -118,8 +132,8 @@ def index_packages(distro: str) -> dict[str, IndexEntry]:
     return packages
 
 
-def package_metadata(distro: str) -> dict[str, tuple[str, str]]:
-    """`{package: (description, licence)}` from the rosdistro distribution cache.
+def package_metadata(distro: str) -> dict[str, str]:
+    """`{package: description}` from the rosdistro distribution cache.
 
     The cache is the only place these live, but the table is still useful without
     them, so a failure here is logged and skipped rather than raised.
@@ -134,14 +148,13 @@ def package_metadata(distro: str) -> dict[str, tuple[str, str]]:
         print(f"  warning: no distribution cache ({error})", file=sys.stderr)
         return {}
 
-    metadata: dict[str, tuple[str, str]] = {}
+    metadata: dict[str, str] = {}
     for name, package_xml in cache.get("release_package_xmls", {}).items():
         try:
             root = ET.fromstring(package_xml)
         except ET.ParseError:
             continue
-        description = " ".join((root.findtext("description") or "").split())
-        metadata[name] = (description, (root.findtext("license") or "").strip())
+        metadata[name] = " ".join((root.findtext("description") or "").split())
     return metadata
 
 
@@ -185,6 +198,17 @@ def version_key(version: str) -> tuple[int, ...]:
     non-numeric segment sorting last is good enough for that.
     """
     return tuple(int(p) if p.isdigit() else -1 for p in re.split(r"[._-]", str(version))[:4])
+
+
+def normalize_timestamp(timestamp: int) -> int:
+    """Repodata timestamps in milliseconds; some artifacts carry seconds instead.
+
+    Workaround for https://github.com/RoboStack/ros-humble/issues/258: a timestamp
+    that would place the build before 2001 is taken to be in seconds.
+    """
+    if 0 < timestamp < 1_000_000_000_000:
+        timestamp *= 1000
+    return timestamp
 
 
 def collect_mutexes(repos: dict[str, list[Artifact]]) -> tuple[str, MutexRecords]:
@@ -257,7 +281,9 @@ def collect_builds(
             if not name.startswith("ros-") or name in MUTEX_NAMES:
                 continue
 
-            newest_build[name] = max(newest_build.get(name, 0), artifact.get("timestamp") or 0)
+            newest_build[name] = max(
+                newest_build.get(name, 0), normalize_timestamp(artifact.get("timestamp") or 0)
+            )
 
             specs = [d for d in artifact.get("depends", []) if d.split(" ")[0] in MUTEX_NAMES]
             if specs:
@@ -290,7 +316,7 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         print(f"  {platform}: {len(repos[platform])}", file=sys.stderr)
 
     mutex_package, mutex_records = collect_mutexes(repos)
-    mutexes = sorted(mutex_records, key=version_key, reverse=True)
+    mutexes = sorted(mutex_records, key=version_key, reverse=True)[:MUTEX_LIMIT]
     print(f"  mutex: {mutex_package} {mutexes}", file=sys.stderr)
 
     builds, newest_build = collect_builds(repos, mutexes, mutex_matcher(mutex_records))
@@ -299,6 +325,11 @@ def build(distro: str, channel: str) -> dict[str, Any]:
     # and each package stores an index into this list.
     repo_urls: list[str] = []
     repo_index: dict[str, int] = {}
+
+    def slots(per_mutex: dict[str, Slot]) -> list[Any]:
+        # Aligned with "mutexes": 0 where nothing is built for that mutex,
+        # otherwise [platform bitmask, newest version built there].
+        return [[per_mutex[v].mask, per_mutex[v].version] if v in per_mutex else 0 for v in mutexes]
 
     packages: list[list[Any]] = []
     for name in sorted(index):
@@ -310,23 +341,37 @@ def build(distro: str, channel: str) -> dict[str, Any]:
             repo_index[entry.source] = len(repo_urls)
             repo_urls.append(entry.source)
 
-        description, package_license = metadata.get(name, ("", ""))
         packages.append(
             [
                 name.replace("_", "-"),  # conda spelling, `ros-<distro>-` stripped
-                description,
-                package_license,
+                metadata.get(name, ""),
                 entry.version,  # as released into the ROS index
                 newest_build.get(conda_name, 0) // 1000,  # newest build, seconds
                 repo_index.get(entry.source, -1),  # index into "repos"
-                # Aligned with "mutexes": 0 where nothing is built for that mutex,
-                # otherwise [platform bitmask, newest version built there].
-                [
-                    [per_mutex[v].mask, per_mutex[v].version] if v in per_mutex else 0
-                    for v in mutexes
-                ],
+                1,  # released into the ROS index
+                slots(per_mutex),
             ]
         )
+
+    # Packages on the channel that rosdistro has never released: no description,
+    # index version or source repository, but installable all the same.
+    prefix = f"ros-{distro}-"
+    released = {f"ros-{distro}-{name.replace('_', '-')}" for name in index}
+    for conda_name in sorted(set(builds) - released):
+        if not conda_name.startswith(prefix):
+            continue
+        packages.append(
+            [
+                conda_name.removeprefix(prefix),
+                "",
+                "",
+                newest_build.get(conda_name, 0) // 1000,
+                -1,
+                0,
+                slots(builds[conda_name]),
+            ]
+        )
+    packages.sort(key=lambda package: package[0])
 
     return {
         "distro": distro,
@@ -334,13 +379,13 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         "platforms": PLATFORMS,
         "mutexPackage": mutex_package,
         "mutexes": mutexes,
-        "fields": ["name", "desc", "license", "indexVersion", "updated", "repo", "builds"],
+        "fields": ["name", "desc", "indexVersion", "updated", "repo", "indexed", "builds"],
         "repos": repo_urls,
         "packages": packages,
     }
 
 
-def write(document: dict[str, Any], path: str) -> None:
+def write(document: dict[str, Any], path: Path) -> None:
     """Write the document with one package per line.
 
     Compact JSON on a single line would make every rebuild a one-line diff covering
@@ -354,22 +399,17 @@ def write(document: dict[str, Any], path: str) -> None:
     body = ",\n".join(json.dumps(p, separators=(",", ":")) for p in document["packages"])
     text = json.dumps(head, separators=(",", ":"))[:-1] + ',"packages":[\n' + body + "\n]}\n"
 
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
         handle.write(text)
 
 
-def main() -> None:
-    """Build one distro and report what came out."""
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("distro", help="ROS distro to build the table for")
-    parser.add_argument("channel", help="conda channel name, or a full base URL")
-    args = parser.parse_args()
+def refresh(distro: str, channel: str) -> None:
+    """Build one distro, write it, and report what came out."""
+    print(f"{distro} ({channel}):", file=sys.stderr)
+    document = build(distro, channel)
 
-    print(f"{args.distro} ({args.channel}):", file=sys.stderr)
-    document = build(args.distro, args.channel)
-
-    path = os.path.join("public", "data", f"{args.distro}.json")
+    path = Path("public") / "data" / f"{distro}.json"
     write(document, path)
 
     total = len(document["packages"])
@@ -378,9 +418,43 @@ def main() -> None:
     ever = sum(1 for p in document["packages"] if any(p[6]))
     print(
         f"  -> {path}: {total} packages, {ever} built at some point, "
-        f"{on_newest} on mutex {newest}, {os.path.getsize(path) / 1e6:.2f} MB",
+        f"{on_newest} on mutex {newest}, {path.stat().st_size / 1e6:.2f} MB",
         file=sys.stderr,
     )
+
+
+def main() -> None:
+    """Build one distro, or every distro the pipeline maintains."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("distro", nargs="?", help="ROS distro to build the table for")
+    parser.add_argument("channel", nargs="?", help="conda channel name, or a full base URL")
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="regenerate every distro with a dataChannel in src/data/distros.json",
+    )
+    args = parser.parse_args()
+
+    if args.all == bool(args.distro) or (args.distro and not args.channel):
+        parser.error("pass either <distro> <channel> or --all")
+
+    if not args.all:
+        refresh(args.distro, args.channel)
+        return
+
+    # One distro failing must not take the other five down with it: finish the
+    # loop, keep whatever succeeded, and only then report the failures.
+    failed: list[str] = []
+    for entry in json.loads(DISTROS_JSON.read_text())["distros"]:
+        if not entry["dataChannel"]:
+            continue
+        try:
+            refresh(entry["name"], entry["dataChannel"])
+        except Exception as error:  # noqa: BLE001 - reported and folded into the exit code
+            print(f"  error: {entry['name']} failed: {error}", file=sys.stderr)
+            failed.append(entry["name"])
+    if failed:
+        sys.exit(f"failed to update: {', '.join(failed)}")
 
 
 if __name__ == "__main__":

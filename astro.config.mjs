@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import svelte from "@astrojs/svelte";
+import { newestRelease } from "./src/data/distros.ts";
 
 export default defineConfig({
   site: "https://robostack.github.io",
@@ -46,7 +47,7 @@ export default defineConfig({
             { label: "Conda", slug: "conda" },
           ],
         },
-        { label: "Packages", link: "/lyrical.html" },
+        { label: "Packages", link: `/${newestRelease().name}.html` },
         { label: "JupyterRos", slug: "JupyterRos" },
         { label: "Support", slug: "support" },
         { label: "Contributing", slug: "Contributing" },

@@ -12,9 +12,16 @@ const { current } = Astro.props;
   {
     tabOrder().map((d) => (
       <a
-        class:list={["distro", { "distro--active": d.name === current }]}
+        class:list={[
+          "distro",
+          {
+            "distro--active": d.name === current,
+            "distro--eol": d.status === "eol",
+          },
+        ]}
         href={`/${d.name}.html`}
         aria-current={d.name === current ? "page" : undefined}
+        title={d.status === "eol" ? "End of life" : undefined}
       >
         {d.name}
       </a>
@@ -49,6 +56,10 @@ const { current } = Astro.props;
   }
   .distro:hover {
     color: var(--sl-color-white);
+  }
+  /* End-of-life releases stay reachable but recede; the active tab wins. */
+  .distro--eol:not(.distro--active) {
+    color: var(--sl-color-gray-4);
   }
   .distro--active {
     color: var(--sl-color-white);

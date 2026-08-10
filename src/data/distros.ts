@@ -1,3 +1,5 @@
+import distrosJson from "./distros.json";
+
 /**
  * One RoboStack channel and the ROS release behind it.
  *
@@ -13,10 +15,17 @@ export interface Distro {
   base: typeof PREFIX | typeof ANACONDA;
   /** rosdistro's own vocabulary from index-v4.yaml: rolling, active or eol. */
   status: "rolling" | "active" | "eol";
+  /** Long-term support release: the even-year May releases per REP-2000. */
+  lts: boolean;
   /** YYYY-MM. */
   released: string;
   /** YYYY-MM, or null when the support window is not published yet. */
   eol: string | null;
+  /**
+   * The pipeline still rebuilds this distro's table (it has a `dataChannel`
+   * in distros.json). False for the frozen end-of-life snapshots.
+   */
+  maintained: boolean;
 }
 
 // Channel bases, as passed to `pixi workspace channel add`.
@@ -30,89 +39,35 @@ const BROWSE = {
   [ANACONDA]: (channel: string) => `https://anaconda.org/${channel}`,
 };
 
+// The list itself lives in distros.json, which the table pipeline
+// (`scripts/compare_pkg_completeness.py --all`) reads too: its `dataChannel`
+// is the channel repodata is fetched from, null for the end-of-life distros
+// whose `public/data/<name>.json` is a committed snapshot. The platform list
+// is shared the same way; its order is the pipeline's bitmask order.
+//
 // Dates come from REP-2000 for ROS 2 and REP-3 for ROS 1, not from the actual
-// tag dates, so the pages agree with what ROS itself documents.
+// tag dates, so the pages agree with what ROS itself documents. Lyrical is
+// not in REP-2000 yet; May 2031 follows the established cadence of five-year
+// LTS windows for even-year releases.
 //
 // Galactic is the odd one out for `base`: `robostack-experimental` 404s on
 // prefix.dev, so it points at anaconda.org.
-export const DISTROS: Distro[] = [
-  {
-    name: "noetic",
-    ros: 1,
-    channel: "robostack-noetic",
-    base: PREFIX,
-    status: "eol",
-    released: "2020-05",
-    eol: "2025-05",
-  },
-  {
-    name: "foxy",
-    ros: 2,
-    channel: "robostack",
-    base: PREFIX,
-    status: "eol",
-    released: "2020-05",
-    eol: "2023-05",
-  },
-  {
-    name: "galactic",
-    ros: 2,
-    channel: "robostack-experimental",
-    base: ANACONDA,
-    status: "eol",
-    released: "2021-05",
-    eol: "2022-11",
-  },
-  {
-    name: "humble",
-    ros: 2,
-    channel: "robostack-humble",
-    base: PREFIX,
-    status: "active",
-    released: "2022-05",
-    eol: "2027-05",
-  },
-  {
-    name: "jazzy",
-    ros: 2,
-    channel: "robostack-jazzy",
-    base: PREFIX,
-    status: "active",
-    released: "2024-05",
-    eol: "2029-05",
-  },
-  {
-    name: "kilted",
-    ros: 2,
-    channel: "robostack-kilted",
-    base: PREFIX,
-    status: "active",
-    released: "2025-05",
-    eol: "2026-11",
-  },
-  // Lyrical is not in REP-2000 yet. May 2031 follows the established cadence:
-  // even-year releases are LTS with five years of support (Humble 2022-2027,
-  // Jazzy 2024-2029), odd-year ones get eighteen months (Kilted 2025-2026).
-  // Replace it with the published date once the REP lists it.
-  {
-    name: "lyrical",
-    ros: 2,
-    channel: "robostack-lyrical",
-    base: PREFIX,
-    status: "active",
-    released: "2026-05",
-    eol: "2031-05",
-  },
-  {
-    name: "rolling",
-    ros: 2,
-    channel: "robostack-rolling",
-    base: PREFIX,
-    status: "rolling",
-    released: "2020-06",
-    eol: null,
-  },
-];
+const BASES = { prefix: PREFIX, anaconda: ANACONDA } as const;
+
+export const DISTROS: Distro[] = distrosJson.distros.map((d) => ({
+  name: d.name,
+  ros: d.ros as Distro["ros"],
+  channel: d.channel,
+  base: BASES[d.base as keyof typeof BASES],
+  status: d.status as Distro["status"],
+  lts: d.lts,
+  released: d.released,
+  eol: d.eol,
+  maintained: d.dataChannel !== null,
+}));
+
+/** Platforms the channels build for. */
+export const PLATFORMS: string[] = distrosJson.platforms;
 
 const MONTHS = [
   "January",
@@ -173,4 +128,14 @@ export function tabOrder(distros: Distro[] = DISTROS): Distro[] {
     .filter((d) => d.status !== "rolling")
     .sort((a, b) => b.released.localeCompare(a.released) || b.ros - a.ros);
   return [...rolling, ...dated];
+}
+
+/**
+ * The newest dated release: the second tab on the distro pages, after
+ * rolling. The site recommends no distro; links into the package tables and
+ * the example commands simply land here, and move on their own when the next
+ * release enters `DISTROS`.
+ */
+export function newestRelease(): Distro {
+  return tabOrder()[1];
 }

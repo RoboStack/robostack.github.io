@@ -1,0 +1,100 @@
+{
+  "platforms": [
+    "linux-64",
+    "linux-aarch64",
+    "osx-64",
+    "osx-arm64",
+    "win-64",
+    "emscripten-wasm32"
+  ],
+  "distros": [
+    {
+      "name": "noetic",
+      "ros": 1,
+      "channel": "robostack-noetic",
+      "base": "prefix",
+      "status": "eol",
+      "released": "2020-05",
+      "eol": "2025-05",
+      "dataChannel": "robostack-noetic",
+      "lts": true
+    },
+    {
+      "name": "foxy",
+      "ros": 2,
+      "channel": "robostack",
+      "base": "prefix",
+      "status": "eol",
+      "released": "2020-05",
+      "eol": "2023-05",
+      "dataChannel": null,
+      "lts": true
+    },
+    {
+      "name": "galactic",
+      "ros": 2,
+      "channel": "robostack-experimental",
+      "base": "anaconda",
+      "status": "eol",
+      "released": "2021-05",
+      "eol": "2022-11",
+      "dataChannel": null,
+      "lts": false
+    },
+    {
+      "name": "humble",
+      "ros": 2,
+      "channel": "robostack-humble",
+      "base": "prefix",
+      "status": "active",
+      "released": "2022-05",
+      "eol": "2027-05",
+      "dataChannel": "robostack-humble",
+      "lts": true
+    },
+    {
+      "name": "jazzy",
+      "ros": 2,
+      "channel": "robostack-jazzy",
+      "base": "prefix",
+      "status": "active",
+      "released": "2024-05",
+      "eol": "2029-05",
+      "dataChannel": "robostack-jazzy",
+      "lts": true
+    },
+    {
+      "name": "kilted",
+      "ros": 2,
+      "channel": "robostack-kilted",
+      "base": "prefix",
+      "status": "active",
+      "released": "2025-05",
+      "eol": "2026-11",
+      "dataChannel": "robostack-kilted",
+      "lts": false
+    },
+    {
+      "name": "lyrical",
+      "ros": 2,
+      "channel": "robostack-lyrical",
+      "base": "prefix",
+      "status": "active",
+      "released": "2026-05",
+      "eol": "2031-05",
+      "dataChannel": "https://prefix.dev/robostack-lyrical",
+      "lts": true
+    },
+    {
+      "name": "rolling",
+      "ros": 2,
+      "channel": "robostack-rolling",
+      "base": "prefix",
+      "status": "rolling",
+      "released": "2020-06",
+      "eol": null,
+      "dataChannel": "https://prefix.dev/robostack-rolling",
+      "lts": false
+    }
+  ]
+}

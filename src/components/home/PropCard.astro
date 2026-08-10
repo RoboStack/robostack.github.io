@@ -14,7 +14,7 @@ const { title, href, linkLabel } = Astro.props;
 const Tag = href ? "a" : "div";
 ---
 
-<Tag class="card" href={href}>
+<Tag class="rs-card card" href={href}>
   <div class="icon"><slot name="icon" /></div>
   <div class="title">{title}</div>
   <p><slot /></p>
@@ -26,21 +26,14 @@ const Tag = href ? "a" : "div";
     position: relative;
     display: block;
     padding: 24px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-1);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
     color: var(--fg-1);
     text-decoration: none;
   }
   a.card {
-    transition:
-      box-shadow var(--dur-3) var(--ease-out),
-      transform var(--dur-3) var(--ease-out);
+    transition: box-shadow var(--dur-3) var(--ease-out);
   }
   a.card:hover {
     box-shadow: var(--shadow-hover-accent);
-    transform: translateY(-2px);
     text-decoration: none;
   }
   .icon {
@@ -52,13 +45,8 @@ const Tag = href ? "a" : "div";
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
-  }
-  .icon :global(svg) {
-    fill: var(--fg-1);
-  }
-  .icon :global(svg.stroke) {
-    fill: none;
-    stroke: var(--fg-1);
+    /* The icon files in src/assets/icons paint with currentColor. */
+    color: var(--fg-1);
   }
   .title {
     font-family: var(--font-display);

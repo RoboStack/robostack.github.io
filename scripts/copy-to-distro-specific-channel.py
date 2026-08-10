@@ -3,6 +3,7 @@ import datetime
 import subprocess
 
 import niquests
+from urllib3.util.retry import Retry
 
 # Configuration
 BASE_URL = "https://conda.anaconda.org"
@@ -17,19 +18,26 @@ PLATFORMS = [
     "emscripten-wasm32",
 ]
 
+session = niquests.Session(
+    retries=Retry(total=5, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
+)
 
-def fetch_repodata(channel: str, platform: str) -> dict | None:
+
+def fetch_repodata(channel: str, platform: str) -> dict:
     """
     Fetch the repodata.json file from a given channel and platform.
+
+    A 404 means the channel has no such platform yet and reads as empty. Anything
+    else raises: treating a transient error as an empty channel would make the run
+    copy nothing and still report success.
     """
     url = f"{BASE_URL}/{channel}/{platform}/repodata.json"
-    response = niquests.get(url)
+    response = session.get(url)
 
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error fetching repodata.json from {channel}/{platform}: {response.status_code}")
-        return None
+    if response.status_code == 404:
+        return {}
+    response.raise_for_status()
+    return response.json() or {}
 
 
 def upload_package(
@@ -106,8 +114,8 @@ def main() -> None:
     source_repodata = {}
     destination_repodata = {}
     for platform in PLATFORMS:
-        source_repodata[platform] = fetch_repodata(SOURCE_CHANNEL, platform) or {}
-        destination_repodata[platform] = fetch_repodata(destination_channel, platform) or {}
+        source_repodata[platform] = fetch_repodata(SOURCE_CHANNEL, platform)
+        destination_repodata[platform] = fetch_repodata(destination_channel, platform)
 
     # Process packages for each platform
     for platform in PLATFORMS:

@@ -1,9 +1,8 @@
 <!--
   Renders the Available Packages table from /data/<distro>.json.
 
-  The distro pages used to ship the whole table as static Markdown, around
-  2,300 rows and 13,000 remote emoji images per page. This fetches the same
-  data as JSON instead and renders only the rows currently on screen.
+  The table is a couple of thousand rows per distro, so the data ships as
+  one JSON document and only the rows currently on screen are rendered.
 
   Everything on a channel is built against one version of the ROS distro
   mutex, and builds for different mutex versions cannot be installed together.
@@ -18,6 +17,15 @@
 -->
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { Doc, MutexRow, Row } from "./data";
+  import {
+    baseVersion,
+    deriveMutexRows,
+    matchesFilter,
+    relevanceTier,
+    SORTERS,
+    unpackRows,
+  } from "./data";
 
   interface PlatformMeta {
     icon: string;
@@ -50,59 +58,6 @@
   const CONTRIBUTING =
     "/Contributing.html#adding-new-packages-via-pull-requests";
 
-  /* One entry per mutex, aligned with doc.mutexes: 0 when nothing is built
-   * for that mutex, otherwise a platform bitmask plus the version built. */
-  type BuildSlot = 0 | [number, string];
-
-  /* name, description, license, index version, last-built timestamp, index
-   * into doc.repos (-1 for none), build slots. */
-  type PackageEntry = [
-    string,
-    string,
-    string,
-    string,
-    number,
-    number,
-    BuildSlot[],
-  ];
-
-  interface Doc {
-    distro: string;
-    channel: string;
-    platforms: string[];
-    mutexPackage: string;
-    mutexes: string[];
-    repos: string[];
-    packages: PackageEntry[];
-  }
-
-  interface Upgrade {
-    version: string;
-    mutex: string;
-  }
-
-  interface Row {
-    name: string;
-    desc: string;
-    license: string;
-    indexVersion: string;
-    updated: number;
-    repo: string;
-    builds: BuildSlot[];
-    haystack: string;
-  }
-
-  interface MutexRow extends Row {
-    mask: number;
-    version: string;
-    built: number;
-    total: number;
-    behind: boolean;
-    older: string[];
-    upgrade: Upgrade | null;
-    never: boolean;
-  }
-
   interface ActivePlatform {
     id: string;
     bit: number;
@@ -121,6 +76,9 @@
   let filter = $state("all");
   let sort = $state("name");
   let mutex = $state(0);
+  /* Narrow screens collapse the platform columns into a per-row pill; this
+   * is the row whose platform detail is currently expanded under it. */
+  let expanded = $state("");
 
   // Windowing state, driven by the scroll handler.
   let first = $state(0);
@@ -132,46 +90,12 @@
   let tbodyEl = $state<HTMLTableSectionElement>();
   let searchEl = $state<HTMLInputElement>();
 
-  // rosdistro versions carry a release increment ("2.0.2-1"); drop it to
-  // compare against the plain version conda publishes.
-  function baseVersion(value: string): string {
-    return String(value || "").split("-")[0];
-  }
-
-  function versionParts(value: string): number[] {
-    return baseVersion(value)
-      .split(".")
-      .map((part) => (/^\d+$/.test(part) ? parseInt(part, 10) : -1));
-  }
-
-  function compareVersions(a: string, b: string): number {
-    const x = versionParts(a);
-    const y = versionParts(b);
-    for (let i = 0; i < Math.max(x.length, y.length); i++) {
-      const delta =
-        (x[i] === undefined ? -1 : x[i]) - (y[i] === undefined ? -1 : y[i]);
-      if (delta) return delta < 0 ? -1 : 1;
-    }
-    return 0;
-  }
-
   const channel = $derived(doc?.channel ?? "");
   const mutexPackage = $derived(doc?.mutexPackage ?? "");
   const mutexes = $derived(doc?.mutexes ?? []);
   const currentMutex = $derived(mutexes[mutex] ?? "");
 
-  const all: Row[] = $derived(
-    (doc?.packages ?? []).map((pkg) => ({
-      name: pkg[0],
-      desc: pkg[1],
-      license: pkg[2],
-      indexVersion: pkg[3],
-      updated: pkg[4],
-      repo: pkg[5] >= 0 ? (doc?.repos[pkg[5]] ?? "") : "",
-      builds: pkg[6], // aligned with doc.mutexes
-      haystack: (pkg[0] + " " + pkg[1]).toLowerCase(),
-    })),
-  );
+  const all: Row[] = $derived(doc ? unpackRows(doc) : []);
 
   /* Everything that depends on the selected mutex, derived in one pass:
    * O(n) over 2,300 rows, which is far cheaper than re-fetching. */
@@ -189,58 +113,7 @@
         }),
       );
     const bits = active.map((p) => p.bit);
-    const list = mutexes;
-
-    const rows: MutexRow[] = all.map((row) => {
-      const slot = row.builds[mutex];
-      const mask = slot ? slot[0] : 0;
-      const version = slot ? slot[1] : "";
-      // Which other mutexes do have it, so a gap reads as "built, but not
-      // for this mutex" rather than "never built". Newer and older are kept
-      // apart because only one of them is actionable: a package waiting on a
-      // newer mutex arrives if you move up, one that exists only on an older
-      // mutex has been dropped and will not come back.
-      // doc.mutexes is newest first, so a lower index means newer.
-      const older: string[] = [];
-      let upgrade: Upgrade | null = null;
-      for (let i = 0; i < list.length; i++) {
-        const other = row.builds[i];
-        if (i === mutex || !other) continue;
-        if (i > mutex) {
-          if (!mask) older.push(list[i]);
-          continue;
-        }
-        // A newer mutex: worth reporting when it offers this package at all,
-        // or offers a newer version of it than the selected mutex does.
-        if (!upgrade || compareVersions(other[1], upgrade.version) > 0) {
-          upgrade = { version: other[1], mutex: list[i] };
-        }
-      }
-      if (
-        upgrade &&
-        version &&
-        compareVersions(upgrade.version, version) <= 0
-      ) {
-        upgrade = null;
-      }
-      return {
-        ...row,
-        mask,
-        version,
-        built: bits.reduce((n, bit) => n + ((mask >> bit) & 1), 0),
-        total: bits.length,
-        behind:
-          !!version &&
-          !!row.indexVersion &&
-          compareVersions(version, row.indexVersion) < 0,
-        older,
-        upgrade,
-        // Never built for any mutex. Distinct from "not built for the
-        // selected mutex": that one is answered by changing the mutex, this
-        // one only by someone adding the package.
-        never: !row.builds.some((slot) => Boolean(slot)),
-      };
-    });
+    const rows = deriveMutexRows(all, mutex, mutexes, bits);
 
     const counts: Record<string, number> = {
       all: rows.length,
@@ -252,7 +125,16 @@
       older: rows.filter((r) => !r.mask && r.older.length).length,
     };
 
-    return { rows, active, counts };
+    // The summary figure is "how much of the ROS index is on RoboStack", so
+    // channel-only packages count in the table but not in this ratio.
+    const indexed = rows.filter((r) => r.indexed);
+    return {
+      rows,
+      active,
+      counts,
+      indexTotal: indexed.length,
+      indexAvailable: indexed.filter((r) => r.built > 0).length,
+    };
   });
 
   const active = $derived(mutexData.active);
@@ -275,55 +157,37 @@
     if (filter !== "all" && (counts[filter] ?? 0) === 0) filter = "all";
   });
 
-  function matchesFilter(row: MutexRow, id: string): boolean {
-    switch (id) {
-      case "full":
-        return row.total > 0 && row.built === row.total;
-      case "partial":
-        return row.built > 0 && row.built < row.total;
-      case "missing":
-        return row.built === 0;
-      case "behind":
-        return row.behind;
-      case "upgrade":
-        return !!row.upgrade;
-      default:
-        return true;
-    }
-  }
-
-  const SORTERS: Record<string, (a: MutexRow, b: MutexRow) => number> = {
-    name: (a, b) => a.name.localeCompare(b.name),
-    coverage: (a, b) => b.built - a.built || a.name.localeCompare(b.name),
-    gaps: (a, b) => a.built - b.built || a.name.localeCompare(b.name),
-    recent: (a, b) => b.updated - a.updated || a.name.localeCompare(b.name),
-  };
-
   const rows = $derived.by(() => {
     const q = query.trim().toLowerCase();
     const filtered = mutexData.rows.filter(
       (row) => matchesFilter(row, filter) && (!q || row.haystack.includes(q)),
     );
-    return filtered.sort(SORTERS[sort] ?? SORTERS.name);
+    const sorter = SORTERS[sort] ?? SORTERS.name;
+    if (!q) return filtered.sort(sorter);
+    return filtered.sort(
+      (a, b) =>
+        relevanceTier(a.name, q) - relevanceTier(b.name, q) || sorter(a, b),
+    );
   });
 
   const last = $derived(Math.min(rows.length, first + visibleCount));
   const slice = $derived(rows.slice(first, last));
   const padBottom = $derived(rows.length - last);
 
-  const available = $derived((counts.full ?? 0) + (counts.partial ?? 0));
+  const indexTotal = $derived(mutexData.indexTotal);
+  const indexAvailable = $derived(mutexData.indexAvailable);
   const percent = $derived(
-    all.length ? Math.round((available / all.length) * 100) : 0,
+    indexTotal ? Math.round((indexAvailable / indexTotal) * 100) : 0,
   );
   // Behind-index packages are a subset of the available ones (a package needs
   // a version on the channel before it can be compared), so the bar splits
   // the filled portion rather than adding to it. Unrounded widths, so the two
   // segments cannot drift apart from the total.
   const availablePct = $derived(
-    all.length ? (available / all.length) * 100 : 0,
+    indexTotal ? (indexAvailable / indexTotal) * 100 : 0,
   );
   const behindPct = $derived(
-    all.length ? ((counts.behind ?? 0) / all.length) * 100 : 0,
+    indexTotal ? ((counts.behind ?? 0) / indexTotal) * 100 : 0,
   );
   const currentPct = $derived(Math.max(0, availablePct - behindPct));
 
@@ -358,10 +222,11 @@
 
   /* The stylesheet declares the row height, but td padding can outweigh it,
    * and zoom or a font change shifts it again. Measuring a real row keeps the
-   * padding rows honest whatever the CSS ends up doing. */
+   * padding rows honest whatever the CSS ends up doing. An expanded row is
+   * deliberately taller than the rest, so it must not be the sample. */
   $effect(() => {
     void slice;
-    const row = tbodyEl?.querySelector("tr:not(.rs-pad)");
+    const row = tbodyEl?.querySelector("tr:not(.rs-pad):not(.rs-open)");
     if (!row) return;
     const measured = Math.round(row.getBoundingClientRect().height);
     if (measured && measured !== rowHeight) rowHeight = measured;
@@ -475,7 +340,7 @@
         <i
           class="rs-bar__current"
           style="width:{currentPct.toFixed(2)}%"
-          title="{available -
+          title="{indexAvailable -
             (counts.behind ??
               0)} packages at the version the ROS index released"
         ></i>
@@ -485,16 +350,6 @@
           title="{counts.behind} packages older than the version the ROS index released"
         ></i>
       </div>
-      <p class="rs-summary__legend">
-        <span class="rs-key rs-key--full">{counts.full} on every platform</span>
-        <span class="rs-key rs-key--partial">{counts.partial} partial</span>
-        <span class="rs-key rs-key--missing"
-          >{counts.missing} not on channel</span
-        >
-        <span class="rs-key rs-key--behind"
-          >of those, {counts.behind} behind the index</span
-        >
-      </p>
       {#if mutexes.length}
         <p class="rs-mutex">
           <label>
@@ -518,20 +373,29 @@
               >{counts.older} built only for an older mutex</span
             >
           {/if}
+          <span class="rs-mutex__hint">
+            Every package on the channel is built against one version of the
+            <code>{mutexPackage}</code> package; builds for different versions cannot
+            share an environment. A fresh install resolves to the newest.
+          </span>
         </p>
       {/if}
     </div>
 
     <div class="rs-tools">
-      <input
-        type="search"
-        autocomplete="off"
-        spellcheck="false"
-        aria-label="Search packages"
-        placeholder="Search {all.length} index packages…"
-        bind:value={query}
-        bind:this={searchEl}
-      />
+      <span class="rs-search">
+        <input
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search packages"
+          placeholder="Search {all.length} packages…"
+          bind:value={query}
+          bind:this={searchEl}
+        />
+        <!-- Advertises the shortcut the keydown handler already provides. -->
+        <kbd class="rs-slash" aria-hidden="true">/</kbd>
+      </span>
       <!--
         Filters and sort travel together, so the sort control stays beside
         them and only drops to its own line when they genuinely overflow.
@@ -547,7 +411,12 @@
               onclick={() => (filter = f.id)}
             >
               {f.label}
-              {counts[f.id]}
+              <!-- The count doubles as the legend: it carries the same colour
+                   the availability dots use, so the chips are the one place
+                   these numbers appear. -->
+              <span class="rs-chipcount rs-chipcount--{f.id}"
+                >{counts[f.id]}</span
+              >
             </button>
           {/each}
         </div>
@@ -561,10 +430,14 @@
     </div>
 
     <p class="rs-count" aria-live="polite">
-      <span class="rs-count__showing"
-        >Showing {rows.length.toLocaleString()} of {all.length.toLocaleString()}
-        index packages.</span
-      >
+      <!-- Redundant while nothing is filtered out; the All chip already
+           carries the total. -->
+      {#if rows.length !== all.length}
+        <span class="rs-count__showing"
+          >Showing {rows.length.toLocaleString()} of {all.length.toLocaleString()}
+          packages.</span
+        >
+      {/if}
       {#if hiddenPlatforms.length}
         {hiddenPlatforms.join(", ")} hidden: nothing built for this mutex.
       {/if}
@@ -575,7 +448,7 @@
         <colgroup>
           <col />
           {#each active as p (p.id)}
-            <col style="width:5rem" />
+            <col class="rs-col-plat" />
           {/each}
         </colgroup>
         <thead bind:this={theadEl}>
@@ -604,7 +477,10 @@
             <!-- The ROS index spells package names with underscores; conda
                  uses hyphens. -->
             {@const rosName = row.name.replace(/-/g, "_")}
-            <tr aria-rowindex={first + i + 2}>
+            <tr
+              aria-rowindex={first + i + 2}
+              class:rs-open={expanded === row.name}
+            >
               <td>
                 <span
                   class="rs-dot"
@@ -674,14 +550,17 @@
                       "channel",
                     )}
                   {/if}
-                  {@render extLink(
-                    "https://index.ros.org/p/" +
-                      encodeURIComponent(rosName) +
-                      "/#" +
-                      distro,
-                    rosName + " on the ROS index",
-                    "docs",
-                  )}
+                  <!-- Channel-only packages have no ROS index page to link. -->
+                  {#if row.indexed}
+                    {@render extLink(
+                      "https://index.ros.org/p/" +
+                        encodeURIComponent(rosName) +
+                        "/#" +
+                        distro,
+                      rosName + " on the ROS index",
+                      "docs",
+                    )}
+                  {/if}
                   {#if row.repo}
                     {@render extLink(
                       row.repo,
@@ -704,7 +583,43 @@
                     </a>
                   {/if}
                 </span>
+                <!--
+                  Narrow screens have no platform columns; the pill sums them
+                  up and expands into a per-platform list below the
+                  description. It spans both text rows in its own grid
+                  column, so a finger-sized target does not stretch the row.
+                -->
+                <button
+                  type="button"
+                  class="rs-pill"
+                  aria-expanded={expanded === row.name}
+                  aria-label="Platform availability for {row.name}"
+                  onclick={() =>
+                    (expanded = expanded === row.name ? "" : row.name)}
+                >
+                  {row.built}/{row.total}
+                </button>
                 <small>{row.desc || "-"}</small>
+                {#if expanded === row.name}
+                  <span class="rs-detail">
+                    {#each active as p (p.id)}
+                      {@const meta = PLATFORMS[p.id] ?? {
+                        icon: "linux",
+                        arch: "",
+                      }}
+                      {@const on = ((row.mask >> p.bit) & 1) === 1}
+                      <span
+                        class="rs-det"
+                        class:rs-det--yes={on}
+                        class:rs-det--no={!on}
+                        title="{p.id}: {on ? 'available' : 'not on channel'}"
+                      >
+                        {@render iconSpan(meta.icon, 12)}{meta.arch}
+                        {on ? "✓" : "·"}
+                      </span>
+                    {/each}
+                  </span>
+                {/if}
               </td>
               {#each active as p (p.id)}
                 {@const on = ((row.mask >> p.bit) & 1) === 1}
@@ -823,31 +738,6 @@
   .rs-bar__behind {
     background: var(--rs-warn-fg);
   }
-  .rs-summary__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.1rem;
-    margin: 0;
-    font-size: 0.8rem;
-    font-variant-numeric: tabular-nums;
-  }
-  .rs-key--full {
-    color: var(--rs-yes-fg);
-  }
-  .rs-key--partial {
-    color: var(--rs-warn-fg);
-  }
-  .rs-key--missing {
-    color: var(--sl-color-gray-3);
-  }
-  /* Overlaps the three above rather than extending them, so it is set apart
-     by a rule and phrased as a subset. */
-  .rs-key--behind {
-    color: var(--rs-warn-fg);
-    padding-left: 1.1rem;
-    border-left: 1px solid var(--sl-color-gray-5);
-  }
-
   /* Mutex picker: availability is only meaningful against one of these, so
      it sits inside the summary card rather than among the table controls. */
   .rs-mutex {
@@ -871,6 +761,15 @@
   }
   .rs-mutex__note--up {
     color: var(--rs-up-fg);
+  }
+  /* "ros2-distro-mutex" is channel jargon; one muted sentence keeps the
+     picker from being a mystery dropdown. */
+  .rs-mutex__hint {
+    flex-basis: 100%;
+    color: var(--sl-color-gray-3);
+  }
+  .rs-mutex__hint code {
+    font-size: 0.95em;
   }
 
   /* ---- toolbar ----------------------------------------------------------- */
@@ -897,12 +796,41 @@
     cursor: pointer;
   }
   /* min-width:0 matters: an input's automatic minimum size is its intrinsic
-     width, which clamps the flex base size upward and pushes the whole line
-     over the limit. The filters and sort were bumped to a second row even
-     when there was room for everything. */
-  .rs-tools input {
+     width, which clamps the flex base size upward and pushes the filters and
+     sort to a second row even when there is room for everything. */
+  .rs-search {
+    position: relative;
+    display: flex;
     flex: 1 1 12rem;
     min-width: 0;
+  }
+  .rs-search input {
+    flex: 1;
+    min-width: 0;
+  }
+  /* Advertises the "/" shortcut. Gone while typing, and gone entirely on
+     touch devices, where there is no key to press. */
+  .rs-slash {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.05em 0.45em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    pointer-events: none;
+  }
+  .rs-search:focus-within .rs-slash,
+  .rs-search input:not(:placeholder-shown) ~ .rs-slash {
+    display: none;
+  }
+  @media (hover: none) and (pointer: coarse) {
+    .rs-slash {
+      display: none;
+    }
   }
   /* Filters and sort wrap as one unit, so the sort control keeps its place
      next to them: when the row runs out of space the pair moves below the
@@ -947,6 +875,30 @@
     border-color: var(--sl-color-accent);
     color: var(--sl-color-black);
   }
+  /* The chip counts double as the colour legend: the same hues the
+     availability dots use. On the active chip the accent background takes
+     over and the count follows the label. */
+  .rs-chipcount {
+    font-variant-numeric: tabular-nums;
+  }
+  .rs-chipcount--full {
+    color: var(--rs-yes-fg);
+  }
+  .rs-chipcount--partial {
+    color: var(--rs-warn-fg);
+  }
+  .rs-chipcount--missing {
+    color: var(--sl-color-gray-3);
+  }
+  .rs-chipcount--behind {
+    color: var(--rs-warn-fg);
+  }
+  .rs-chipcount--upgrade {
+    color: var(--rs-up-fg);
+  }
+  .rs-filter--on .rs-chipcount {
+    color: inherit;
+  }
 
   .rs-count {
     margin: 0 0 0.6rem;
@@ -976,6 +928,12 @@
     font-size: inherit;
     border-collapse: collapse;
   }
+  /* The fixed layout takes column widths from the <col> elements, so this is
+     where the platform columns get their 5rem - and where the narrow-screen
+     block can take it back, which hiding the cells alone would not. */
+  .rs-packages col.rs-col-plat {
+    width: 5rem;
+  }
   .rs-packages th {
     padding: 0.6em 0.9em;
     white-space: nowrap;
@@ -991,7 +949,7 @@
     height: var(--rs-row-h);
   }
   /* The separator lives on the cells, not the row: the first cell is a grid
-     (no longer a table-cell), and a row border breaks at its edge. */
+     (not a table-cell), and a row border breaks at its edge. */
   .rs-packages tbody td {
     border-bottom: 1px solid var(--sl-color-gray-6);
   }
@@ -1203,6 +1161,12 @@
     color: var(--sl-color-black);
     background: var(--sl-color-accent);
   }
+  /* Coarse pointers need more than a 21px square to hit. */
+  @media (hover: none) and (pointer: coarse) {
+    .rs-link {
+      padding: 0.5rem 0.45rem;
+    }
+  }
   /* Icons are masks rather than images, so they inherit the text colour: the
      same file serves a muted column header and a link that inverts on hover. */
   .rs-icon {
@@ -1268,6 +1232,85 @@
     align-items: center;
     gap: 0.25rem;
     color: var(--sl-color-gray-3);
+  }
+
+  /* ---- narrow screens ---------------------------------------------------- */
+  /* Six ~5rem availability columns cannot fit next to the package cell, so
+     below 48rem they collapse into one coverage pill per row that expands
+     into a per-platform list. Desktop never shows the pill. */
+  .rs-pill,
+  .rs-detail {
+    display: none;
+  }
+  @media screen and (max-width: 48rem) {
+    .rs-packages thead th:not(:first-child),
+    .rs-packages tbody td:not(:first-child) {
+      display: none;
+    }
+    /* Only one column left; scrolling sideways would reveal nothing. The
+       hidden columns must also give up their <col> width, or the fixed
+       layout keeps reserving 5rem apiece for them. */
+    .rs-packages table {
+      min-width: 0;
+    }
+    .rs-packages col.rs-col-plat {
+      width: 0;
+    }
+    /* Competes with the pill for the right edge; the Contributing page
+       remains reachable through the missing-package notice on desktop. */
+    .rs-add {
+      display: none;
+    }
+    /* Third grid column for the pill, and room to grow for the expanded
+       platform list. The row height floor stays where it was. */
+    .rs-packages tbody td:first-child {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      height: auto;
+      min-height: var(--rs-row-h);
+    }
+    .rs-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      align-self: center;
+      min-height: 2.75rem; /* a finger-sized target */
+      min-width: 3.2rem;
+      padding: 0 0.7em;
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 2rem;
+      background: var(--sl-color-bg);
+      color: var(--sl-color-gray-2);
+      font: inherit;
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+    }
+    .rs-pill[aria-expanded="true"] {
+      border-color: var(--sl-color-accent);
+      color: var(--sl-color-accent);
+    }
+    .rs-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.9rem;
+      grid-column: 2 / 4;
+      grid-row: 3;
+      padding: 0.3rem 0 0.6rem;
+      font-size: 0.8rem;
+    }
+    .rs-det {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .rs-det--yes {
+      color: var(--rs-yes-fg);
+    }
+    .rs-det--no {
+      color: var(--sl-color-gray-4);
+    }
   }
 
   /* ---- notices ----------------------------------------------------------- */

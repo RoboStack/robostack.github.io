@@ -140,3 +140,21 @@
   --border-1: var(--rs-dark-900);
   --border-2: var(--rs-dark-600);
 }
+
+/* ---------- Shared frontpage primitives ----------
+   Two patterns every home component repeats: the card surface and the
+   small-caps kicker. One definition here; the components add their own
+   layout on top. */
+.rs-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
