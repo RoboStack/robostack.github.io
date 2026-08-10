@@ -1,4 +1,4 @@
-name: Update distro tables
+name: Update package table
 
 on:
   schedule:
@@ -8,11 +8,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
+    # The push step writes the regenerated tables back to the repository
+    permissions:
+      contents: write
     steps:
     - name: Checkout robostack.github.io
-      uses: actions/checkout@v4
-    - uses: prefix-dev/setup-pixi@v0.10.0
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      with:
+        persist-credentials: false
+    - uses: prefix-dev/setup-pixi@a09b6247153796b190642a2b53fac4241043cf6f # v0.10.0
     # foxy and galactic are end-of-life; public/data/{foxy,galactic}.json are
     # committed snapshots and deliberately not regenerated here.
     - name: Create table noetic
@@ -48,7 +53,7 @@ jobs:
       continue-on-error: true
     - name: Push changes
       if: steps.commit.outcome == 'success'
-      uses: ad-m/github-push-action@master
+      uses: ad-m/github-push-action@881a6320fdb16eb5318c5054f31c218aec2b324c # master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.ref }}

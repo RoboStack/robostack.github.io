@@ -1,0 +1,3 @@
+[files]
+# Generated package tables; names and descriptions come from upstream
+extend-exclude = ["public/data/*.json", "pnpm-lock.yaml"]

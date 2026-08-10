@@ -32,7 +32,7 @@ Ideally, try to add packages to all of these platforms. The name of the package 
 Sometimes, it may be required to patch the packages. An example of how to do so can be found in [this PR](https://github.com/RoboStack/ros-noetic/pull/32). Generating the patch can be done as follows:
 
 1. Modify the `vinca_*.yaml` file, but just adding the package you want to create the patch for
-2. Run `pixi run build`. This will either succeded if the package can be built without any patch, or fail if a patch is required to actually build the package.
+2. Run `pixi run build`. This will either succeed if the package can be built without any patch, or fail if a patch is required to actually build the package.
 3. Start a shell and go inside the repository to be edited. It should be located in `<robostack folder>/output/src_cache/<repo_name>`, where `<robostack folder>` is the folder where you run `pixi run build` and `<repo_name>` is the name of the repository associated to the package in the `url:` attribute of the repo in the `rosdistro_snapshot.yaml`
 4. Apply the changes that you would like to store into the patch
 5. Create a patch file with `git diff > changes.patch`
@@ -88,6 +88,6 @@ When doing a full rebuild, please follow these guidelines:
 
 - Refresh the `rosdistro_snapshot.yaml` by running `pixi run create_snapshot` (this is the only step that actually queries rosdistro, directly from the repo and independently from sync).
 - Refresh the `conda_build_config.yaml` file to reflect the current status of conda-forge plus migrations that are basically finished even if not updated in conda-forge-pinnings (see https://conda-forge.org/status/ for a list of ongoing migrations and their status; if in doubt, please ask the RoboStack maintainers).
-- Bump the `build_number` in `vinca_*.yaml` files to a version higher than any existing build number (considering the overriden build numbers in `pkg_additional_info.yaml`).
+- Bump the `build_number` in `vinca_*.yaml` files to a version higher than any existing build number (considering the overridden build numbers in `pkg_additional_info.yaml`).
 - Bump the minor number of the mutex_package in `vinca_*.yaml`, and manually search for any hardcoded number for `ros-distro-mutex` or `ros2-distro-mutex` in `additional_recipes`
 - Remove any `build_number` override in `pkg_additional_info.yaml`.

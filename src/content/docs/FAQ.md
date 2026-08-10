@@ -77,7 +77,7 @@ mamba install -c conda-forge libgl-devel
 ```
 
 For actually running OpenGL-applications on Linux, you also need to make sure that your distribution has installed the packages containing the OpenGL drivers for you GPU.
-In most cases those should be already installed in your system, but in case they are not (tipically for headless systems or barebone containers) you can tipically add them with:
+In most cases those should be already installed in your system, but in case they are not (typically for headless systems or barebone containers) you can typically add them with:
 
 - Debian/Ubuntu-based distributions: `sudo apt-get install libgl1-mesa-dri libglx-mesa0 libegl-mesa0`
 - Fedora-based distributions: `sudo dnf install mesa-libGL mesa-libEGL mesa-dri-drivers`

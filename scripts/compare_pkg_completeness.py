@@ -24,7 +24,7 @@ would work today, but the specs appear in two forms (`0.9.* humble_*` and
 The JSON is positional to keep it small; `packages.js` unpacks it by index, so the
 order in `PackageRecordJson` is load-bearing.
 
-Usage: python utils/compare_pkg_completeness.py <distro> <channel>
+Usage: python scripts/compare_pkg_completeness.py <distro> <channel>
        channel is an anaconda.org channel name or a full base URL.
 """
 
