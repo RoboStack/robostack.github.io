@@ -1,9 +1,8 @@
 <!--
   Renders the Available Packages table from /data/<distro>.json.
 
-  The distro pages used to ship the whole table as static Markdown, around
-  2,300 rows and 13,000 remote emoji images per page. This fetches the same
-  data as JSON instead and renders only the rows currently on screen.
+  The table is a couple of thousand rows per distro, so the data ships as
+  one JSON document and only the rows currently on screen are rendered.
 
   Everything on a channel is built against one version of the ROS distro
   mutex, and builds for different mutex versions cannot be installed together.
@@ -967,9 +966,8 @@
     cursor: pointer;
   }
   /* min-width:0 matters: an input's automatic minimum size is its intrinsic
-     width, which clamps the flex base size upward and pushes the whole line
-     over the limit. The filters and sort were bumped to a second row even
-     when there was room for everything. */
+     width, which clamps the flex base size upward and pushes the filters and
+     sort to a second row even when there is room for everything. */
   .rs-search {
     position: relative;
     display: flex;
@@ -1121,7 +1119,7 @@
     height: var(--rs-row-h);
   }
   /* The separator lives on the cells, not the row: the first cell is a grid
-     (no longer a table-cell), and a row border breaks at its edge. */
+     (not a table-cell), and a row border breaks at its edge. */
   .rs-packages tbody td {
     border-bottom: 1px solid var(--sl-color-gray-6);
   }
