@@ -25,6 +25,14 @@
   --sl-font-mono: "JetBrains Mono";
 }
 
+/* JetBrains Mono enables ligatures by default; keep code as plain glyphs. */
+code,
+pre,
+kbd,
+samp {
+  font-variant-ligatures: none;
+}
+
 /* Docs headings share the frontpage's serif display face. */
 .sl-markdown-content :is(h1, h2, h3, h4, h5, h6),
 .content-panel h1 {
