@@ -24,7 +24,10 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
     min-width: 0;
   }
   .site-title :global(svg) {
-    height: calc(var(--sl-nav-height) - 2.4 * var(--sl-nav-pad-y));
+    /* Sized against the header's first row, not the full two-row header. */
+    height: calc(
+      var(--rs-nav-row, var(--sl-nav-height)) - 2.4 * var(--sl-nav-pad-y)
+    );
     width: auto;
   }
 </style>

@@ -1,0 +1,166 @@
+---
+import config from "virtual:starlight/user-config";
+
+import LanguageSelect from "virtual:starlight/components/LanguageSelect";
+import Search from "virtual:starlight/components/Search";
+import SiteTitle from "virtual:starlight/components/SiteTitle";
+import SocialIcons from "virtual:starlight/components/SocialIcons";
+import ThemeSelect from "virtual:starlight/components/ThemeSelect";
+
+import { NAV_TABS as tabs } from "../data/nav";
+
+/**
+ * Override of Starlight's Header: the original row plus a tab row underneath
+ * (the zensical.org pattern), so the main sections stay reachable from every
+ * page - the splash homepage has no sidebar. The row's extra height comes
+ * from `--sl-nav-height`, raised in custom.css; the first row keeps the
+ * original height via `--rs-nav-row`. The tabs live in src/data/nav.ts,
+ * shared with the Sidebar override.
+ */
+
+const shouldRenderSearch =
+  config.pagefind ||
+  config.components.Search !== "@astrojs/starlight/components/Search.astro";
+
+const pathname = Astro.url.pathname;
+---
+
+<div class="stacked">
+  <div class="header">
+    <div class="title-wrapper sl-flex">
+      <SiteTitle />
+    </div>
+    <div class="sl-flex print:hidden">
+      {shouldRenderSearch && <Search />}
+    </div>
+    <div class="sl-hidden md:sl-flex print:hidden right-group">
+      <div class="sl-flex social-icons">
+        <SocialIcons />
+      </div>
+      <ThemeSelect />
+      <LanguageSelect />
+    </div>
+  </div>
+  <nav class="top-nav print:hidden" aria-label="Main">
+    {
+      tabs.map((tab) => (
+        <a
+          href={tab.href}
+          aria-current={tab.match.test(pathname) ? "page" : undefined}
+        >
+          {tab.label}
+        </a>
+      ))
+    }
+  </nav>
+</div>
+
+<script>
+  // On narrow screens the tab row scrolls; keep the active tab in view.
+  document
+    .querySelector('.top-nav a[aria-current="page"]')
+    ?.scrollIntoView({ inline: "center", block: "nearest" });
+</script>
+
+{
+  /* The first-row styles are copied from Starlight's Header.astro so the
+    original layout survives the override; only `.stacked` and `.top-nav`
+    are new. */
+}
+<style>
+  .stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .header {
+    display: flex;
+    gap: var(--sl-nav-gap);
+    justify-content: space-between;
+    align-items: center;
+    height: calc(var(--rs-nav-row) - 2 * var(--sl-nav-pad-y));
+  }
+
+  .title-wrapper {
+    /* Prevent long titles overflowing and covering the search and menu buttons on narrow viewports. */
+    overflow: clip;
+    /* Avoid clipping focus ring around link inside title wrapper. */
+    padding: 0.25rem;
+    margin: -0.25rem;
+    min-width: 0;
+  }
+
+  .right-group,
+  .social-icons {
+    gap: 1rem;
+    align-items: center;
+  }
+  .social-icons::after {
+    content: "";
+    height: 2rem;
+    border-inline-end: 1px solid var(--sl-color-gray-5);
+  }
+
+  .top-nav {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: var(--sl-text-sm);
+  }
+  .top-nav a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-block: 0.25rem 0.4rem;
+    border-bottom: 2px solid transparent;
+  }
+  .top-nav a:hover {
+    color: var(--sl-color-white);
+  }
+  .top-nav a[aria-current="page"] {
+    color: var(--sl-color-white);
+    border-bottom-color: var(--sl-color-accent);
+  }
+
+  @media (min-width: 50rem) {
+    :global(:root[data-has-sidebar]) {
+      --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
+    }
+    :global(:root:not([data-has-toc])) {
+      --__toc-width: 0rem;
+    }
+    .header {
+      --__sidebar-width: max(
+        0rem,
+        var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x)
+      );
+      --__main-column-fr: calc(
+        (
+            100% + var(--__sidebar-pad, 0rem) -
+              var(--__toc-width, var(--sl-sidebar-width)) -
+              (2 * var(--__toc-width, var(--sl-nav-pad-x))) -
+              var(--sl-content-inline-start, 0rem) - var(--sl-content-width)
+          ) /
+          2
+      );
+      display: grid;
+      grid-template-columns:
+        /* 1 (site title): runs up until the main content column’s left edge or the width of the title, whichever is the largest  */
+        minmax(
+          calc(
+            var(--__sidebar-width) +
+              max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))
+          ),
+          auto
+        )
+        /* 2 (search box): all free space that is available. */
+        1fr
+        /* 3 (right items): use the space that these need. */
+        auto;
+      align-content: center;
+    }
+  }
+</style>

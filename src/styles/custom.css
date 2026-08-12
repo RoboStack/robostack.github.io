@@ -25,6 +25,20 @@
   --sl-font-mono: "JetBrains Mono";
 }
 
+/* The header holds two rows: Starlight's original row (--rs-nav-row) and the
+   section-tab row below it (src/components/Header.astro). Everything that
+   hangs off the header (sidebar, mobile TOC, drawer) follows automatically,
+   because Starlight positions it all with --sl-nav-height. */
+:root {
+  --rs-nav-row: 3.5rem;
+  --sl-nav-height: calc(var(--rs-nav-row) + 2.25rem);
+}
+@media (min-width: 50em) {
+  :root {
+    --rs-nav-row: 4rem;
+  }
+}
+
 /* JetBrains Mono enables ligatures by default; keep code as plain glyphs. */
 code,
 pre,
@@ -165,4 +179,23 @@ samp {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--fg-2);
+}
+
+/* ---------- Menu (burger) button ----------
+   Starlight ships this as a high-contrast floating circle that inverts per
+   theme (light disc on the dark header and vice versa). Restyle it flat so
+   it follows the header text color in both color schemes, like the social
+   icons and the theme picker next to it. */
+starlight-menu-button button,
+:root[data-theme="light"] starlight-menu-button button {
+  background-color: transparent;
+  color: var(--sl-color-white);
+  box-shadow: none;
+  /* Center on the header's first row, not on the two-row header. */
+  top: calc((var(--rs-nav-row) - var(--sl-menu-button-size)) / 2);
+}
+starlight-menu-button:hover button,
+starlight-menu-button[aria-expanded="true"] button,
+:root[data-theme="light"] starlight-menu-button[aria-expanded="true"] button {
+  background-color: var(--sl-color-gray-6);
 }

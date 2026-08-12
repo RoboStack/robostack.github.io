@@ -1,0 +1,35 @@
+---
+import MobileMenuFooter from "virtual:starlight/components/MobileMenuFooter";
+import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro";
+import SidebarSublist from "@astrojs/starlight/components/SidebarSublist.astro";
+
+import { NAV_TABS } from "../data/nav";
+
+/**
+ * Override of Starlight's Sidebar: the header tabs are the top level of the
+ * navigation, so the sidebar only shows the pages of the current section.
+ * The section comes from the shared nav.ts patterns - the same ones that
+ * pick the active header tab - and names the matching top-level group in
+ * `astro.config.mjs`. Pages outside any section fall back to the full
+ * sidebar. The distro table pages opt out of the sidebar entirely; their
+ * in-page distro tabs are the sub-navigation.
+ */
+
+const { sidebar } = Astro.locals.starlightRoute;
+const pathname = Astro.url.pathname;
+
+const tab = NAV_TABS.find((t) => t.match.test(pathname));
+const section = sidebar.find(
+  (entry) => entry.type === "group" && entry.label === tab?.label,
+);
+
+const entries = section && section.type === "group" ? section.entries : sidebar;
+---
+
+<SidebarPersister>
+  <SidebarSublist sublist={entries} />
+</SidebarPersister>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>

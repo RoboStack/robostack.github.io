@@ -149,10 +149,10 @@ const packagesHref = `/${newestRelease().name}.html`;
 
 {/* Page backdrop and measure: the cream paper tone, wider than the docs. */}
 <style is:global>
-  /* Outranks Starlight's own `html:not([data-has-sidebar])` width. */
-  :root:not([data-has-sidebar]) {
+  :root {
     --sl-content-width: 76rem;
   }
+
   .main-pane,
   main {
     background: var(--bg-page);
