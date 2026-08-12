@@ -9,6 +9,7 @@ RoboStack Website/
 node_modules
 dist
 .astro
+site
 
 # pnpm package store
 .pnpm-store
