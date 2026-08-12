@@ -109,6 +109,10 @@ const pathname = Astro.url.pathname;
     overflow-x: auto;
     scrollbar-width: none;
     font-size: var(--sl-text-sm);
+    /* Sit on the header's bottom border, zensical-style: the active tab's
+       underline touches the border, and the space freed up moves between
+       the logo row and the tabs. */
+    margin-block-end: calc(-1 * var(--sl-nav-pad-y));
   }
   .top-nav a {
     color: var(--sl-color-gray-2);

@@ -31,7 +31,7 @@
    because Starlight positions it all with --sl-nav-height. */
 :root {
   --rs-nav-row: 3.5rem;
-  --sl-nav-height: calc(var(--rs-nav-row) + 2.25rem);
+  --sl-nav-height: calc(var(--rs-nav-row) + 2.75rem);
 }
 @media (min-width: 50em) {
   :root {
