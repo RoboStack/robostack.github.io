@@ -2,12 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dev",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "run",
-        "dev"
-      ],
+      "name": "robostack-site",
+      "runtimeExecutable": "env",
+      "runtimeArgs": ["ASTRO_DEV_BACKGROUND=1", "pixi", "run", "serve"],
       "port": 4321
     }
   ]
