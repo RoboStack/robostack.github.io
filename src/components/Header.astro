@@ -30,7 +30,7 @@ const pathname = Astro.url.pathname;
     <div class="title-wrapper sl-flex">
       <SiteTitle />
     </div>
-    <div class="sl-flex print:hidden">
+    <div class="search-wrapper sl-flex print:hidden">
       {shouldRenderSearch && <Search />}
     </div>
     <div class="sl-hidden md:sl-flex print:hidden right-group">
@@ -126,41 +126,17 @@ const pathname = Astro.url.pathname;
   }
 
   @media (min-width: 50rem) {
-    :global(:root[data-has-sidebar]) {
-      --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
-    }
-    :global(:root:not([data-has-toc])) {
-      --__toc-width: 0rem;
-    }
     .header {
-      --__sidebar-width: max(
-        0rem,
-        var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x)
-      );
-      --__main-column-fr: calc(
-        (
-            100% + var(--__sidebar-pad, 0rem) -
-              var(--__toc-width, var(--sl-sidebar-width)) -
-              (2 * var(--__toc-width, var(--sl-nav-pad-x))) -
-              var(--sl-content-inline-start, 0rem) - var(--sl-content-width)
-          ) /
-          2
-      );
       display: grid;
-      grid-template-columns:
-        /* 1 (site title): runs up until the main content column’s left edge or the width of the title, whichever is the largest  */
-        minmax(
-          calc(
-            var(--__sidebar-width) +
-              max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))
-          ),
-          auto
-        )
-        /* 2 (search box): all free space that is available. */
-        1fr
-        /* 3 (right items): use the space that these need. */
-        auto;
+      /* Starlight's own grid sizes the first column off the sidebar and TOC
+         widths, so the search box shifts from page to page. Anchoring the
+         search to the right edge, next to the other controls, keeps it in
+         the same place everywhere. */
+      grid-template-columns: auto 1fr auto;
       align-content: center;
+    }
+    .search-wrapper {
+      justify-content: flex-end;
     }
   }
 </style>

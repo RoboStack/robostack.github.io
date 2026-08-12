@@ -53,16 +53,6 @@ samp {
   font-family: var(--font-display);
 }
 
-/* Starlight hides the header's social links and theme switcher below 50rem
-   and offers them in the sidebar drawer instead. Pages without a sidebar
-   (the splash landing page) have no drawer, so keep the controls in the
-   header there; they fit because those pages have no menu button either. */
-@media (max-width: 49.999rem) {
-  :root:not([data-has-sidebar]) .header .right-group {
-    display: flex;
-  }
-}
-
 :root {
   --sl-color-accent-low: #dee5ff;
   --sl-color-accent: #2e46d8;
