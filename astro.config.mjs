@@ -2,7 +2,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import svelte from "@astrojs/svelte";
-import { newestRelease } from "./src/data/distros.ts";
 
 export default defineConfig({
   site: "https://robostack.github.io",
@@ -33,25 +32,43 @@ export default defineConfig({
       customCss: ["./src/styles/custom.css"],
       routeMiddleware: "./src/routeData.ts",
       components: {
+        Header: "./src/components/Header.astro",
+        Sidebar: "./src/components/Sidebar.astro",
         SiteTitle: "./src/components/SiteTitle.astro",
         PageTitle: "./src/components/PageTitle.astro",
       },
       sidebar: [
-        // Slugs are set explicitly in each page's frontmatter to keep the
-        // published mixed-case URLs (`GettingStarted.html`, `FAQ.html`, ...).
-        { label: "Getting Started", slug: "GettingStarted" },
+        // One top-level group per header tab (src/components/Header.astro);
+        // the Sidebar override shows only the current page's group, so these
+        // group labels never render. Slugs are set explicitly in each page's
+        // frontmatter to keep the published mixed-case URLs
+        // (`GettingStarted.html`, `FAQ.html`, ...).
         {
-          label: "Alternative to Pixi",
+          label: "Docs",
           items: [
-            { label: "Micromamba", slug: "micromamba" },
-            { label: "Conda", slug: "conda" },
+            { label: "Getting Started", slug: "GettingStarted" },
+            {
+              label: "Alternative to Pixi",
+              items: [
+                { label: "Micromamba", slug: "micromamba" },
+                { label: "Conda", slug: "conda" },
+              ],
+            },
+            { label: "JupyterRos", slug: "JupyterRos" },
+            { label: "FAQ", slug: "FAQ" },
+            // Cross-listed; its primary section is Community (the last
+            // group containing a page wins in the Sidebar override).
+            { label: "Contributing", slug: "Contributing" },
           ],
         },
-        { label: "Packages", link: `/${newestRelease().name}.html` },
-        { label: "JupyterRos", slug: "JupyterRos" },
-        { label: "Support", slug: "support" },
-        { label: "Contributing", slug: "Contributing" },
-        { label: "FAQ", slug: "FAQ" },
+        {
+          label: "Community",
+          items: [
+            { label: "Community Meeting", slug: "CommunityMeeting" },
+            { label: "Support", slug: "support" },
+            { label: "Contributing", slug: "Contributing" },
+          ],
+        },
       ],
     }),
     svelte(),

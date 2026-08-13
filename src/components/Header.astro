@@ -1,0 +1,146 @@
+---
+import config from "virtual:starlight/user-config";
+
+import LanguageSelect from "virtual:starlight/components/LanguageSelect";
+import Search from "virtual:starlight/components/Search";
+import SiteTitle from "virtual:starlight/components/SiteTitle";
+import SocialIcons from "virtual:starlight/components/SocialIcons";
+import ThemeSelect from "virtual:starlight/components/ThemeSelect";
+
+import { NAV_TABS as tabs } from "../data/nav";
+
+/**
+ * Override of Starlight's Header: the original row plus a tab row underneath
+ * (the zensical.org pattern), so the main sections stay reachable from every
+ * page - the splash homepage has no sidebar. The row's extra height comes
+ * from `--sl-nav-height`, raised in custom.css; the first row keeps the
+ * original height via `--rs-nav-row`. The tabs live in src/data/nav.ts,
+ * shared with the Sidebar override.
+ */
+
+const shouldRenderSearch =
+  config.pagefind ||
+  config.components.Search !== "@astrojs/starlight/components/Search.astro";
+
+const pathname = Astro.url.pathname;
+---
+
+<div class="stacked">
+  <div class="header">
+    <div class="title-wrapper sl-flex">
+      <SiteTitle />
+    </div>
+    <div class="search-wrapper sl-flex print:hidden">
+      {shouldRenderSearch && <Search />}
+    </div>
+    <div class="sl-hidden md:sl-flex print:hidden right-group">
+      <div class="sl-flex social-icons">
+        <SocialIcons />
+      </div>
+      <ThemeSelect />
+      <LanguageSelect />
+    </div>
+  </div>
+  <nav class="top-nav print:hidden" aria-label="Main">
+    {
+      tabs.map((tab) => (
+        <a
+          href={tab.href}
+          aria-current={tab.match.test(pathname) ? "page" : undefined}
+        >
+          {tab.label}
+        </a>
+      ))
+    }
+  </nav>
+</div>
+
+<script>
+  // On narrow screens the tab row scrolls; keep the active tab in view.
+  document
+    .querySelector('.top-nav a[aria-current="page"]')
+    ?.scrollIntoView({ inline: "center", block: "nearest" });
+</script>
+
+{
+  /* The first-row styles are copied from Starlight's Header.astro so the
+    original layout survives the override; only `.stacked` and `.top-nav`
+    are new. */
+}
+<style>
+  .stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .header {
+    display: flex;
+    gap: var(--sl-nav-gap);
+    justify-content: space-between;
+    align-items: center;
+    height: calc(var(--rs-nav-row) - 2 * var(--sl-nav-pad-y));
+  }
+
+  .title-wrapper {
+    /* Prevent long titles overflowing and covering the search and menu buttons on narrow viewports. */
+    overflow: clip;
+    /* Avoid clipping focus ring around link inside title wrapper. */
+    padding: 0.25rem;
+    margin: -0.25rem;
+    min-width: 0;
+  }
+
+  .right-group,
+  .social-icons {
+    gap: 1rem;
+    align-items: center;
+  }
+  .social-icons::after {
+    content: "";
+    height: 2rem;
+    border-inline-end: 1px solid var(--sl-color-gray-5);
+  }
+
+  .top-nav {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    font-size: var(--sl-text-sm);
+    /* Sit on the header's bottom border, zensical-style: the active tab's
+       underline touches the border, and the space freed up moves between
+       the logo row and the tabs. */
+    margin-block-end: calc(-1 * var(--sl-nav-pad-y));
+  }
+  .top-nav a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+    white-space: nowrap;
+    padding-block: 0.25rem 0.4rem;
+    border-bottom: 2px solid transparent;
+  }
+  .top-nav a:hover {
+    color: var(--sl-color-white);
+  }
+  .top-nav a[aria-current="page"] {
+    color: var(--sl-color-white);
+    border-bottom-color: var(--sl-color-accent);
+  }
+
+  @media (min-width: 50rem) {
+    .header {
+      display: grid;
+      /* Starlight's own grid sizes the first column off the sidebar and TOC
+         widths, so the search box shifts from page to page. Anchoring the
+         search to the right edge, next to the other controls, keeps it in
+         the same place everywhere. */
+      grid-template-columns: auto 1fr auto;
+      align-content: center;
+    }
+    .search-wrapper {
+      justify-content: flex-end;
+    }
+  }
+</style>

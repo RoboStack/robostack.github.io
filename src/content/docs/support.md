@@ -9,6 +9,7 @@ How to help improve our documentation:
 
 - For typos, grammar, or other errors, we'd appreciate your support! Simply [fork](https://github.com/RoboStack/robostack.github.io/fork) our repo, make the necessary changes, and submit a pull request.
 - If you have questions or need help, feel free to create an [issue](https://github.com/RoboStack/robostack.github.io/issues) or join the community in the [robotics channel on the prefix.dev Discord](https://discord.gg/kKV8ZxyzY4).
+- Prefer talking to us live? Join the monthly [community meeting](/CommunityMeeting.html).
 
 We're always eager to improve, and your input is valuable to us. Thank you for being part of the RoboStack community!
 
