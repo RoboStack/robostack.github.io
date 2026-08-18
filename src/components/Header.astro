@@ -10,12 +10,14 @@ import ThemeSelect from "virtual:starlight/components/ThemeSelect";
 import { NAV_TABS as tabs } from "../data/nav";
 
 /**
- * Override of Starlight's Header: the original row plus a tab row underneath
- * (the zensical.org pattern), so the main sections stay reachable from every
- * page - the splash homepage has no sidebar. The row's extra height comes
- * from `--sl-nav-height`, raised in custom.css; the first row keeps the
- * original height via `--rs-nav-row`. The tabs live in src/data/nav.ts,
- * shared with the Sidebar override.
+ * Override of Starlight's Header with a section-tab nav (the zensical.org
+ * pattern), so the main sections stay reachable from every page - the splash
+ * homepage has no sidebar. Below 60rem the tabs sit on their own row under
+ * the logo; from that breakpoint up they move next to the logo in the
+ * single header row. The row heights come from `--sl-nav-height`, set
+ * per breakpoint in custom.css; the logo row keeps the original height via
+ * `--rs-nav-row`. The tabs live in src/data/nav.ts, shared with the Sidebar
+ * override.
  */
 
 const shouldRenderSearch =
@@ -25,21 +27,9 @@ const shouldRenderSearch =
 const pathname = Astro.url.pathname;
 ---
 
-<div class="stacked">
-  <div class="header">
-    <div class="title-wrapper sl-flex">
-      <SiteTitle />
-    </div>
-    <div class="search-wrapper sl-flex print:hidden">
-      {shouldRenderSearch && <Search />}
-    </div>
-    <div class="sl-hidden md:sl-flex print:hidden right-group">
-      <div class="sl-flex social-icons">
-        <SocialIcons />
-      </div>
-      <ThemeSelect />
-      <LanguageSelect />
-    </div>
+<div class="header">
+  <div class="title-wrapper sl-flex">
+    <SiteTitle />
   </div>
   <nav class="top-nav print:hidden" aria-label="Main">
     {
@@ -53,6 +43,16 @@ const pathname = Astro.url.pathname;
       ))
     }
   </nav>
+  <div class="search-wrapper sl-flex print:hidden">
+    {shouldRenderSearch && <Search />}
+  </div>
+  <div class="sl-hidden md:sl-flex print:hidden right-group">
+    <div class="sl-flex social-icons">
+      <SocialIcons />
+    </div>
+    <ThemeSelect />
+    <LanguageSelect />
+  </div>
 </div>
 
 <script>
@@ -63,24 +63,21 @@ const pathname = Astro.url.pathname;
 </script>
 
 {
-  /* The first-row styles are copied from Starlight's Header.astro so the
-    original layout survives the override; only `.stacked` and `.top-nav`
-    are new. */
+  /* The single-row styles are copied from Starlight's Header.astro so the
+    original layout survives the override; only `.top-nav` and the wrapping
+    behavior are new. */
 }
 <style>
-  .stacked {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-
+  /* Two rows while stacked: the original header items on top, the tab row
+     wrapped underneath and pushed to the header's bottom border. */
   .header {
     display: flex;
-    gap: var(--sl-nav-gap);
+    flex-wrap: wrap;
+    gap: 0 var(--sl-nav-gap);
     justify-content: space-between;
     align-items: center;
-    height: calc(var(--rs-nav-row) - 2 * var(--sl-nav-pad-y));
+    align-content: space-between;
+    height: 100%;
   }
 
   .title-wrapper {
@@ -105,6 +102,9 @@ const pathname = Astro.url.pathname;
 
   .top-nav {
     display: flex;
+    order: 5;
+    flex-basis: 100%;
+    min-width: 0;
     gap: 1.5rem;
     overflow-x: auto;
     scrollbar-width: none;
@@ -137,10 +137,38 @@ const pathname = Astro.url.pathname;
          search to the right edge, next to the other controls, keeps it in
          the same place everywhere. */
       grid-template-columns: auto 1fr auto;
-      align-content: center;
+      align-content: space-between;
+    }
+    .top-nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
     }
     .search-wrapper {
       justify-content: flex-end;
+    }
+  }
+
+  /* Wide screens: one row, tabs between the logo and the search box. The
+     tabs stretch to the full header height (the negative margins eat the
+     header padding) so the active underline still touches the bottom
+     border. Below 60rem the search box gets too cramped next to the tabs;
+     keep this breakpoint in sync with --sl-nav-height in custom.css. */
+  @media (min-width: 60rem) {
+    .header {
+      grid-template-columns: auto auto 1fr auto;
+    }
+    .top-nav {
+      grid-column: 2;
+      grid-row: 1;
+      align-self: stretch;
+      align-items: stretch;
+      margin-block: calc(-1 * var(--sl-nav-pad-y));
+      overflow-x: visible;
+    }
+    .top-nav a {
+      display: inline-flex;
+      align-items: center;
+      padding-block: 0;
     }
   }
 </style>
