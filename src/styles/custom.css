@@ -25,10 +25,13 @@
   --sl-font-mono: "JetBrains Mono";
 }
 
-/* The header holds two rows: Starlight's original row (--rs-nav-row) and the
-   section-tab row below it (src/components/Header.astro). Everything that
-   hangs off the header (sidebar, mobile TOC, drawer) follows automatically,
-   because Starlight positions it all with --sl-nav-height. */
+/* Below 60em the header holds two rows: Starlight's original row
+   (--rs-nav-row) and the section-tab row below it; from 60em up the tabs
+   move into the original row and the header shrinks back to one row
+   (src/components/Header.astro, where the breakpoint must stay in sync).
+   Everything that hangs off the header (sidebar, mobile TOC, drawer)
+   follows automatically, because Starlight positions it all with
+   --sl-nav-height. */
 :root {
   --rs-nav-row: 3.5rem;
   --sl-nav-height: calc(var(--rs-nav-row) + 2.75rem);
@@ -36,6 +39,11 @@
 @media (min-width: 50em) {
   :root {
     --rs-nav-row: 4rem;
+  }
+}
+@media (min-width: 60em) {
+  :root {
+    --sl-nav-height: var(--rs-nav-row);
   }
 }
 
