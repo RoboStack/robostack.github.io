@@ -19,7 +19,7 @@
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-svelte": "^4.1.1",
-    "svelte-check": "^4.7.5",
+    "svelte-check": "^4.7.6",
     "typescript": "^6.0.3"
   }
 }
