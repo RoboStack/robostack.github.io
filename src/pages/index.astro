@@ -20,8 +20,6 @@ import { newestRelease } from "../data/distros";
 // Package links land on the newest release's table; the site recommends no
 // distro, so this is a landing page, not an endorsement.
 const packagesHref = `/${newestRelease().name}.html`;
-
-const ogImage = new URL("/og.png", Astro.site).href;
 ---
 
 <StarlightPage
@@ -31,19 +29,6 @@ const ogImage = new URL("/og.png", Astro.site).href;
     title: "Manage ROS with ease",
     template: "splash",
     tableOfContents: false,
-    head: [
-      { tag: "meta", attrs: { property: "og:image", content: ogImage } },
-      { tag: "meta", attrs: { property: "og:image:width", content: "1200" } },
-      { tag: "meta", attrs: { property: "og:image:height", content: "630" } },
-      {
-        tag: "meta",
-        attrs: {
-          property: "og:image:alt",
-          content:
-            "RoboStack - Manage ROS with ease. Any ROS distro, in an isolated per-project environment, on Linux, macOS and Windows.",
-        },
-      },
-    ],
   }}
 >
   {
