@@ -12,7 +12,17 @@ export default defineConfig({
       title: "RoboStack",
       description:
         "Run any ROS distro in an isolated, per-project environment. On Linux, macOS and Windows.",
-      favicon: "/favicon.svg",
+      favicon: "/icon.svg",
+      head: [
+        {
+          tag: "link",
+          attrs: { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
+        },
+        {
+          tag: "link",
+          attrs: { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        },
+      ],
       social: [
         {
           icon: "github",
