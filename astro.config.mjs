@@ -3,8 +3,11 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import svelte from "@astrojs/svelte";
 
+const site = "https://robostack.github.io";
+const ogImage = new URL("/og.png", site).href;
+
 export default defineConfig({
-  site: "https://robostack.github.io",
+  site,
   // Published URLs are `GettingStarted.html`, not `GettingStarted/`. Don't change this.
   build: { format: "file" },
   integrations: [
@@ -21,6 +24,17 @@ export default defineConfig({
         {
           tag: "link",
           attrs: { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+        },
+        { tag: "meta", attrs: { property: "og:image", content: ogImage } },
+        { tag: "meta", attrs: { property: "og:image:width", content: "1200" } },
+        { tag: "meta", attrs: { property: "og:image:height", content: "630" } },
+        {
+          tag: "meta",
+          attrs: {
+            property: "og:image:alt",
+            content:
+              "RoboStack - Manage ROS with ease. Any ROS distro, in an isolated per-project environment, on Linux, macOS and Windows.",
+          },
         },
       ],
       social: [
