@@ -98,6 +98,10 @@ export function browseUrl(distro: Distro): string {
 export function title(distro: Distro): string {
   return distro.name.charAt(0).toUpperCase() + distro.name.slice(1);
 }
+/** The conda package prefix used for the distro's primary packages. */
+export function packagePrefix(distro: Distro): string {
+  return distro.name === "rolling" ? "ros2" : `ros-${distro.name}`;
+}
 
 /** The release and support summary shown under the title. */
 export function supportLine(distro: Distro): string {

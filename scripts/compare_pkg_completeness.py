@@ -278,7 +278,7 @@ def collect_builds(
     for bit, platform in enumerate(PLATFORMS):
         for artifact in repos[platform]:
             name = artifact["name"]
-            if not name.startswith("ros-") or name in MUTEX_NAMES:
+            if not (name.startswith("ros-") or name.startswith("ros2-")) or name in MUTEX_NAMES:
                 continue
 
             newest_build[name] = max(
@@ -332,8 +332,9 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         return [[per_mutex[v].mask, per_mutex[v].version] if v in per_mutex else 0 for v in mutexes]
 
     packages: list[list[Any]] = []
+    package_prefix = "ros2" if distro == "rolling" else f"ros-{distro}"
     for name in sorted(index):
-        conda_name = f"ros-{distro}-{name.replace('_', '-')}"
+        conda_name = f"{package_prefix}-{name.replace('_', '-')}"
         per_mutex = builds.get(conda_name, {})
         entry = index[name]
 
@@ -343,7 +344,8 @@ def build(distro: str, channel: str) -> dict[str, Any]:
 
         packages.append(
             [
-                name.replace("_", "-"),  # conda spelling, `ros-<distro>-` stripped
+                name.replace("_", "-"),  # conda spelling, distro prefix stripped
+                conda_name,
                 metadata.get(name, ""),
                 entry.version,  # as released into the ROS index
                 newest_build.get(conda_name, 0) // 1000,  # newest build, seconds
@@ -353,17 +355,24 @@ def build(distro: str, channel: str) -> dict[str, Any]:
             ]
         )
 
-    # Packages on the channel that rosdistro has never released: no description,
-    # index version or source repository, but installable all the same.
-    prefix = f"ros-{distro}-"
-    released = {f"ros-{distro}-{name.replace('_', '-')}" for name in index}
+    # Exact channel artifacts without a primary rosdistro row. This includes
+    # Rolling's ros-rolling-* compatibility aliases and genuinely extra recipes.
+    # They have no index version or source link, but remain installable. Reuse a
+    # description when their suffix matches a package in the distribution cache.
+    prefixes = ("ros2-", "ros-rolling-") if distro == "rolling" else (f"ros-{distro}-",)
+    released = {f"{package_prefix}-{name.replace('_', '-')}" for name in index}
     for conda_name in sorted(set(builds) - released):
-        if not conda_name.startswith(prefix):
+        prefix = next((prefix for prefix in prefixes if conda_name.startswith(prefix)), None)
+        if prefix is None:
             continue
+        suffix = conda_name.removeprefix(prefix)
+        row_name = suffix if prefix != "ros-rolling-" else f"rolling-{suffix}"
+        description = metadata.get(suffix.replace("-", "_"), "")
         packages.append(
             [
-                conda_name.removeprefix(prefix),
-                "",
+                row_name,
+                conda_name,
+                description,
                 "",
                 newest_build.get(conda_name, 0) // 1000,
                 -1,
@@ -379,7 +388,16 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         "platforms": PLATFORMS,
         "mutexPackage": mutex_package,
         "mutexes": mutexes,
-        "fields": ["name", "desc", "indexVersion", "updated", "repo", "indexed", "builds"],
+        "fields": [
+            "name",
+            "condaName",
+            "desc",
+            "indexVersion",
+            "updated",
+            "repo",
+            "indexed",
+            "builds",
+        ],
         "repos": repo_urls,
         "packages": packages,
     }
@@ -414,8 +432,8 @@ def refresh(distro: str, channel: str) -> None:
 
     total = len(document["packages"])
     newest = document["mutexes"][0] if document["mutexes"] else None
-    on_newest = sum(1 for p in document["packages"] if p[6] and p[6][0])
-    ever = sum(1 for p in document["packages"] if any(p[6]))
+    on_newest = sum(1 for p in document["packages"] if p[7] and p[7][0])
+    ever = sum(1 for p in document["packages"] if any(p[7]))
     print(
         f"  -> {path}: {total} packages, {ever} built at some point, "
         f"{on_newest} on mutex {newest}, {path.stat().st_size / 1e6:.2f} MB",

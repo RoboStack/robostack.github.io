@@ -473,7 +473,7 @@
             </tr>
           {/if}
           {#each slice as row, i (row.name)}
-            {@const conda = "ros-" + distro + "-" + row.name}
+            {@const conda = row.condaName}
             <!-- The ROS index spells package names with underscores; conda
                  uses hyphens. -->
             {@const rosName = row.name.replace(/-/g, "_")}
@@ -490,7 +490,7 @@
                 ></span>
                 <span class="rs-name">
                   <span class="rs-pkg">
-                    <span class="rs-prefix">ros-{distro}-</span>{row.name}
+                    {conda}
                   </span>
                   <!--
                     On this mutex: the version built for it, plus an orange

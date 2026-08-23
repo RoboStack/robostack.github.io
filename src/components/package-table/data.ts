@@ -32,13 +32,18 @@ export interface Upgrade {
 }
 
 export interface Row {
+  /** Prefix-free key used to identify the row. It normally uses the ROS package
+   * name with Conda's hyphen spelling; compatibility aliases are disambiguated. */
   name: string;
+  /** Complete package name exactly as published in the Conda channel, such as
+   * `ros2-desktop` or its `ros-rolling-desktop` compatibility alias. */
+  condaName: string;
   desc: string;
   indexVersion: string;
   updated: number;
   repo: string;
-  /** Released into the ROS index. False for packages that only exist on the
-   * channel: no description, index version or source repository. */
+  /** Whether this is the primary Conda row for a package released into the
+   * ROS index. False for channel-only packages and compatibility aliases. */
   indexed: boolean;
   builds: BuildSlot[];
   haystack: string;
@@ -91,17 +96,23 @@ export function unpackRows(doc: Doc): Row[] {
   doc.fields.forEach((field, i) => (at[field] = i));
   return doc.packages.map((pkg) => {
     const name = pkg[at.name] as string;
+    // Older snapshots predate condaName and used ros-<distro>-<name>.
+    // Preserve that exact historical spelling instead of applying today's
+    // Rolling ros2-* convention to old data.
+    const condaName =
+      ((pkg[at.condaName] ?? "") as string) || `ros-${doc.distro}-${name}`;
     const desc = (pkg[at.desc] ?? "") as string;
     const repo = pkg[at.repo] as number;
     return {
       name,
+      condaName,
       desc,
       indexVersion: (pkg[at.indexVersion] ?? "") as string,
       updated: (pkg[at.updated] ?? 0) as number,
       repo: repo >= 0 ? (doc.repos[repo] ?? "") : "",
       indexed: at.indexed === undefined || Boolean(pkg[at.indexed]),
       builds: pkg[at.builds] as BuildSlot[], // aligned with doc.mutexes
-      haystack: (name + " " + desc).toLowerCase(),
+      haystack: (name + " " + condaName + " " + desc).toLowerCase(),
     };
   });
 }
