@@ -356,7 +356,7 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         )
 
     # Exact channel artifacts without a primary rosdistro row. This includes
-    # Rolling's ros-rolling-* compatibility aliases and genuinely extra recipes.
+    # Rolling's legacy ros-rolling-* compatibility packages and genuinely extra recipes.
     # They have no index version or source link, but remain installable. Reuse a
     # description when their suffix matches a package in the distribution cache.
     prefixes = ("ros2-", "ros-rolling-") if distro == "rolling" else (f"ros-{distro}-",)

@@ -28,7 +28,7 @@ const install = [
   `pixi workspace channel add ${distro.base}/${distro.channel}`,
   `pixi add ${packagePrefix(distro)}-<package>`,
   ...(distro.name === "rolling"
-    ? ["# Compatibility alias: pixi add ros-rolling-<package>"]
+    ? ["# Legacy compatibility name: pixi add ros-rolling-<package>"]
     : []),
 ].join("\n");
 ---

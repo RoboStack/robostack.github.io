@@ -33,17 +33,17 @@ export interface Upgrade {
 
 export interface Row {
   /** Prefix-free key used to identify the row. It normally uses the ROS package
-   * name with Conda's hyphen spelling; compatibility aliases are disambiguated. */
+   * name with Conda's hyphen spelling; legacy compatibility names are disambiguated. */
   name: string;
   /** Complete package name exactly as published in the Conda channel, such as
-   * `ros2-desktop` or its `ros-rolling-desktop` compatibility alias. */
+   * `ros2-desktop` or its legacy `ros-rolling-desktop` compatibility name. */
   condaName: string;
   desc: string;
   indexVersion: string;
   updated: number;
   repo: string;
   /** Whether this is the primary Conda row for a package released into the
-   * ROS index. False for channel-only packages and compatibility aliases. */
+   * ROS index. False for channel-only and legacy compatibility packages. */
   indexed: boolean;
   builds: BuildSlot[];
   haystack: string;
