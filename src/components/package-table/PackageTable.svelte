@@ -22,6 +22,7 @@
     baseVersion,
     deriveMutexRows,
     matchesFilter,
+    mutexPrefixes,
     relevanceTier,
     SORTERS,
     unpackRows,
@@ -94,6 +95,10 @@
   const mutexPackage = $derived(doc?.mutexPackage ?? "");
   const mutexes = $derived(doc?.mutexes ?? []);
   const currentMutex = $derived(mutexes[mutex] ?? "");
+  /* Rolling renamed its packages from ros-rolling-* to ros2-* partway
+   * through, so the prefix every name on the page carries comes from the
+   * selected mutex rather than from the distro. */
+  const prefix = $derived((doc ? (mutexPrefixes(doc)[mutex] ?? "") : "") + "-");
 
   const all: Row[] = $derived(doc ? unpackRows(doc) : []);
 
@@ -473,10 +478,7 @@
             </tr>
           {/if}
           {#each slice as row, i (row.name)}
-            {@const conda = row.condaName}
-            <!-- Every row on a page carries the same prefix, so it is split
-                 back off the conda name for the muted/hidden treatment. -->
-            {@const prefix = conda.slice(0, conda.length - row.name.length)}
+            {@const conda = prefix + row.name}
             <!-- The ROS index spells package names with underscores; conda
                  uses hyphens. -->
             {@const rosName = row.name.replace(/-/g, "_")}
