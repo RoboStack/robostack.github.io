@@ -32,18 +32,18 @@ export interface Upgrade {
 }
 
 export interface Row {
-  /** Prefix-free key used to identify the row. It normally uses the ROS package
-   * name with Conda's hyphen spelling; legacy compatibility names are disambiguated. */
+  /** The ROS package name in conda's hyphen spelling, with the distro's
+   * package prefix stripped. */
   name: string;
-  /** Complete package name exactly as published in the Conda channel, such as
-   * `ros2-desktop` or its legacy `ros-rolling-desktop` compatibility name. */
+  /** The name the package is published under on the channel, prefix and all:
+   * `ros2-desktop` on rolling, `ros-jazzy-desktop` everywhere else. */
   condaName: string;
   desc: string;
   indexVersion: string;
   updated: number;
   repo: string;
-  /** Whether this is the primary Conda row for a package released into the
-   * ROS index. False for channel-only and legacy compatibility packages. */
+  /** Released into the ROS index. False for packages that only exist on the
+   * channel: no description, index version or source repository. */
   indexed: boolean;
   builds: BuildSlot[];
   haystack: string;
@@ -96,9 +96,9 @@ export function unpackRows(doc: Doc): Row[] {
   doc.fields.forEach((field, i) => (at[field] = i));
   return doc.packages.map((pkg) => {
     const name = pkg[at.name] as string;
-    // Older snapshots predate condaName and used ros-<distro>-<name>.
-    // Preserve that exact historical spelling instead of applying today's
-    // Rolling ros2-* convention to old data.
+    // The committed foxy and galactic snapshots predate condaName. They are
+    // ROS 1-era ros-<distro>-<name> data, so reconstruct that spelling rather
+    // than applying today's rolling ros2-* convention to them.
     const condaName =
       ((pkg[at.condaName] ?? "") as string) || `ros-${doc.distro}-${name}`;
     const desc = (pkg[at.desc] ?? "") as string;

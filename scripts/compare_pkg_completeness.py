@@ -355,24 +355,21 @@ def build(distro: str, channel: str) -> dict[str, Any]:
             ]
         )
 
-    # Exact channel artifacts without a primary rosdistro row. This includes
-    # Rolling's legacy ros-rolling-* compatibility packages and genuinely extra recipes.
-    # They have no index version or source link, but remain installable. Reuse a
-    # description when their suffix matches a package in the distribution cache.
-    prefixes = ("ros2-", "ros-rolling-") if distro == "rolling" else (f"ros-{distro}-",)
+    # Packages on the channel that rosdistro has never released: no description,
+    # index version or source repository, but installable all the same. Rolling's
+    # ros-rolling-* names are skipped here: they are empty shims pinning the
+    # ros2-* package of the same version, so a row of their own would duplicate
+    # every package on the page.
+    prefix = f"{package_prefix}-"
     released = {f"{package_prefix}-{name.replace('_', '-')}" for name in index}
     for conda_name in sorted(set(builds) - released):
-        prefix = next((prefix for prefix in prefixes if conda_name.startswith(prefix)), None)
-        if prefix is None:
+        if not conda_name.startswith(prefix):
             continue
-        suffix = conda_name.removeprefix(prefix)
-        row_name = suffix if prefix != "ros-rolling-" else f"rolling-{suffix}"
-        description = metadata.get(suffix.replace("-", "_"), "")
         packages.append(
             [
-                row_name,
+                conda_name.removeprefix(prefix),
                 conda_name,
-                description,
+                "",
                 "",
                 newest_build.get(conda_name, 0) // 1000,
                 -1,

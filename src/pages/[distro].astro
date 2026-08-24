@@ -27,9 +27,6 @@ const browse = browseUrl(distro);
 const install = [
   `pixi workspace channel add ${distro.base}/${distro.channel}`,
   `pixi add ${packagePrefix(distro)}-<package>`,
-  ...(distro.name === "rolling"
-    ? ["# Legacy compatibility name: pixi add ros-rolling-<package>"]
-    : []),
 ].join("\n");
 ---
 

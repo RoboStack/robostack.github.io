@@ -474,6 +474,9 @@
           {/if}
           {#each slice as row, i (row.name)}
             {@const conda = row.condaName}
+            <!-- Every row on a page carries the same prefix, so it is split
+                 back off the conda name for the muted/hidden treatment. -->
+            {@const prefix = conda.slice(0, conda.length - row.name.length)}
             <!-- The ROS index spells package names with underscores; conda
                  uses hyphens. -->
             {@const rosName = row.name.replace(/-/g, "_")}
@@ -490,7 +493,7 @@
                 ></span>
                 <span class="rs-name">
                   <span class="rs-pkg">
-                    {conda}
+                    <span class="rs-prefix">{prefix}</span>{row.name}
                   </span>
                   <!--
                     On this mutex: the version built for it, plus an orange
