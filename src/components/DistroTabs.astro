@@ -12,18 +12,22 @@ const { current } = Astro.props;
   {
     tabOrder().map((d) => (
       <a
-        class:list={[
-          "distro",
-          {
-            "distro--active": d.name === current,
-            "distro--eol": d.status === "eol",
-          },
-        ]}
+        class:list={["distro", { "distro--active": d.name === current }]}
         href={`/${d.name}.html`}
         aria-current={d.name === current ? "page" : undefined}
-        title={d.status === "eol" ? "End of life" : undefined}
       >
         {d.name}
+        {d.status === "eol" && (
+          <Fragment>
+            {/* The mark is the abbreviation sighted readers see; the words
+                behind it go to assistive tech, and the tooltip expands it
+                for anyone who does not know the initials. */}
+            <span class="distro__eol" aria-hidden="true" title="End of life">
+              EOL
+            </span>
+            <span class="sr-only"> (end of life)</span>
+          </Fragment>
+        )}
       </a>
     ))
   }
@@ -42,6 +46,10 @@ const { current } = Astro.props;
   }
   .distro {
     flex-shrink: 0;
+    /* Anchor for the visually hidden span: an absolutely positioned box with
+       no positioned ancestor sits at its static position inside this
+       sideways-scrolling strip and stretches the page with it. */
+    position: relative;
     border-bottom: 2px solid transparent;
     border-radius: 0.125rem 0.125rem 0 0;
     color: var(--sl-color-gray-3);
@@ -57,9 +65,15 @@ const { current } = Astro.props;
   .distro:hover {
     color: var(--sl-color-white);
   }
-  /* End-of-life releases stay reachable but recede; the active tab wins. */
-  .distro--eol:not(.distro--active) {
-    color: var(--sl-color-gray-4);
+  /* End-of-life releases stay reachable, and say so in words rather than by
+     receding: every grey dim enough to read as muted against gray-3 falls
+     under 4.5:1 on this background, and weight alone was too quiet. */
+  .distro__eol {
+    margin-left: 0.4em;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    vertical-align: 0.35em;
   }
   .distro--active {
     color: var(--sl-color-white);

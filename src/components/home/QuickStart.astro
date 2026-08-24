@@ -31,7 +31,16 @@ const commands = [
         <span class="copy-label">Copy</span>
       </button>
     </div>
-    <div class="term-body">
+    {
+      /* Scrolls sideways once the commands outrun the card, so it takes
+        focus: without it the overflow is reachable by pointer only. */
+    }
+    <div
+      class="term-body"
+      tabindex="0"
+      role="group"
+      aria-label="Quick start commands"
+    >
       {
         commands.map((command) => (
           <div>
@@ -112,6 +121,12 @@ const commands = [
     font-size: 13px;
     line-height: 1.7;
     overflow-x: auto;
+  }
+  /* Fixed light ring for the same reason the prompt colour is fixed: the
+     accent is a dark blue in light mode and would vanish on the charcoal. */
+  .term-body:focus-visible {
+    outline: 2px solid #e8eaed;
+    outline-offset: -2px;
   }
   .term-body div {
     white-space: pre;

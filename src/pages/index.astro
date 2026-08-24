@@ -39,7 +39,12 @@ const packagesHref = `/${newestRelease().name}.html`;
     <section class="section section--hero">
       <div class="hero">
         <div>
-          <h1>Manage ROS with ease</h1>
+          {
+            /* Starlight's splash template drops the page title it normally
+              anchors the "Skip to content" link to, so the id rides along
+              with the heading this page brings itself. */
+          }
+          <h1 id="_top">Manage ROS with ease</h1>
           <p class="hero-lead">
             Run any ROS distro in an isolated, per-project environment. On
             Linux, macOS and Windows.
