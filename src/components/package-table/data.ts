@@ -21,9 +21,24 @@ export interface Doc {
   platforms: string[];
   mutexPackage: string;
   mutexes: string[];
+  /** Aligned with `mutexes`: the conda name prefix that mutex generation
+   * publishes under. Missing on the committed end-of-life snapshots. */
+  prefixes?: string[];
   fields: string[];
   repos: string[];
   packages: PackageEntry[];
+}
+
+/**
+ * The conda name prefix for each mutex, aligned with `doc.mutexes`.
+ *
+ * A package is spelled differently on different mutexes: rolling publishes
+ * `ros2-rclcpp` for 0.19 and published `ros-rolling-rclcpp` for everything
+ * before it. The foxy and galactic snapshots predate the field and are
+ * `ros-<distro>-` throughout.
+ */
+export function mutexPrefixes(doc: Doc): string[] {
+  return doc.mutexes.map((_, i) => doc.prefixes?.[i] ?? `ros-${doc.distro}`);
 }
 
 export interface Upgrade {
@@ -32,12 +47,9 @@ export interface Upgrade {
 }
 
 export interface Row {
-  /** The ROS package name in conda's hyphen spelling, with the distro's
+  /** The ROS package name in conda's hyphen spelling, with the channel's
    * package prefix stripped. */
   name: string;
-  /** The name the package is published under on the channel, prefix and all:
-   * `ros2-desktop` on rolling, `ros-jazzy-desktop` everywhere else. */
-  condaName: string;
   desc: string;
   indexVersion: string;
   updated: number;
@@ -94,25 +106,25 @@ export function compareVersions(a: string, b: string): number {
 export function unpackRows(doc: Doc): Row[] {
   const at: Record<string, number> = {};
   doc.fields.forEach((field, i) => (at[field] = i));
+  // Someone searching for a package is as likely to type the name they would
+  // install as the bare one, so every spelling the channel has used goes into
+  // the haystack.
+  const spellings = [...new Set(mutexPrefixes(doc))];
   return doc.packages.map((pkg) => {
     const name = pkg[at.name] as string;
-    // The committed foxy and galactic snapshots predate condaName. They are
-    // ROS 1-era ros-<distro>-<name> data, so reconstruct that spelling rather
-    // than applying today's rolling ros2-* convention to them.
-    const condaName =
-      ((pkg[at.condaName] ?? "") as string) || `ros-${doc.distro}-${name}`;
     const desc = (pkg[at.desc] ?? "") as string;
     const repo = pkg[at.repo] as number;
     return {
       name,
-      condaName,
       desc,
       indexVersion: (pkg[at.indexVersion] ?? "") as string,
       updated: (pkg[at.updated] ?? 0) as number,
       repo: repo >= 0 ? (doc.repos[repo] ?? "") : "",
       indexed: at.indexed === undefined || Boolean(pkg[at.indexed]),
       builds: pkg[at.builds] as BuildSlot[], // aligned with doc.mutexes
-      haystack: (name + " " + condaName + " " + desc).toLowerCase(),
+      haystack: [name, ...spellings.map((p) => `${p}-${name}`), desc]
+        .join(" ")
+        .toLowerCase(),
     };
   });
 }

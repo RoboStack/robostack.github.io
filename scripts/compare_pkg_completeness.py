@@ -25,6 +25,14 @@ real mutex records with `py-rattler`. Parsing the version out of the spec string
 would work today, but the specs appear in two forms (`0.9.* humble_*` and
 `>=0.9.0,<0.10.0a0`) and nothing stops a third from showing up.
 
+How a package is spelled is relative to a mutex as well. Rolling published
+`ros-rolling-<pkg>` up to mutex 0.18 and `ros2-<pkg>` from 0.19 on, so packages are
+keyed by their bare name and the document records the prefix each mutex generation
+publishes under. The `ros-rolling-<pkg>` packages that came along with the switch are
+compatibility shims that do nothing but pin the `ros2-<pkg>` of the same version;
+they constrain no mutex of their own and are dropped, so that the current version
+does not show up as available on every older mutex too.
+
 The JSON is positional to keep it small; `PackageTable.svelte` unpacks it via the
 `fields` list in the document head, so the two only have to agree on the names.
 
@@ -98,12 +106,65 @@ class Slot:
     version: str = ""
 
 
+@dataclass
+class Builds:
+    """Everything the channel has, folded down to what the page needs.
+
+    `slots` is keyed by the bare package name, because a package can be published
+    under more than one prefix: on Rolling, `ros2-tf2-ros` and `ros-rolling-tf2-ros`
+    are the same package built for different mutex generations. `prefixes` says which
+    spelling each generation uses, and `newest` holds the newest build timestamp per
+    package, which drives the "recently built" sort.
+    """
+
+    slots: dict[str, dict[str, Slot]]
+    newest: dict[str, int]
+    prefixes: dict[str, str]
+
+
 @dataclass(frozen=True)
 class IndexEntry:
     """A package as `rosdistro` describes it, before we look at any channel."""
 
     version: str
     source: str
+
+
+def package_prefixes(distro: str) -> tuple[str, ...]:
+    """The conda name prefixes a distro's packages can carry, preferred first.
+
+    Rolling moved from `ros-rolling-` to `ros2-` partway through, so both spellings
+    are live on its channel. The other distros only ever used their own prefix, and
+    the unused candidate simply never wins an election in `collect_builds`.
+    """
+    return (f"ros-{distro}", "ros2")
+
+
+def split_name(name: str, prefixes: tuple[str, ...]) -> tuple[str, str] | None:
+    """`ros2-tf2-ros` -> `("ros2", "tf2-ros")`, or None for a foreign name.
+
+    Channels carry the odd artifact from another distro (jazzy has two `ros-humble-*`
+    ones), which belongs on no page here.
+    """
+    for prefix in prefixes:
+        if name.startswith(f"{prefix}-"):
+            return prefix, name[len(prefix) + 1 :]
+    return None
+
+
+def is_shim(artifact: Artifact, name: str, prefixes: tuple[str, ...]) -> bool:
+    """Whether the artifact is a compatibility package for its own other spelling.
+
+    Rolling's `ros-rolling-<pkg>` shims pin `ros2-<pkg>` and hold nothing else. They
+    depend on no mutex, so counting them as builds would advertise today's version on
+    every older mutex as well.
+    """
+    for dependency in artifact.get("depends", []):
+        depended = dependency.split(" ")[0]
+        split = split_name(depended, prefixes)
+        if depended != artifact["name"] and split and split[1] == name:
+            return True
+    return False
 
 
 def fetch_yaml(url: str) -> Any:  # noqa: ANN401 - shape differs per rosdistro file
@@ -264,25 +325,34 @@ def mutex_matcher(mutex_records: MutexRecords) -> Callable[[str], set[str]]:
 def collect_builds(
     repos: dict[str, list[Artifact]],
     mutexes: list[str],
+    prefixes: tuple[str, ...],
     resolve: Callable[[str], set[str]],
-) -> tuple[dict[str, dict[str, Slot]], dict[str, int]]:
-    """Fold every artifact into `{conda name: {mutex version: Slot}}`.
+) -> Builds:
+    """Fold every artifact into `{package: {mutex version: Slot}}`.
 
-    Also returns the newest build timestamp per package, which drives the "recently
-    built" sort. An artifact with no mutex dependency works with any of them.
+    An artifact with no mutex dependency works with any of them. Which prefix a mutex
+    generation publishes under is elected from the artifacts that do name it: the
+    spelling that most of them use, and the distro's own prefix for a generation that
+    has none left.
     """
-    builds: dict[str, dict[str, Slot]] = {}
-    newest_build: dict[str, int] = {}
+    slots: dict[str, dict[str, Slot]] = {}
+    newest: dict[str, int] = {}
+    votes: dict[str, dict[str, int]] = {}
     unconstrained = 0
 
     for bit, platform in enumerate(PLATFORMS):
         for artifact in repos[platform]:
-            name = artifact["name"]
-            if not (name.startswith("ros-") or name.startswith("ros2-")) or name in MUTEX_NAMES:
+            if artifact["name"] in MUTEX_NAMES:
+                continue
+            split = split_name(artifact["name"], prefixes)
+            if not split:
+                continue
+            prefix, name = split
+            if is_shim(artifact, name, prefixes):
                 continue
 
-            newest_build[name] = max(
-                newest_build.get(name, 0), normalize_timestamp(artifact.get("timestamp") or 0)
+            newest[name] = max(
+                newest.get(name, 0), normalize_timestamp(artifact.get("timestamp") or 0)
             )
 
             specs = [d for d in artifact.get("depends", []) if d.split(" ")[0] in MUTEX_NAMES]
@@ -295,13 +365,23 @@ def collect_builds(
                 unconstrained += 1
 
             for version in allowed:
-                slot = builds.setdefault(name, {}).setdefault(version, Slot())
+                if specs:
+                    ballot = votes.setdefault(version, {})
+                    ballot[prefix] = ballot.get(prefix, 0) + 1
+                slot = slots.setdefault(name, {}).setdefault(version, Slot())
                 slot.mask |= 1 << bit
                 if not slot.version or version_key(artifact["version"]) > version_key(slot.version):
                     slot.version = artifact["version"]
 
     print(f"  artifacts with no mutex constraint: {unconstrained}", file=sys.stderr)
-    return builds, newest_build
+    return Builds(
+        slots=slots,
+        newest=newest,
+        prefixes={
+            version: min(ballot, key=lambda p: (-ballot[p], prefixes.index(p)))
+            for version, ballot in votes.items()
+        },
+    )
 
 
 def build(distro: str, channel: str) -> dict[str, Any]:
@@ -319,7 +399,12 @@ def build(distro: str, channel: str) -> dict[str, Any]:
     mutexes = sorted(mutex_records, key=version_key, reverse=True)[:MUTEX_LIMIT]
     print(f"  mutex: {mutex_package} {mutexes}", file=sys.stderr)
 
-    builds, newest_build = collect_builds(repos, mutexes, mutex_matcher(mutex_records))
+    prefixes = package_prefixes(distro)
+    builds = collect_builds(repos, mutexes, prefixes, mutex_matcher(mutex_records))
+    # Aligned with "mutexes": the prefix that generation's packages are published
+    # under, which is what the page puts in front of every name it shows.
+    naming = [builds.prefixes.get(version, prefixes[0]) for version in mutexes]
+    print(f"  naming: {dict(zip(mutexes, naming, strict=True))}", file=sys.stderr)
 
     # Hundreds of packages come out of the same repository, so the URLs are interned
     # and each package stores an index into this list.
@@ -332,10 +417,8 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         return [[per_mutex[v].mask, per_mutex[v].version] if v in per_mutex else 0 for v in mutexes]
 
     packages: list[list[Any]] = []
-    package_prefix = "ros2" if distro == "rolling" else f"ros-{distro}"
     for name in sorted(index):
-        conda_name = f"{package_prefix}-{name.replace('_', '-')}"
-        per_mutex = builds.get(conda_name, {})
+        package = name.replace("_", "-")  # conda spelling, no distro prefix
         entry = index[name]
 
         if entry.source and entry.source not in repo_index:
@@ -344,37 +427,29 @@ def build(distro: str, channel: str) -> dict[str, Any]:
 
         packages.append(
             [
-                name.replace("_", "-"),  # conda spelling, distro prefix stripped
-                conda_name,
+                package,
                 metadata.get(name, ""),
                 entry.version,  # as released into the ROS index
-                newest_build.get(conda_name, 0) // 1000,  # newest build, seconds
+                builds.newest.get(package, 0) // 1000,  # newest build, seconds
                 repo_index.get(entry.source, -1),  # index into "repos"
                 1,  # released into the ROS index
-                slots(per_mutex),
+                slots(builds.slots.get(package, {})),
             ]
         )
 
     # Packages on the channel that rosdistro has never released: no description,
-    # index version or source repository, but installable all the same. Rolling's
-    # ros-rolling-* names are skipped here: they are empty shims pinning the
-    # ros2-* package of the same version, so a row of their own would duplicate
-    # every package on the page.
-    prefix = f"{package_prefix}-"
-    released = {f"{package_prefix}-{name.replace('_', '-')}" for name in index}
-    for conda_name in sorted(set(builds) - released):
-        if not conda_name.startswith(prefix):
-            continue
+    # index version or source repository, but installable all the same.
+    released = {name.replace("_", "-") for name in index}
+    for package in sorted(set(builds.slots) - released):
         packages.append(
             [
-                conda_name.removeprefix(prefix),
-                conda_name,
+                package,
                 "",
                 "",
-                newest_build.get(conda_name, 0) // 1000,
+                builds.newest.get(package, 0) // 1000,
                 -1,
                 0,
-                slots(builds[conda_name]),
+                slots(builds.slots[package]),
             ]
         )
     packages.sort(key=lambda package: package[0])
@@ -385,9 +460,9 @@ def build(distro: str, channel: str) -> dict[str, Any]:
         "platforms": PLATFORMS,
         "mutexPackage": mutex_package,
         "mutexes": mutexes,
+        "prefixes": naming,
         "fields": [
             "name",
-            "condaName",
             "desc",
             "indexVersion",
             "updated",
@@ -429,8 +504,9 @@ def refresh(distro: str, channel: str) -> None:
 
     total = len(document["packages"])
     newest = document["mutexes"][0] if document["mutexes"] else None
-    on_newest = sum(1 for p in document["packages"] if p[7] and p[7][0])
-    ever = sum(1 for p in document["packages"] if any(p[7]))
+    at = document["fields"].index("builds")
+    on_newest = sum(1 for p in document["packages"] if p[at] and p[at][0])
+    ever = sum(1 for p in document["packages"] if any(p[at]))
     print(
         f"  -> {path}: {total} packages, {ever} built at some point, "
         f"{on_newest} on mutex {newest}, {path.stat().st_size / 1e6:.2f} MB",

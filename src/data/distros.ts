@@ -98,7 +98,13 @@ export function browseUrl(distro: Distro): string {
 export function title(distro: Distro): string {
   return distro.name.charAt(0).toUpperCase() + distro.name.slice(1);
 }
-/** The conda package prefix used for the distro's primary packages. */
+/**
+ * The conda package prefix used for the distro's primary packages.
+ *
+ * Rolling switched from `ros-rolling-` to `ros2-` with mutex 0.19. The package
+ * table reads the prefix per mutex out of its dataset; this is the build-time
+ * answer for the current one, which is what an install snippet wants.
+ */
 export function packagePrefix(distro: Distro): string {
   return distro.name === "rolling" ? "ros2" : `ros-${distro.name}`;
 }
