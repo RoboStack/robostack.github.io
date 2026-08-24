@@ -359,7 +359,13 @@
         <p class="rs-mutex">
           <label>
             Built against
-            <select aria-label="ROS distro mutex version" bind:value={mutex}>
+            <!-- The label wraps the select, but the aria-label overrides it, so
+                 it opens with the same words the label shows: speech control
+                 matches on what the user can read. -->
+            <select
+              aria-label="Built against ROS distro mutex version"
+              bind:value={mutex}
+            >
               {#each mutexes as version, i (version)}
                 <option value={i}>
                   {mutexPackage}
@@ -619,8 +625,17 @@
                         class:rs-det--no={!on}
                         title="{p.id}: {on ? 'available' : 'not on channel'}"
                       >
+                        <!--
+                          Narrow screens drop the platform columns, so this
+                          list is the only place the per-platform state
+                          appears: it carries the same visually hidden text
+                          those cells do rather than leaving the glyph and
+                          the title attribute to speak for it.
+                        -->
                         {@render iconSpan(meta.icon, 12)}{meta.arch}
-                        {on ? "✓" : "·"}
+                        {on ? "✓" : "·"}<span class="sr-only"
+                          >{p.id}: {on ? "available" : "not on channel"}</span
+                        >
                       </span>
                     {/each}
                   </span>
@@ -671,7 +686,7 @@
     --rs-yes-bg: #e7f4d6;
     --rs-yes-fg: #3f7a12;
     --rs-no-bg: var(--sl-color-gray-6);
-    --rs-no-fg: var(--sl-color-gray-4);
+    --rs-no-fg: var(--sl-color-gray-3);
     /* Orange, not amber: a warning must not share a hue with the gold brand. */
     --rs-warn-bg: hsl(28, 85%, 92%);
     --rs-warn-fg: hsl(25, 85%, 34%);
@@ -849,11 +864,19 @@
     gap: 0.6rem;
     min-width: 0;
   }
+  /* The accent border tracks focus for the pointer, but on its own it was
+     the entire keyboard focus signal, and a 1px edge is under the thickness
+     a focus indicator needs to carry that alone. The ring does that job. */
   .rs-tools input:focus,
   .rs-tools select:focus,
   .rs-mutex select:focus {
-    outline: none;
     border-color: var(--sl-color-accent);
+  }
+  .rs-tools input:focus-visible,
+  .rs-tools select:focus-visible,
+  .rs-mutex select:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 1px;
   }
 
   .rs-filters {
@@ -1156,7 +1179,7 @@
     display: inline-flex;
     padding: 0.2rem;
     border-radius: 0.125rem;
-    color: var(--sl-color-gray-4);
+    color: var(--sl-color-gray-3);
     transition:
       color 125ms,
       background-color 125ms;
@@ -1314,7 +1337,7 @@
       color: var(--rs-yes-fg);
     }
     .rs-det--no {
-      color: var(--sl-color-gray-4);
+      color: var(--sl-color-gray-3);
     }
   }
 
