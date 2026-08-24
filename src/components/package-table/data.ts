@@ -32,7 +32,12 @@ export interface Upgrade {
 }
 
 export interface Row {
+  /** The ROS package name in conda's hyphen spelling, with the distro's
+   * package prefix stripped. */
   name: string;
+  /** The name the package is published under on the channel, prefix and all:
+   * `ros2-desktop` on rolling, `ros-jazzy-desktop` everywhere else. */
+  condaName: string;
   desc: string;
   indexVersion: string;
   updated: number;
@@ -91,17 +96,23 @@ export function unpackRows(doc: Doc): Row[] {
   doc.fields.forEach((field, i) => (at[field] = i));
   return doc.packages.map((pkg) => {
     const name = pkg[at.name] as string;
+    // The committed foxy and galactic snapshots predate condaName. They are
+    // ROS 1-era ros-<distro>-<name> data, so reconstruct that spelling rather
+    // than applying today's rolling ros2-* convention to them.
+    const condaName =
+      ((pkg[at.condaName] ?? "") as string) || `ros-${doc.distro}-${name}`;
     const desc = (pkg[at.desc] ?? "") as string;
     const repo = pkg[at.repo] as number;
     return {
       name,
+      condaName,
       desc,
       indexVersion: (pkg[at.indexVersion] ?? "") as string,
       updated: (pkg[at.updated] ?? 0) as number,
       repo: repo >= 0 ? (doc.repos[repo] ?? "") : "",
       indexed: at.indexed === undefined || Boolean(pkg[at.indexed]),
       builds: pkg[at.builds] as BuildSlot[], // aligned with doc.mutexes
-      haystack: (name + " " + desc).toLowerCase(),
+      haystack: (name + " " + condaName + " " + desc).toLowerCase(),
     };
   });
 }

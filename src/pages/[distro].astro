@@ -3,7 +3,13 @@ import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside, Code } from "@astrojs/starlight/components";
 import PackageTable from "../components/package-table/PackageTable.astro";
 import type { Distro } from "../data/distros";
-import { browseUrl, DISTROS, monthYear, title } from "../data/distros";
+import {
+  browseUrl,
+  DISTROS,
+  monthYear,
+  packagePrefix,
+  title,
+} from "../data/distros";
 
 export function getStaticPaths() {
   return DISTROS.map((distro) => ({
@@ -20,7 +26,7 @@ const { distro } = Astro.props;
 const browse = browseUrl(distro);
 const install = [
   `pixi workspace channel add ${distro.base}/${distro.channel}`,
-  `pixi add ros-${distro.name}-<package>`,
+  `pixi add ${packagePrefix(distro)}-<package>`,
 ].join("\n");
 ---
 
