@@ -95,6 +95,21 @@ export function browseUrl(distro: Distro): string {
   return BROWSE[distro.base](distro.channel);
 }
 
+/**
+ * The vinca repository whose recipes build this distro's channel.
+ *
+ * Every distro in `DISTROS` has one under the same name, `RoboStack/ros-noetic`
+ * through `RoboStack/ros-lyrical`, so the URL is derived rather than listed.
+ */
+export function repoUrl(distro: Distro): string {
+  return `https://github.com/RoboStack/ros-${distro.name}`;
+}
+
+/** `RoboStack/ros-lyrical`: the repo link's label. */
+export function repoName(distro: Distro): string {
+  return `RoboStack/ros-${distro.name}`;
+}
+
 export function title(distro: Distro): string {
   return distro.name.charAt(0).toUpperCase() + distro.name.slice(1);
 }
