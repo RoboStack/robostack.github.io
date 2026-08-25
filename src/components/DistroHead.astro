@@ -1,6 +1,6 @@
 ---
 import type { Distro } from "../data/distros";
-import { supportLine, title } from "../data/distros";
+import { repoName, repoUrl, supportLine, title } from "../data/distros";
 import DistroTabs from "./DistroTabs.astro";
 
 interface Props {
@@ -22,6 +22,17 @@ const { distro } = Astro.props;
     <h1 id="_top">ROS {distro.ros} {title(distro)}</h1>
     <p class="support">{supportLine(distro)}</p>
   </div>
+  <!-- The label is spelled out for screen readers because the repo name is
+       dropped on narrow screens, where the mark alone carries the link. -->
+  <a
+    class="repo"
+    href={repoUrl(distro)}
+    aria-label={`${repoName(distro)} on GitHub`}
+    title={`The recipes that build the ${distro.channel} channel`}
+  >
+    <span class="repo__icon" aria-hidden="true"></span>
+    <span class="repo__name">{repoName(distro)}</span>
+  </a>
 </div>
 
 <style>
@@ -47,5 +58,51 @@ const { distro } = Astro.props;
     margin: 0.25rem 0 0;
     font-size: var(--sl-text-sm);
     color: var(--sl-color-gray-3);
+  }
+  /* Pushed to the trailing edge, away from the title block. Wraps under the
+     artwork on narrow screens rather than squeezing the heading. */
+  .repo {
+    margin-inline-start: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: var(--sl-text-xs);
+    color: var(--fg-1);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background var(--dur-2) var(--ease-out),
+      color var(--dur-2) var(--ease-out);
+  }
+  .repo:hover {
+    background: var(--fg-1);
+    color: var(--bg-page);
+  }
+  .repo:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 1px;
+  }
+  /* A mask, not an image, so the glyph follows the text colour through the
+     hover inversion and both themes. */
+  .repo__icon {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    background-color: currentColor;
+    mask-image: url("/images/icons/github.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+  /* Below the two-column layout the repo name is the first thing worth
+     dropping: the icon still says where the link goes. */
+  @media (max-width: 30rem) {
+    .repo__name {
+      display: none;
+    }
   }
 </style>
