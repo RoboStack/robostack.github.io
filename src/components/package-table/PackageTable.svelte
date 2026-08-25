@@ -395,6 +395,10 @@
 
     <div class="rs-tools">
       <span class="rs-search">
+        <span
+          class="rs-icon rs-icon--magnifier rs-search__icon"
+          aria-hidden="true"
+        ></span>
         <input
           type="search"
           autocomplete="off"
@@ -828,19 +832,48 @@
     flex: 1;
     min-width: 0;
   }
+  /* The search box carries the whole table: it is the one control people
+     reach for first, so it gets the card treatment the shared toolbar rule
+     above leaves flat, and the room the icon and the "/" hint need on either
+     side. */
+  .rs-tools .rs-search input {
+    padding: 0.6em 2.4em;
+    border: 1.5px solid var(--border-2);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-card);
+    font-size: 0.95rem;
+  }
+  .rs-tools .rs-search input::placeholder {
+    color: var(--fg-2);
+  }
+  .rs-search__icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--fg-2);
+    pointer-events: none;
+  }
+  /* Both edges answer focus: the glyph picks up the accent the border takes. */
+  .rs-search:focus-within .rs-search__icon {
+    color: var(--sl-color-accent);
+  }
   /* Advertises the "/" shortcut. Gone while typing, and gone entirely on
      touch devices, where there is no key to press. */
   .rs-slash {
     position: absolute;
-    right: 0.5rem;
+    right: 0.6rem;
     top: 50%;
     transform: translateY(-50%);
-    padding: 0.05em 0.45em;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.25rem;
+    padding: 0.15em 0.5em;
+    border: 1px solid var(--border-2);
+    border-radius: var(--radius-xs);
     font-family: inherit;
-    font-size: 0.75rem;
-    color: var(--sl-color-gray-3);
+    font-size: 0.8rem;
+    color: var(--fg-2);
     pointer-events: none;
   }
   .rs-search:focus-within .rs-slash,
@@ -1226,6 +1259,9 @@
   }
   .rs-icon--github {
     mask-image: url("/images/icons/github.svg");
+  }
+  .rs-icon--magnifier {
+    mask-image: url("/images/icons/magnifier.svg");
   }
 
   /* Availability marks. Every column except Package holds one, so the cells

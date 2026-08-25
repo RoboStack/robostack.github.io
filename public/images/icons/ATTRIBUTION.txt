@@ -13,6 +13,16 @@ linux.svg, apple.svg, windows.svg, channel.svg, docs.svg, github.svg
            https://github.com/Templarian/MaterialDesign/blob/master/LICENSE
   Credit: Pictogrammers
 
+magnifier.svg
+  Source: Starlight's own icon set, @astrojs/starlight
+          components-internals/Icons.ts, `magnifier`
+  Licence: MIT
+           https://github.com/withastro/starlight/blob/main/LICENSE
+  Credit: Astro contributors
+  Note: not a Material icon like the rest, on purpose. The header's site
+        search renders this same glyph, and the two search boxes sit on the
+        same page.
+
 wasm.svg
   Source: Simple Icons, via zensical/templates/.icons/simple/webassembly.svg
   Licence: CC0 1.0 Universal
