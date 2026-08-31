@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/starlight": "^0.41.7",
     "@astrojs/svelte": "^9.0.1",
-    "astro": "^7.2.4",
+    "astro": "^7.2.9",
     "svelte": "^5.56.10"
   },
   "devDependencies": {
