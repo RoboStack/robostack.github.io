@@ -26,7 +26,7 @@ jobs:
     steps:
       # ghp-import pushes with the credentials persisted by checkout
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: prefix-dev/setup-pixi@f00437f565399d418b0acc85936d12c1fb668347 # v0.10.1
+      - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
       # Regenerates every distro with a dataChannel in src/data/distros.json;
       # a distro without one (foxy, galactic) is a committed snapshot. A failed
       # distro does not stop the deploy: the ensure-tables task inside
