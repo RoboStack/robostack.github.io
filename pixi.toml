@@ -87,6 +87,10 @@ py-rattler = ">=0.25,<0.26"
 niquests = ">=3.21.0,<4"
 
 [feature.scripts.tasks]
+check-dependabot-merge = {
+  cmd = "python scripts/check_dependabot_merge.py",
+  description = "Check whether every Dependabot update qualifies for auto-merge",
+}
 compare-completeness = {
   cmd = "python scripts/compare_pkg_completeness.py",
   description = "Add two arguments to give it the DISTRO and CHANNEL",
