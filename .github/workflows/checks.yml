@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'
     permissions:
-      contents: write
       pull-requests: write
     steps:
       - name: Fetch dependabot metadata
@@ -30,11 +29,48 @@ jobs:
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Approve and enable auto-merge
-        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+      - name: Check auto-merge policy
+        id: policy
+        env:
+          DEPENDENCIES: ${{ steps.metadata.outputs.updated-dependencies-json }}
         run: |
-          gh pr review --approve "$PR_URL"
-          gh pr merge --auto --squash "$PR_URL"
+          if jq --exit-status --slurp '
+            def release:
+              type == "string" and test("^v?(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$");
+            length == 1 and (.[0] |
+              type == "array" and length > 0 and all(.[];
+                (.prevVersion | release) and
+                (.newVersion | release) and
+                (.updateType == "version-update:semver-patch" or
+                  (.updateType == "version-update:semver-minor" and
+                    (.prevVersion | test("^v?[1-9][0-9]*\\."))))
+              )
+            )
+          ' <<< "$DEPENDENCIES"; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Approve pull request
+        if: steps.policy.outputs.eligible == 'true'
+        run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create merge token
+        if: steps.policy.outputs.eligible == 'true'
+        id: merge-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.ROBOSTACK_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.ROBOSTACK_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+      - name: Enable auto-merge
+        if: steps.policy.outputs.eligible == 'true'
+        run: gh pr merge --auto --squash --match-head-commit "$PR_HEAD_SHA" "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_TOKEN: ${{ steps.merge-token.outputs.token }}

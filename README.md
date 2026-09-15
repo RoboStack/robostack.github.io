@@ -26,3 +26,25 @@ pixi run serve
 ```
 
 Open server on http://localhost:4321/
+
+# Dependabot merges
+
+Dependabot patch updates are approved after checks pass. Minor updates are also
+approved for dependencies already on `1.0.0` or later, but `0.x` minor updates and
+all major updates need manual review. Every dependency in a PR must qualify;
+missing version metadata, non-release versions, and unknown update types need
+manual review.
+
+Eligible updates are merged with a GitHub App token so the merge triggers checks
+and deployment on `main`.
+
+Install the App on this repository with these repository permissions:
+
+- Contents: read and write
+- Pull requests: read and write
+- Workflows: read and write, so dependency updates to workflow files can merge
+
+Set the repository Actions variable `ROBOSTACK_BOT_CLIENT_ID` to the App's
+client ID. Store its private key as `ROBOSTACK_BOT_PRIVATE_KEY` in both
+Actions secrets and Dependabot secrets. Dependabot-triggered workflows only
+have access to Dependabot secrets.
