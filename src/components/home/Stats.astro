@@ -36,14 +36,12 @@ const stats = [
 ---
 
 <div class="rs-card stats">
-  {
-    stats.map(({ num, label }) => (
-      <div class="stat">
-        <div class="stat-num">{num}</div>
-        <div class="stat-label">{label}</div>
-      </div>
-    ))
-  }
+  {stats.map(({ num, label }) => (
+    <div class="stat">
+      <div class="stat-num">{num}</div>
+      <div class="stat-label">{label}</div>
+    </div>
+  ))}
 </div>
 
 <style>

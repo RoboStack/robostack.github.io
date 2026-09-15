@@ -32,16 +32,14 @@ const pathname = Astro.url.pathname;
     <SiteTitle />
   </div>
   <nav class="top-nav print:hidden" aria-label="Sections">
-    {
-      tabs.map((tab) => (
-        <a
-          href={tab.href}
-          aria-current={tab.match.test(pathname) ? "page" : undefined}
-        >
-          {tab.label}
-        </a>
-      ))
-    }
+    {tabs.map((tab) => (
+      <a
+        href={tab.href}
+        aria-current={tab.match.test(pathname) ? "page" : undefined}
+      >
+        {tab.label}
+      </a>
+    ))}
   </nav>
   <div class="search-wrapper sl-flex print:hidden">
     {shouldRenderSearch && <Search />}
@@ -62,11 +60,9 @@ const pathname = Astro.url.pathname;
     ?.scrollIntoView({ inline: "center", block: "nearest" });
 </script>
 
-{
-  /* The single-row styles are copied from Starlight's Header.astro so the
+{/* The single-row styles are copied from Starlight's Header.astro so the
     original layout survives the override; only `.top-nav` and the wrapping
-    behavior are new. */
-}
+    behavior are new. */}
 <style>
   /* Two rows while stacked: the original header items on top, the tab row
      wrapped underneath and pushed to the header's bottom border. */

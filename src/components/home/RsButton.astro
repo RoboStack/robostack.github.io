@@ -14,8 +14,10 @@ const Tag = href ? "a" : "button";
 <Tag
   class:list={["btn", `btn--${variant}`, { "btn--sm": small }]}
   href={href}
-  {...rest}><slot /></Tag
+  {...rest}
 >
+  <slot />
+</Tag>
 
 <style>
   .btn {

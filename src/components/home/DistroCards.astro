@@ -44,16 +44,14 @@ if (olderLts) {
 ---
 
 <div class="grid">
-  {
-    cards.map(({ distro, description }) => (
-      <DistroCard
-        href={`/${distro.name}.html`}
-        channel={distro.channel}
-        name={`ROS ${distro.ros} ${title(distro)}`}
-        description={description}
-      />
-    ))
-  }
+  {cards.map(({ distro, description }) => (
+    <DistroCard
+      href={`/${distro.name}.html`}
+      channel={distro.channel}
+      name={`ROS ${distro.ros} ${title(distro)}`}
+      description={description}
+    />
+  ))}
 </div>
 
 <style>

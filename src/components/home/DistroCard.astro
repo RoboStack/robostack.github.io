@@ -11,7 +11,9 @@ const { href, channel, name, description } = Astro.props;
 
 <a class="rs-card card" href={href}>
   <div class="top">
-    <span class="channel"><code>{channel}</code></span>
+    <span class="channel">
+      <code>{channel}</code>
+    </span>
   </div>
   <div class="name">{name}</div>
   <div class="sub">{description}</div>
