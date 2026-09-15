@@ -1,1 +1,1 @@
-/// <reference types="@astrojs/starlight/locals" />
+/// <reference types="@astrojs/starlight" />
