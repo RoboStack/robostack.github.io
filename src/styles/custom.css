@@ -184,16 +184,16 @@ samp {
    theme (light disc on the dark header and vice versa). Restyle it flat so
    it follows the header text color in both color schemes, like the social
    icons and the theme picker next to it. */
-starlight-menu-button button,
-:root[data-theme="light"] starlight-menu-button button {
+.sl-menu-button,
+:root[data-theme="light"] .sl-menu-button {
   background-color: transparent;
   color: var(--sl-color-white);
   box-shadow: none;
   /* Center on the header's first row, not on the two-row header. */
   top: calc((var(--rs-nav-row) - var(--sl-menu-button-size)) / 2);
 }
-starlight-menu-button:hover button,
-starlight-menu-button[aria-expanded="true"] button,
-:root[data-theme="light"] starlight-menu-button[aria-expanded="true"] button {
+.sl-menu-button:hover,
+.sl-menu-button:has(~ :popover-open),
+:root[data-theme="light"] .sl-menu-button:has(~ :popover-open) {
   background-color: var(--sl-color-gray-6);
 }
