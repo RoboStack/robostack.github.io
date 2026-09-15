@@ -31,24 +31,20 @@ const commands = [
         <span class="copy-label">Copy</span>
       </button>
     </div>
-    {
-      /* Scrolls sideways once the commands outrun the card, so it takes
-        focus: without it the overflow is reachable by pointer only. */
-    }
+    {/* Scrolls sideways once the commands outrun the card, so it takes
+        focus: without it the overflow is reachable by pointer only. */}
     <div
       class="term-body"
       tabindex="0"
       role="group"
       aria-label="Quick start commands"
     >
-      {
-        commands.map((command) => (
-          <div>
-            <span class="prompt">$ </span>
-            {command}
-          </div>
-        ))
-      }
+      {commands.map((command) => (
+        <div>
+          <span class="prompt">$ </span>
+          {command}
+        </div>
+      ))}
     </div>
   </div>
 </div>

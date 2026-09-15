@@ -31,19 +31,15 @@ const packagesHref = `/${newestRelease().name}.html`;
     tableOfContents: false,
   }}
 >
-  {
-    /* `not-content` opts the whole page out of Starlight's Markdown spacing;
-      every margin here is set by the components themselves. */
-  }
+  {/* `not-content` opts the whole page out of Starlight's Markdown spacing;
+      every margin here is set by the components themselves. */}
   <div class="home not-content">
     <section class="section section--hero">
       <div class="hero">
         <div>
-          {
-            /* Starlight's splash template drops the page title it normally
+          {/* Starlight's splash template drops the page title it normally
               anchors the "Skip to content" link to, so the id rides along
-              with the heading this page brings itself. */
-          }
+              with the heading this page brings itself. */}
           <h1 id="_top">Manage ROS with ease</h1>
           <p class="hero-lead">
             Run any ROS distro in an isolated, per-project environment. On
@@ -51,9 +47,9 @@ const packagesHref = `/${newestRelease().name}.html`;
           </p>
           <div class="hero-actions">
             <RsButton href="/GettingStarted.html">Get started</RsButton>
-            <RsButton href={packagesHref} variant="subtle"
-              >Browse the packages</RsButton
-            >
+            <RsButton href={packagesHref} variant="subtle">
+              Browse the packages
+            </RsButton>
           </div>
         </div>
         <QuickStart />
@@ -68,23 +64,25 @@ const packagesHref = `/${newestRelease().name}.html`;
       <div class="grid2">
         <PropCard title="Any OS, any version">
           <Screen slot="icon" />
-          Run any ROS distro on Fedora, Arch, macOS with Apple Silicon or Windows.
-          The one-Ubuntu-version-per-distro rule simply doesn't apply here.
+          Run any ROS distro on Fedora, Arch, macOS with Apple Silicon or
+          Windows. The one-Ubuntu-version-per-distro rule simply doesn't apply
+          here.
         </PropCard>
         <PropCard title="No sudo, nothing global">
           <Shield slot="icon" />
-          Each project gets its own environment. Run two distros side by side, delete
-          a folder and it's gone. No Docker, no dual-boot, no VM.
+          Each project gets its own environment. Run two distros side by side,
+          delete a folder and it's gone. No Docker, no dual-boot, no VM.
         </PropCard>
         <PropCard title="Minutes, not an afternoon">
           <Bolt slot="icon" />
-          Every package ships as a prebuilt binary. No compiling from source, no hunting
-          down build dependencies - install and launch rviz.
+          Every package ships as a prebuilt binary. No compiling from source, no
+          hunting down build dependencies - install and launch rviz.
         </PropCard>
         <PropCard title="The whole conda and PyPI ecosystem">
           <Layers slot="icon" />
-          PyTorch, Jupyter and OpenCV from conda-forge live in the same environment
-          as ROS. Robotics and machine learning, one <code>pixi add</code> apart.
+          PyTorch, Jupyter and OpenCV from conda-forge live in the same
+          environment as ROS. Robotics and machine learning, one{" "}
+          <code>pixi add</code> apart.
         </PropCard>
       </div>
     </section>
@@ -99,9 +97,9 @@ const packagesHref = `/${newestRelease().name}.html`;
           <div class="eyebrow">Channels</div>
           <h2>Pick your ROS distro</h2>
         </div>
-        <RsButton href={packagesHref} variant="subtle" small
-          >All distros &rarr;</RsButton
-        >
+        <RsButton href={packagesHref} variant="subtle" small>
+          All distros &rarr;
+        </RsButton>
       </div>
       <DistroCards />
     </section>
@@ -114,17 +112,16 @@ const packagesHref = `/${newestRelease().name}.html`;
           linkLabel="Browse packages"
         >
           <Search slot="icon" />
-          Every distro has a searchable package list showing exactly which packages
-          are built for which platform - no guessing.
+          Every distro has a searchable package list showing exactly which
+          packages are built for which platform - no guessing.
         </PropCard>
         <PropCard
           title="Guides that get you there"
           href="/GettingStarted.html"
           linkLabel="Get started"
         >
-          <Book slot="icon" />
-          A getting started guide that walks you from nothing to a running rviz, plus
-          an FAQ for the sharp edges.
+          <Book slot="icon" />A getting started guide that walks you from
+          nothing to a running rviz, plus an FAQ for the sharp edges.
         </PropCard>
         <PropCard
           title="An active community"
@@ -132,8 +129,8 @@ const packagesHref = `/${newestRelease().name}.html`;
           linkLabel="Join the Discord"
         >
           <Chat slot="icon" />
-          Stuck on something? The maintainers hang out in the robotics channel on
-          prefix.dev's Discord and on GitHub.
+          Stuck on something? The maintainers hang out in the robotics channel
+          on prefix.dev's Discord and on GitHub.
         </PropCard>
       </div>
     </section>

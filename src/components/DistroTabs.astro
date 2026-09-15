@@ -9,28 +9,26 @@ const { current } = Astro.props;
 ---
 
 <nav class="distros" aria-label="Distributions">
-  {
-    tabOrder().map((d) => (
-      <a
-        class:list={["distro", { "distro--active": d.name === current }]}
-        href={`/${d.name}.html`}
-        aria-current={d.name === current ? "page" : undefined}
-      >
-        {d.name}
-        {d.status === "eol" && (
-          <Fragment>
-            {/* The mark is the abbreviation sighted readers see; the words
+  {tabOrder().map((d) => (
+    <a
+      class:list={["distro", { "distro--active": d.name === current }]}
+      href={`/${d.name}.html`}
+      aria-current={d.name === current ? "page" : undefined}
+    >
+      {d.name}
+      {d.status === "eol" && (
+        <Fragment>
+          {/* The mark is the abbreviation sighted readers see; the words
                 behind it go to assistive tech, and the tooltip expands it
                 for anyone who does not know the initials. */}
-            <span class="distro__eol" aria-hidden="true" title="End of life">
-              EOL
-            </span>
-            <span class="sr-only"> (end of life)</span>
-          </Fragment>
-        )}
-      </a>
-    ))
-  }
+          <span class="distro__eol" aria-hidden="true" title="End of life">
+            EOL
+          </span>
+          <span class="sr-only"> (end of life)</span>
+        </Fragment>
+      )}
+    </a>
+  ))}
 </nav>
 
 <style>

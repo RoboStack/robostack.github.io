@@ -11,16 +11,14 @@ const { distro } = Astro.props;
 const browse = browseUrl(distro);
 ---
 
-{
-  /*
+{/*
   The `eol` prop suppresses the per-row "Add to channel" button. Inviting
   contributions to a distro upstream has stopped supporting would waste
   someone's afternoon.
 
   The island renders and updates everything itself; this wrapper only feeds
   it the distro facts that are known at build time.
-*/
-}
+*/}
 <PackageTable
   client:load
   distro={distro.name}

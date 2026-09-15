@@ -15,9 +15,13 @@ const Tag = href ? "a" : "div";
 ---
 
 <Tag class="rs-card card" href={href}>
-  <div class="icon"><slot name="icon" /></div>
+  <div class="icon">
+    <slot name="icon" />
+  </div>
   <div class="title">{title}</div>
-  <p><slot /></p>
+  <p>
+    <slot />
+  </p>
   {linkLabel && <span class="link">{linkLabel} &rarr;</span>}
 </Tag>
 

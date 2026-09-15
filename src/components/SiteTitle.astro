@@ -11,7 +11,9 @@ const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
 
 <a href={siteTitleHref} class="site-title sl-flex">
   <Logo />
-  <span class="sr-only" translate="no">{siteTitle}</span>
+  <span class="sr-only" translate="no">
+    {siteTitle}
+  </span>
 </a>
 
 <style>

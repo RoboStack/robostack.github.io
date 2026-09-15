@@ -50,12 +50,12 @@ const install = [
     )
   }
   <p>
-    Every package in the <a href={`https://index.ros.org/#${distro.name}`}
-      >ROS index</a
-    > for{" "}
-    {distro.name}, and whether it is available on the <a href={browse}
-      ><code>{distro.channel}</code></a
-    >{" "}
+    Every package in the{" "}
+    <a href={`https://index.ros.org/#${distro.name}`}>ROS index</a> for{" "}
+    {distro.name}, and whether it is available on the{" "}
+    <a href={browse}>
+      <code>{distro.channel}</code>
+    </a>{" "}
     channel yet.
   </p>
   <Code lang="sh" code={install} />
