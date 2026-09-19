@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .dot { fill: #2e46d8 }
+    @media (prefers-color-scheme: dark) {
+      .dot { fill: #6c85ff }
+    }
+  </style>
+  <g class="dot">
+    <circle cx="6" cy="26" r="3.5" />
+    <circle cx="16" cy="26" r="3.5" />
+    <circle cx="26" cy="26" r="3.5" />
+    <circle cx="16" cy="16" r="3.5" />
+    <circle cx="26" cy="16" r="3.5" />
+    <circle cx="26" cy="6" r="3.5" />
+  </g>
+</svg>
