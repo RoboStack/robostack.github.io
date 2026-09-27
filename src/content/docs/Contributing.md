@@ -19,7 +19,7 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 
 ## Adding new packages via pull requests
 
-You can open a pull request that will get build automatically in our CI.
+You can open a pull request that will get built automatically in our CI.
 
 An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257).
 
