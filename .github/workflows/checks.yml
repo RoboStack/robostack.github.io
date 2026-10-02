@@ -15,6 +15,7 @@ jobs:
           persist-credentials: false
       - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
       - run: pixi run lint
+      - run: pixi run test
       - run: pixi run build-docs
 
   dependabot:

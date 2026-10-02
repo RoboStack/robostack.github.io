@@ -85,8 +85,13 @@ anaconda-client = ">=1.14.1,<2"
 pyyaml = ">=6,<7"
 py-rattler = ">=0.25,<0.26"
 niquests = ">=3.21.0,<4"
+pytest = ">=9.1.1,<10"
 
 [feature.scripts.tasks]
+test = {
+  cmd = "pytest scripts",
+  description = "Run the Python regression tests",
+}
 check-dependabot-merge = {
   cmd = "python scripts/check_dependabot_merge.py",
   description = "Check whether every Dependabot update qualifies for auto-merge",
