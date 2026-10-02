@@ -5,6 +5,18 @@ RoboStack Website/
 .pixi
 *.egg-info
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pycache
+*.pytest_cache
+*.mypy_cache
+*.coverage
+coverage.xml
+htmlcov/
+
 # astro
 node_modules
 dist

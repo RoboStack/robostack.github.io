@@ -3,6 +3,7 @@ import datetime
 import subprocess
 
 import niquests
+from rattler import MatchSpec
 from urllib3.util.retry import Retry
 
 # Configuration
@@ -88,6 +89,29 @@ def get_timestamp_with_workaround_for_timestamp_in_seconds_instead_of_millisecon
     return timestamp
 
 
+def belongs_to_distro(pkg_data: dict, distro: str) -> bool:
+    """Identify renamed ROS packages by their distro-specific mutex build pin.
+
+    A version-only mutex pin is not enough: different distros can publish the
+    same mutex version. Require the literal distro name in the build selector.
+    """
+    name = pkg_data["name"]
+    if name.startswith(f"ros-{distro}-"):
+        return True
+    if name in ("ros-distro-mutex", "ros2-distro-mutex"):
+        return pkg_data["build"].split("_", 1)[0] == distro
+    if not name.startswith("ros2-"):
+        return False
+
+    for dependency in pkg_data.get("depends", []):
+        if dependency.split(" ", 1)[0] != "ros2-distro-mutex":
+            continue
+        build = MatchSpec(dependency).build
+        if build and build.split("_", 1)[0] == distro:
+            return True
+    return False
+
+
 def main() -> None:
     # Parse command-line arguments
     parser = argparse.ArgumentParser(
@@ -135,16 +159,10 @@ def main() -> None:
 
         # Filter packages that belong to the given distro
         # and are newer then the specified cutoff date
-        prefix = "ros-" + distro
         filtered_packages = {
             pkg_name: pkg_data
             for pkg_name, pkg_data in source_packages.items()
-            # This should cover both packages that start with 'ros-<distro>'
-            # '(ros|ros2)-<distro>-mutex' packages whose build string contains <distro>
-            if (
-                pkg_name.startswith(prefix)
-                or (pkg_data["name"].endswith("distro-mutex") and distro in pkg_data["build"])
-            )
+            if belongs_to_distro(pkg_data, distro)
             and (
                 get_timestamp_with_workaround_for_timestamp_in_seconds_instead_of_milliseconds(
                     pkg_data
