@@ -3,6 +3,11 @@ title: Support
 slug: support
 ---
 
+:::note[RoboStack is now a monorepo]
+Humble, Jazzy, Lyrical and Rolling are now built from one repository, [RoboStack/robostack](https://github.com/RoboStack/robostack), and Noetic, Kilted, Galactic and Foxy are deprecated.
+[Read what changed](/Monorepo.html).
+:::
+
 We strive to make our documentation as clear as possible, but sometimes things can get confusing. Good news – our documentation is open-source! You can view and contribute to it on [github](https://github.com/RoboStack/robostack.github.io).
 
 How to help improve our documentation:

@@ -3,6 +3,11 @@ title: Contributing
 slug: Contributing
 ---
 
+:::note[RoboStack is now a monorepo]
+Humble, Jazzy, Lyrical and Rolling are now built from one repository, [RoboStack/robostack](https://github.com/RoboStack/robostack), and Noetic, Kilted, Galactic and Foxy are deprecated.
+[Read what changed](/Monorepo.html).
+:::
+
 Many thanks for taking the time to read this and for contributing to RoboStack!
 
 This project is in early stages and we are looking for contributors to help it grow.

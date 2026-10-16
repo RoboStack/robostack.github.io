@@ -91,6 +91,7 @@ export default defineConfig({
             { label: "Community Meeting", slug: "CommunityMeeting" },
             { label: "Support", slug: "support" },
             { label: "Contributing", slug: "Contributing" },
+            { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
       ],

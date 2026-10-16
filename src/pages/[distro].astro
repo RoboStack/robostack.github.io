@@ -9,6 +9,7 @@ import {
   isDeprecated,
   monthYear,
   packagePrefix,
+  repoUrl,
   title,
 } from "../data/distros";
 
@@ -38,13 +39,19 @@ const install = [
   }}
   hasSidebar={false}
 >
-  {isDeprecated(distro) && (
+  {isDeprecated(distro) ? (
     <Aside type="caution" title="Deprecated">
       RoboStack no longer maintains {title(distro)}. Its packages stay
       installable, but they are not rebuilt or fixed anymore. Use{" "}
       <a href="/humble.html">Humble</a>, <a href="/jazzy.html">Jazzy</a>,{" "}
       <a href="/lyrical.html">Lyrical</a> or <a href="/rolling.html">Rolling</a>{" "}
-      instead.
+      instead. <a href="/Monorepo.html">Read why</a>.
+    </Aside>
+  ) : (
+    <Aside title="RoboStack is now a monorepo">
+      {title(distro)} is now built from{" "}
+      <a href={repoUrl(distro)}>RoboStack/robostack</a>, together with the other
+      maintained distributions. <a href="/Monorepo.html">Read what changed</a>.
     </Aside>
   )}
   {

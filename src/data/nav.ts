@@ -29,6 +29,6 @@ export const NAV_TABS: NavTab[] = [
   {
     label: "Community",
     href: "/CommunityMeeting.html",
-    match: /^\/(CommunityMeeting|support|Contributing)/,
+    match: /^\/(CommunityMeeting|support|Contributing|Monorepo)/,
   },
 ];
