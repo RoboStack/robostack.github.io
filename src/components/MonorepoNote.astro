@@ -1,0 +1,36 @@
+---
+import { Aside } from "@astrojs/starlight/components";
+import type { Distro } from "../data/distros";
+import { DISTROS, isDeprecated, repoUrl, title } from "../data/distros";
+
+/**
+ * The "RoboStack is now a monorepo" note, linking to /Monorepo.html. Shown on
+ * the docs pages and on the distro pages of the maintained distros; pass
+ * `distro` on a distro page to word it for that one and link its folder.
+ */
+interface Props {
+  distro?: Distro;
+}
+
+const { distro } = Astro.props;
+
+// "Humble, Jazzy, Lyrical and Rolling", in the order of distros.json.
+const names = DISTROS.filter((d) => !isDeprecated(d)).map(title);
+const maintained = `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+---
+
+<Aside title="RoboStack is now a monorepo">
+  {distro ? (
+    <p>
+      {title(distro)} is now built from{" "}
+      <a href={repoUrl(distro)}>RoboStack/robostack</a>, together with the other
+      maintained distributions. <a href="/Monorepo.html">Read what changed</a>.
+    </p>
+  ) : (
+    <p>
+      {maintained} are now built from one repository,{" "}
+      <a href="https://github.com/RoboStack/robostack">RoboStack/robostack</a>.{" "}
+      <a href="/Monorepo.html">Read what changed</a>.
+    </p>
+  )}
+</Aside>

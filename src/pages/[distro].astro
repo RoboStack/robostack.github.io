@@ -1,6 +1,7 @@
 ---
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside, Code } from "@astrojs/starlight/components";
+import MonorepoNote from "../components/MonorepoNote.astro";
 import PackageTable from "../components/package-table/PackageTable.astro";
 import type { Distro } from "../data/distros";
 import {
@@ -9,7 +10,6 @@ import {
   isDeprecated,
   monthYear,
   packagePrefix,
-  repoUrl,
   title,
 } from "../data/distros";
 
@@ -48,11 +48,7 @@ const install = [
       instead. <a href="/Monorepo.html">Read why</a>.
     </Aside>
   ) : (
-    <Aside title="RoboStack is now a monorepo">
-      {title(distro)} is now built from{" "}
-      <a href={repoUrl(distro)}>RoboStack/robostack</a>, together with the other
-      maintained distributions. <a href="/Monorepo.html">Read what changed</a>.
-    </Aside>
+    <MonorepoNote distro={distro} />
   )}
   {
     /* Phrased about upstream, not about our rebuilds. Noetic is end of life
