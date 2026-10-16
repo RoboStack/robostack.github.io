@@ -95,19 +95,24 @@ export function browseUrl(distro: Distro): string {
   return BROWSE[distro.base](distro.channel);
 }
 
-/**
- * The vinca repository whose recipes build this distro's channel.
- *
- * Every distro in `DISTROS` has one under the same name, `RoboStack/ros-noetic`
- * through `RoboStack/ros-lyrical`, so the URL is derived rather than listed.
- */
-export function repoUrl(distro: Distro): string {
-  return `https://github.com/RoboStack/ros-${distro.name}`;
+// The ROS 2 distros that moved into the robostack-distros monorepo, tracked in
+// https://github.com/Tobias-Fischer/robostack-distros/issues/54. The others keep
+// their own `RoboStack/ros-<name>` repository.
+const MONOREPO = "RoboStack/robostack-distros";
+const MONOREPO_DISTROS = ["humble", "jazzy", "lyrical", "rolling"];
+
+/** The repository whose recipes build this distro's channel. */
+export function repoName(distro: Distro): string {
+  return MONOREPO_DISTROS.includes(distro.name)
+    ? MONOREPO
+    : `RoboStack/ros-${distro.name}`;
 }
 
-/** `RoboStack/ros-lyrical`: the repo link's label. */
-export function repoName(distro: Distro): string {
-  return `RoboStack/ros-${distro.name}`;
+/** The distro's recipes on GitHub: its folder in the monorepo, or its own repo. */
+export function repoUrl(distro: Distro): string {
+  return MONOREPO_DISTROS.includes(distro.name)
+    ? `https://github.com/${MONOREPO}/tree/main/distros/${distro.name}`
+    : `https://github.com/${repoName(distro)}`;
 }
 
 export function title(distro: Distro): string {

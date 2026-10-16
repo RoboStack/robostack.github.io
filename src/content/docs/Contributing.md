@@ -19,6 +19,8 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 
 ## Adding new packages via pull requests
 
+Humble, Jazzy, Lyrical and Rolling are built from one repository, [robostack-distros](https://github.com/RoboStack/robostack-distros). The quickest way to get a package added there is to open a [package request](https://github.com/RoboStack/robostack-distros/issues/new/choose): robostack-bot opens the pull request for you. Its [README](https://github.com/RoboStack/robostack-distros#for-maintainers) describes how the repository is laid out and which tasks it has. The other distributions (Noetic, Kilted) still have their own `RoboStack/ros-<distro>` repository, which the rest of this section describes.
+
 You can open a pull request that will get built automatically in our CI.
 
 An example can be found [here](https://github.com/RoboStack/ros-humble/pull/257).
@@ -53,16 +55,24 @@ To make code review easier, please consider manually porting the new hunks into 
 
 ## Testing changes locally
 
-Clone the relevant repo:
+For Humble, Jazzy, Lyrical and Rolling, clone the monorepo and run its tasks for the distribution you want:
 
 ```bash wrap
-git clone https://github.com/RoboStack/ros-humble.git  # or: git clone https://github.com/RoboStack/ros-noetic.git or git clone https://github.com/RoboStack/ros-jazzy.git or git clone https://github.com/RoboStack/ros-kilted.git or git clone https://github.com/RoboStack/ros-lyrical.git or git clone https://github.com/RoboStack/ros-rolling.git
+git clone https://github.com/RoboStack/robostack-distros.git
+cd robostack-distros
+pixi run rs jazzy build  # or: humble, lyrical, rolling
+```
+
+For Noetic and Kilted, clone their own repository:
+
+```bash wrap
+git clone https://github.com/RoboStack/ros-noetic.git  # or: git clone https://github.com/RoboStack/ros-kilted.git
 ```
 
 Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
 
 ```bash wrap
-cd ros-humble  # or: cd ros-noetic or cd ros-jazzy or cd ros-kilted or cd ros-lyrical or cd ros-rolling
+cd ros-noetic  # or: cd ros-kilted
 ```
 
 Then you can build the packages that need to be built after the `vinca_***.yaml` changes with:
