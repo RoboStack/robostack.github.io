@@ -18,10 +18,13 @@ We're always eager to improve, and your input is valuable to us. Thank you for b
 If you're facing any issues specific to a ROS distribution, we recommend creating an issue in the corresponding GitHub repository.
 You can also contribute by following the guidelines in our [contribution](/Contributing.html) guide.
 
-- [ROS2 Humble, Jazzy, Lyrical and Rolling](https://github.com/RoboStack/robostack-distros/issues/new/choose): these are all built from the [robostack-distros](https://github.com/RoboStack/robostack-distros) repository, so mention the distribution in your issue.
-- [ROS Noetic](https://github.com/RoboStack/ros-noetic/issues/new/choose)
-- [ROS2 Kilted](https://github.com/RoboStack/ros-kilted/issues/new/choose)
-- [ROS2 Galactic](https://github.com/RoboStack/ros-galactic/issues/new/choose) (not actively maintained anymore)
-- [ROS2 Foxy](https://github.com/RoboStack/ros-foxy/issues/new/choose) (not actively maintained anymore)
+- [ROS2 Humble, Jazzy, Lyrical and Rolling](https://github.com/RoboStack/robostack/issues/new/choose): these are all built from the [robostack](https://github.com/RoboStack/robostack) repository, so mention the distribution in your issue.
+
+The following distributions are deprecated and not actively maintained anymore. Their repositories are kept around, but expect little to no response on new issues:
+
+- [ROS Noetic](https://github.com/RoboStack/ros-noetic/issues/new/choose) (deprecated)
+- [ROS2 Kilted](https://github.com/RoboStack/ros-kilted/issues/new/choose) (deprecated)
+- [ROS2 Galactic](https://github.com/RoboStack/ros-galactic/issues/new/choose) (deprecated)
+- [ROS2 Foxy](https://github.com/RoboStack/ros-foxy/issues/new/choose) (deprecated)
 
 By submitting your issue to the appropriate repo, we can better understand and address your concerns. Thank you for helping us improve the RoboStack ecosystem!

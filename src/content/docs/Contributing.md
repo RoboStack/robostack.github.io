@@ -19,7 +19,7 @@ We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
 
 ## Adding new packages via pull requests
 
-Humble, Jazzy, Lyrical and Rolling are built from one repository, [robostack-distros](https://github.com/RoboStack/robostack-distros). The quickest way to get a package added there is to open a [package request](https://github.com/RoboStack/robostack-distros/issues/new/choose): robostack-bot opens the pull request for you. Its [README](https://github.com/RoboStack/robostack-distros#for-maintainers) describes how the repository is laid out and which tasks it has. The other distributions (Noetic, Kilted) still have their own `RoboStack/ros-<distro>` repository, which the rest of this section describes.
+Humble, Jazzy, Lyrical and Rolling are built from one repository, [robostack](https://github.com/RoboStack/robostack). The quickest way to get a package added there is to open a [package request](https://github.com/RoboStack/robostack/issues/new/choose): robostack-bot opens the pull request for you. Its [README](https://github.com/RoboStack/robostack#for-maintainers) describes how the repository is laid out and which tasks it has. The deprecated distributions (Noetic, Kilted, Galactic and Foxy) keep their own `RoboStack/ros-<distro>` repository, which the rest of this section describes; they are not actively maintained anymore.
 
 You can open a pull request that will get built automatically in our CI.
 
@@ -58,12 +58,12 @@ To make code review easier, please consider manually porting the new hunks into 
 For Humble, Jazzy, Lyrical and Rolling, clone the monorepo and run its tasks for the distribution you want:
 
 ```bash wrap
-git clone https://github.com/RoboStack/robostack-distros.git
-cd robostack-distros
+git clone https://github.com/RoboStack/robostack.git
+cd robostack
 pixi run rs jazzy build  # or: humble, lyrical, rolling
 ```
 
-For Noetic and Kilted, clone their own repository:
+For the deprecated Noetic and Kilted, clone their own repository:
 
 ```bash wrap
 git clone https://github.com/RoboStack/ros-noetic.git  # or: git clone https://github.com/RoboStack/ros-kilted.git

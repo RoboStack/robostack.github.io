@@ -95,24 +95,27 @@ export function browseUrl(distro: Distro): string {
   return BROWSE[distro.base](distro.channel);
 }
 
-// The ROS 2 distros that moved into the robostack-distros monorepo, tracked in
-// https://github.com/Tobias-Fischer/robostack-distros/issues/54. The others keep
-// their own `RoboStack/ros-<name>` repository.
-const MONOREPO = "RoboStack/robostack-distros";
+// The ROS 2 distros that moved into the RoboStack/robostack monorepo, tracked in
+// https://github.com/Tobias-Fischer/robostack-distros/issues/54. The others are
+// deprecated and keep their own `RoboStack/ros-<name>` repository.
+const MONOREPO = "RoboStack/robostack";
 const MONOREPO_DISTROS = ["humble", "jazzy", "lyrical", "rolling"];
+
+/** RoboStack no longer maintains it: every distro outside the monorepo. */
+export function isDeprecated(distro: Distro): boolean {
+  return !MONOREPO_DISTROS.includes(distro.name);
+}
 
 /** The repository whose recipes build this distro's channel. */
 export function repoName(distro: Distro): string {
-  return MONOREPO_DISTROS.includes(distro.name)
-    ? MONOREPO
-    : `RoboStack/ros-${distro.name}`;
+  return isDeprecated(distro) ? `RoboStack/ros-${distro.name}` : MONOREPO;
 }
 
 /** The distro's recipes on GitHub: its folder in the monorepo, or its own repo. */
 export function repoUrl(distro: Distro): string {
-  return MONOREPO_DISTROS.includes(distro.name)
-    ? `https://github.com/${MONOREPO}/tree/main/distros/${distro.name}`
-    : `https://github.com/${repoName(distro)}`;
+  return isDeprecated(distro)
+    ? `https://github.com/${repoName(distro)}`
+    : `https://github.com/${MONOREPO}/tree/main/distros/${distro.name}`;
 }
 
 export function title(distro: Distro): string {
