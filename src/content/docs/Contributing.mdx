@@ -1,0 +1,257 @@
+---
+title: Contributing
+slug: Contributing
+---
+
+import MonorepoNote from '../../components/MonorepoNote.astro';
+
+<MonorepoNote />
+
+Many thanks for taking the time to read this and for contributing to RoboStack!
+
+This project is in early stages and we are looking for contributors to help it grow.
+
+The developers are on the [robotics channel on the prefix.dev Discord](https://discord.gg/kKV8ZxyzY4) where we discuss steps forward.
+
+We welcome all kinds of contribution -- code or non-code -- and value them
+highly. We pledge to treat everyones contribution fairly and with respect and
+we are here to help awesome pull requests over the finish line.
+
+Please note we have a code of conduct, and follow it in all your interactions with the project.
+
+We follow the [NumFOCUS code of conduct](https://numfocus.org/code-of-conduct).
+
+## Adding new packages
+
+Humble, Jazzy, Lyrical and Rolling are built from one repository, [RoboStack/robostack](https://github.com/RoboStack/robostack).
+
+**The quickest way to get a package added is a** [package request](https://github.com/RoboStack/robostack/issues/new/choose): `robostack-bot` opens the pull request for you and a maintainer reviews it.
+
+You can also make that pull request yourself.
+It's the same change the bot makes, and you can build the package on your own machine before CI does.
+
+### Select the package
+
+Fork [RoboStack/robostack](https://github.com/RoboStack/robostack) and clone your fork:
+
+```bash
+git clone https://github.com/<your-user>/robostack.git
+cd robostack
+```
+
+All distributions build from one package selection: the `packages_select_by_deps` list in `shared/vinca.yaml`.
+Add your package with the `add-package` task, the same command robostack-bot runs:
+
+```bash
+pixi run rs add-package foxglove_bridge
+```
+
+It adds the package to the list in sorted position.
+Then it prints, per distribution, which packages that adds to the linux-64 build.
+Dependencies that aren't on the channel yet are built too, so the list can be longer than the one package you asked for.
+A distribution whose rosdistro doesn't have the package skips it.
+
+Use the package name as [index.ros.org](https://index.ros.org) knows it.
+`foxglove-bridge`, `ros2-foxglove-bridge` and `ros-jazzy-foxglove-bridge` work too, they're turned into `foxglove_bridge`.
+To see what a package would add without changing any file, use `--preview`, optionally with the distributions you care about:
+
+```bash
+pixi run rs add-package foxglove_bridge humble jazzy --preview
+```
+
+You can also edit `shared/vinca.yaml` yourself and run `pixi run sort` to put the list back in order.
+A package that only builds on some platforms goes in an `if:` block, with [rattler-build selectors](https://rattler-build.prefix.dev/latest/selectors/) as the condition:
+
+```yaml
+packages_select_by_deps:
+  - if: linux and not aarch64
+    then:
+      - libfranka
+```
+
+### Check the recipes
+
+`add-package` generates the recipes to see what changes.
+To look at them yourself, generate them for one distribution:
+
+```bash
+pixi run rs jazzy generate-recipes
+```
+
+The recipes end up in `distros/jazzy/work/recipes/`, one for every selected package that isn't on the channel yet.
+When vinca can't translate one of the package's dependencies into a conda package, add its rosdep key to `shared/robostack.yaml`, per platform:
+
+```yaml
+acl:
+  robostack:
+    linux: [libacl]
+    osx: []
+    win64: []
+```
+
+### Build it
+
+Build the package itself with `build-one`, see [Building a single package](#building-a-single-package):
+
+```bash
+pixi run rs jazzy build-one ros2-foxglove-bridge
+```
+
+If it doesn't build, it might need a patch, see [Patching a package](#patching-a-package).
+Building on your machine is optional, CI builds everything again.
+But it's a lot faster to find a problem locally than to wait for CI to fail.
+
+### Open the pull request
+
+Run the same checks as CI:
+
+```bash
+pixi run sort
+pixi run rs check
+```
+
+Commit your changes, push them to your fork and open a pull request against [RoboStack/robostack](https://github.com/RoboStack/robostack).
+A change in `shared/` builds every distribution on all five platforms (`linux-64`, `linux-aarch64`, `osx-64`, `osx-arm64` and `win-64`).
+Packages that are already on a distribution's channel aren't built again.
+After the merge, the new packages are built once more and uploaded to the channels.
+
+## Testing changes locally
+
+For Humble, Jazzy, Lyrical and Rolling, clone the monorepo and run its tasks for the distribution you want:
+
+```bash wrap
+git clone https://github.com/RoboStack/robostack.git
+cd robostack
+pixi run rs jazzy build  # or: humble, lyrical, rolling
+```
+
+### Building a single package
+
+A full `build` can take hours.
+When you are working on one package, for example a new patch, build only that one.
+
+First generate the recipes for the distribution:
+
+```bash
+pixi run rs jazzy generate-recipes
+```
+
+This only creates recipes for packages that are not on the channel yet.
+If the package you want is already published, give it a new build number in `distros/jazzy/pkg_additional_info.yaml` first, otherwise there is no recipe to build.
+The key is the ROS package name, with underscores:
+
+```yaml
+ros_workspace:
+  build_number: 27  # higher than the one on the channel
+```
+
+Run `generate-recipes` again after that.
+
+Then build it by its conda package name:
+
+```bash
+pixi run rs jazzy build-one ros2-ros-workspace
+```
+
+`build-one` copies the distribution's patches for that package into its recipe and builds it with `rattler-build`, including the package's tests.
+Its dependencies come from the channel and conda-forge, so they don't have to be built locally.
+Any extra arguments go straight to `rattler-build build`.
+The result ends up in `distros/jazzy/work/output/`, which you can add as a channel to a test workspace to try the package out.
+
+## Patching a package
+
+Some packages don't build on every platform without a change to their sources.
+Patches live per distribution, in `distros/<distro>/patch/`:
+
+- `ros2-<package>.patch` for all platforms,
+- `ros2-<package>.linux.patch`, `.osx.patch`, `.win.patch` or `.unix.patch` for some.
+
+The package name uses dashes, like the conda package.
+There's one patch per package and platform, vinca picks it up by its name.
+
+### Creating a new patch file
+
+Build the package with `build-one` until it fails.
+rattler-build keeps its work directory, with the sources and the existing patches applied:
+
+```bash wrap
+WORK=$(ls -td distros/jazzy/work/output/bld/rattler-build_ros2-<package>_*/work | head -1)
+```
+
+Fix the sources in `$WORK`.
+Then turn your changes into a patch in the distribution's patch directory:
+
+```bash
+pixi run rattler-build debug create-patch --directory "$WORK" \
+  --name ros2-<package> --patch-dir distros/jazzy/patch \
+  --exclude "*.o,*.so,*.dylib,*.a,*.pyc,__pycache__,build/" --dry-run
+```
+
+`--dry-run` only shows the diff.
+When it looks right, run it again without `--dry-run` to write the file.
+Check that it applies and build again:
+
+```bash
+pixi run rs jazzy check-patches --recipe ros2-<package>
+pixi run rs jazzy build-one ros2-<package>
+```
+
+If the package is already on the channel, it also needs a new build number, see [Building a single package](#building-a-single-package).
+
+The same fix is often needed in the other distributions.
+Copy the patch to their `patch/` directory only when the package's version is close enough, and check it there with `check-patches` too.
+A fix that belongs upstream: open a pull request on the package's repository as well and link it in the patch.
+
+### Extending an existing patch file
+
+There's only one patch per package and platform, so end up with one file that has the old and the new changes, not a second patch next to it.
+Keep the hunks in the same order where you can, that makes the change easy to review.
+
+### Fixing dependencies
+
+A missing or wrong dependency in a package's `package.xml` doesn't need a source patch.
+Add it to `shared/patch/dependencies.yaml` (every distribution) or `distros/<distro>/patch/dependencies.yaml` (one distribution), with the ROS package name as the key:
+
+```yaml
+foonathan_memory_vendor:
+  add_host: ["foonathan-memory"]
+  add_run: ["foonathan-memory"]
+```
+
+## How does it work?
+
+[vinca](https://github.com/RoboStack/vinca) turns the ROS packages into rattler-build recipes, rattler-build builds them.
+The repository's [README](https://github.com/RoboStack/robostack#for-maintainers) describes every file, these are the ones you'll touch most:
+
+- `shared/vinca.yaml` selects the packages for every distribution (`packages_select_by_deps`), with all their dependencies.
+  - `packages_exclude` never builds a package and drops it from the dependencies of other packages, for example a package that doesn't build on Windows and that nothing needs.
+  - `packages_skip` never builds a package, but other packages keep depending on it.
+  - Both work in `shared/vinca.yaml` and in a distribution's own `distros/<distro>/vinca.yaml`, as plain names or in an `if:` block.
+  - Packages that are already on the distribution's channel are skipped.
+- `pkg_additional_info.yaml` (in `shared/` and per distribution) sets per-package build numbers and extra CMake arguments.
+  A new build number rebuilds a package, but it keeps the version from `distros/<distro>/rosdistro_snapshot.yaml`.
+- `shared/robostack.yaml` is the equivalent of [rosdep.yaml](http://wiki.ros.org/rosdep/rosdep.yaml): it translates ROS dependencies into conda package names, `robostack: []` drops a dependency.
+
+## Doing a full rebuild
+
+A "full rebuild" rebuilds all packages of a distribution.
+It's how a channel gets newer ROS package versions, and newer dependencies from conda-forge.
+
+Maintainers start one with robostack-bot, by commenting on an issue or a pull request:
+
+```text
+@robostack-bot update-rosdistro-snapshot jazzy
+```
+
+The bot also does this every day for a distribution with a new rosdistro sync.
+It opens a pull request that:
+
+- snapshots the latest rosdistro sync into `distros/jazzy/rosdistro_snapshot.yaml`,
+- sets the `build_number` in `distros/jazzy/vinca.yaml` above every published build,
+- bumps the minor version of the distribution's mutex package,
+- removes the per-package build numbers from `distros/jazzy/pkg_additional_info.yaml`.
+
+`pixi run rs jazzy update-snapshot` makes the same change locally.
+
+conda-forge pins move separately, with `@robostack-bot update-conda-forge-pinning jazzy` or `pixi run rs jazzy update-pinning`.
+That rebuilds only the packages that use a changed pin, and a full rebuild when more than half of them are affected.

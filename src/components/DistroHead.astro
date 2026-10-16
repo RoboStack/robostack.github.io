@@ -24,16 +24,16 @@ const { distro } = Astro.props;
     </h1>
     <p class="support">{supportLine(distro)}</p>
   </div>
-  <!-- The label is spelled out for screen readers because the repo name is
+  <!-- The label is spelled out for screen readers because the visible text is
        dropped on narrow screens, where the mark alone carries the link. -->
   <a
     class="repo"
     href={repoUrl(distro)}
-    aria-label={`${repoName(distro)} on GitHub`}
-    title={`The recipes that build the ${distro.channel} channel`}
+    aria-label={`${title(distro)} distro config on GitHub`}
+    title={`The recipes in ${repoName(distro)} that build the ${distro.channel} channel`}
   >
     <span class="repo__icon" aria-hidden="true"></span>
-    <span class="repo__name">{repoName(distro)}</span>
+    <span class="repo__name">Distro config</span>
   </a>
 </div>
 
