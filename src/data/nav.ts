@@ -4,8 +4,8 @@ import { DISTROS, newestRelease } from "./distros";
  * The site's top-level sections: one header tab each (Header.astro), and -
  * for tabs whose label matches a top-level sidebar group in astro.config.mjs
  * - the sidebar shows that group's pages (Sidebar.astro). `match` decides
- * both the active tab and which section a page belongs to, so cross-listed
- * pages (Contributing sits in Docs and Community) resolve consistently.
+ * both the active tab and which section a page belongs to, so a page's
+ * slug should match exactly the tab whose sidebar group lists it.
  */
 export interface NavTab {
   label: string;

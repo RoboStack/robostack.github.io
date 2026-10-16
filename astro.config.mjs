@@ -64,7 +64,9 @@ export default defineConfig({
       sidebar: [
         // One top-level group per header tab (src/components/Header.astro);
         // the Sidebar override shows only the current page's group, so these
-        // group labels never render. Slugs are set explicitly in each page's
+        // group labels never render. List each page in exactly one group, the
+        // one whose tab nav.ts highlights for it, so the sidebar and the
+        // header tabs never disagree. Slugs are set explicitly in each page's
         // frontmatter to keep the published mixed-case URLs
         // (`GettingStarted.html`, `FAQ.html`, ...).
         {
@@ -81,9 +83,6 @@ export default defineConfig({
             { label: "JupyterRos", slug: "JupyterRos" },
             { label: "FAQ", slug: "FAQ" },
             { label: "RoboStack monorepo", slug: "Monorepo" },
-            // Cross-listed; its primary section is Community (the last
-            // group containing a page wins in the Sidebar override).
-            { label: "Contributing", slug: "Contributing" },
           ],
         },
         {
@@ -92,8 +91,6 @@ export default defineConfig({
             { label: "Community Meeting", slug: "CommunityMeeting" },
             { label: "Support", slug: "support" },
             { label: "Contributing", slug: "Contributing" },
-            // Cross-listed; its primary section is Docs (nav.ts).
-            { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
       ],
