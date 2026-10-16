@@ -50,8 +50,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl:
-          "https://github.com/RoboStack/robostack.github.io/edit/master/",
+        baseUrl: "https://github.com/RoboStack/robostack.github.io/edit/main/",
       },
       customCss: ["./src/styles/custom.css"],
       routeMiddleware: "./src/routeData.ts",
