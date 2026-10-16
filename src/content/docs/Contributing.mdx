@@ -67,23 +67,38 @@ cd robostack
 pixi run rs jazzy build  # or: humble, lyrical, rolling
 ```
 
-For the deprecated Noetic and Kilted, clone their own repository:
+### Building a single package
 
-```bash wrap
-git clone https://github.com/RoboStack/ros-noetic.git  # or: git clone https://github.com/RoboStack/ros-kilted.git
-```
+A full `build` can take hours.
+When you are working on one package, for example a new patch, build only that one.
 
-Then move in the newly cloned repo, and if necessary do any change to the `vinca_*.yaml` file for your platform:
-
-```bash wrap
-cd ros-noetic  # or: cd ros-kilted
-```
-
-Then you can build the packages that need to be built after the `vinca_***.yaml` changes with:
+First generate the recipes for the distribution:
 
 ```bash
-pixi run build
+pixi run rs jazzy generate-recipes
 ```
+
+This only creates recipes for packages that are not on the channel yet.
+If the package you want is already published, give it a new build number in `distros/jazzy/pkg_additional_info.yaml` first, otherwise there is no recipe to build.
+The key is the ROS package name, with underscores:
+
+```yaml
+ros_workspace:
+  build_number: 27  # higher than the one on the channel
+```
+
+Run `generate-recipes` again after that.
+
+Then build it by its conda package name:
+
+```bash
+pixi run rs jazzy build-one ros2-ros-workspace
+```
+
+`build-one` copies the distribution's patches for that package into its recipe and builds it with `rattler-build`, including the package's tests.
+Its dependencies come from the channel and conda-forge, so they don't have to be built locally.
+Any extra arguments go straight to `rattler-build build`.
+The result ends up in `distros/jazzy/work/output/`, which you can add as a channel to a test workspace to try the package out.
 
 ## How does it work?
 
