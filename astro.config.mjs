@@ -80,6 +80,7 @@ export default defineConfig({
             },
             { label: "JupyterRos", slug: "JupyterRos" },
             { label: "FAQ", slug: "FAQ" },
+            { label: "RoboStack monorepo", slug: "Monorepo" },
             // Cross-listed; its primary section is Community (the last
             // group containing a page wins in the Sidebar override).
             { label: "Contributing", slug: "Contributing" },
@@ -91,6 +92,7 @@ export default defineConfig({
             { label: "Community Meeting", slug: "CommunityMeeting" },
             { label: "Support", slug: "support" },
             { label: "Contributing", slug: "Contributing" },
+            // Cross-listed; its primary section is Docs (nav.ts).
             { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
