@@ -6,7 +6,7 @@ slug: Monorepo
 All maintained ROS distributions in RoboStack are built from one repository: [RoboStack/robostack](https://github.com/RoboStack/robostack).
 
 That wasn't always the case.
-Before 2026, every distribution had its own repository: `ros-humble`, `ros-jazzy`, `ros-lyrical`, `ros-rolling` and so on.
+Before 2026 Okt, every distribution had its own repository: `ros-humble`, `ros-jazzy`, `ros-lyrical`, `ros-rolling` and so on.
 A fix for a broken package often had to be made four times, in four repositories, with four CI setups that slowly drifted apart.
 Keeping all of that in sync took more maintainer time than building the packages themselves.
 So in 2026 the maintained distributions moved into one repository.
