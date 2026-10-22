@@ -50,8 +50,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl:
-          "https://github.com/RoboStack/robostack.github.io/edit/master/",
+        baseUrl: "https://github.com/RoboStack/robostack.github.io/edit/main/",
       },
       customCss: ["./src/styles/custom.css"],
       routeMiddleware: "./src/routeData.ts",
@@ -64,7 +63,9 @@ export default defineConfig({
       sidebar: [
         // One top-level group per header tab (src/components/Header.astro);
         // the Sidebar override shows only the current page's group, so these
-        // group labels never render. Slugs are set explicitly in each page's
+        // group labels never render. List each page in exactly one group, the
+        // one whose tab nav.ts highlights for it, so the sidebar and the
+        // header tabs never disagree. Slugs are set explicitly in each page's
         // frontmatter to keep the published mixed-case URLs
         // (`GettingStarted.html`, `FAQ.html`, ...).
         {
@@ -80,9 +81,7 @@ export default defineConfig({
             },
             { label: "JupyterRos", slug: "JupyterRos" },
             { label: "FAQ", slug: "FAQ" },
-            // Cross-listed; its primary section is Community (the last
-            // group containing a page wins in the Sidebar override).
-            { label: "Contributing", slug: "Contributing" },
+            { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
         {

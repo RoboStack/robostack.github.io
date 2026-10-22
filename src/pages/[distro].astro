@@ -1,11 +1,13 @@
 ---
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import { Aside, Code } from "@astrojs/starlight/components";
+import MonorepoNote from "../components/MonorepoNote.astro";
 import PackageTable from "../components/package-table/PackageTable.astro";
 import type { Distro } from "../data/distros";
 import {
   browseUrl,
   DISTROS,
+  isDeprecated,
   monthYear,
   packagePrefix,
   title,
@@ -37,6 +39,17 @@ const install = [
   }}
   hasSidebar={false}
 >
+  {isDeprecated(distro) ? (
+    <Aside type="caution" title="Deprecated">
+      RoboStack no longer maintains {title(distro)}. Its packages stay
+      installable, but they are not rebuilt or fixed anymore. Use{" "}
+      <a href="/humble.html">Humble</a>, <a href="/jazzy.html">Jazzy</a>,{" "}
+      <a href="/lyrical.html">Lyrical</a> or <a href="/rolling.html">Rolling</a>{" "}
+      instead. <a href="/Monorepo.html">Read why</a>.
+    </Aside>
+  ) : (
+    <MonorepoNote distro={distro} />
+  )}
   {
     /* Phrased about upstream, not about our rebuilds. Noetic is end of life
        upstream but its table is still regenerated on the usual schedule, so
