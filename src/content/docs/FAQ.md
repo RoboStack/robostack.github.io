@@ -110,6 +110,32 @@ linux = "5.15"
 
 Note: Set the glibc version to match the oldest machine or robot that needs to run your project, not necessarily your personal machine. You can check a machine's version by running `ldd --version`.
 
+## Why does pixi install older ROS packages on macOS?
+
+The current RoboStack builds need macOS 14 or newer.
+Pixi doesn't look at the macOS version of your machine: unless the workspace declares one, it solves for macOS 13.
+The solver then skips the newest builds and picks an older generation, without any error.
+
+You can spot this with `pixi list distro-mutex`.
+If the version is lower than the "Built against" mutex on the distro's package page, for example [Lyrical](/lyrical.html), you're on older builds.
+
+Declare macOS 14 for the workspace:
+
+```shell
+pixi workspace platform add osx-latest=osx-arm64 --osx 14
+pixi workspace platform rm osx-arm64
+```
+
+On an Intel Mac, replace `osx-arm64` with `osx-64` in both commands.
+Pixi updates the lockfile and the environment right away.
+
+You can also write it in the `pixi.toml` yourself and run `pixi install`:
+
+```toml
+[workspace]
+platforms = [{ name = "osx-latest", platform = "osx-arm64", macos = "14" }]
+```
+
 ## Why ROS and Conda?
 
 We tightly couple ROS with Conda, a cross-platform, language-agnostic package manager.
