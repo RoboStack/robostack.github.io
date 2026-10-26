@@ -12,8 +12,8 @@ importers:
         specifier: ^0.42.6
         version: 0.42.6(astro@7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))(supports-color@7.2.0)(typescript@6.0.3)
       '@astrojs/svelte':
-        specifier: ^9.1.0
-        version: 9.1.0(@types/node@24.13.4)(astro@7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))(esbuild@0.28.2)(svelte@5.57.2)(typescript@6.0.3)(yaml@2.9.0)
+        specifier: ^9.1.1
+        version: 9.1.1(@types/node@24.13.4)(astro@7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))(esbuild@0.28.2)(svelte@5.57.2)(typescript@6.0.3)(yaml@2.9.0)
       astro:
         specifier: ^7.4.0
         version: 7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0)
@@ -242,9 +242,9 @@ packages:
       '@astrojs/markdown-remark':
         optional: true
 
-  '@astrojs/svelte@9.1.0':
-    resolution: {integrity: sha512-fRTJEm6AmAQJtdJoOoOvbXix7+ytNsU1dCJ4MS48pJCm/GeYR++SY2DHMSy79R8BZylah321/3dSilH+IvZ21w==}
-    engines: {node: '>=22.22.0'}
+  '@astrojs/svelte@9.1.1':
+    resolution: {integrity: sha512-XLbgJ1B88Oand+6VxpsW4hBbW8MQJz50SyHr2CoFNYaX9Kg3Bm6A4aeC1bzKcYwBCzcqyYuDD1GygP5sgGxIFQ==}
+    engines: {node: '>=22.23.4'}
     peerDependencies:
       astro: ^7.0.0
       svelte: ^5.43.6
@@ -2596,7 +2596,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@astrojs/svelte@9.1.0(@types/node@24.13.4)(astro@7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))(esbuild@0.28.2)(svelte@5.57.2)(typescript@6.0.3)(yaml@2.9.0)':
+  '@astrojs/svelte@9.1.1(@types/node@24.13.4)(astro@7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))(esbuild@0.28.2)(svelte@5.57.2)(typescript@6.0.3)(yaml@2.9.0)':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 7.3.1(svelte@5.57.2)(vite@8.3.4(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0))
       astro: 7.4.0(@types/node@24.13.4)(esbuild@0.28.2)(yaml@2.9.0)
