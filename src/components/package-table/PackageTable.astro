@@ -1,6 +1,6 @@
 ---
 import type { Distro } from "../../data/distros";
-import { browseUrl } from "../../data/distros";
+import { browseUrl, isDeprecated } from "../../data/distros";
 import PackageTable from "./PackageTable.svelte";
 
 interface Props {
@@ -9,12 +9,14 @@ interface Props {
 
 const { distro } = Astro.props;
 const browse = browseUrl(distro);
+const requestable = !isDeprecated(distro) && distro.status !== "eol";
 ---
 
 {/*
-  The `eol` prop suppresses the per-row "Add to channel" button. Inviting
-  contributions to a distro upstream has stopped supporting would waste
-  someone's afternoon.
+  The `requestable` prop shows the per-row "Add to channel" button, which opens
+  a package request in the RoboStack/robostack monorepo. Only the distros the
+  monorepo builds get it: inviting contributions to a distro nobody rebuilds,
+  or one upstream has stopped supporting, would waste someone's afternoon.
 
   The island renders and updates everything itself; this wrapper only feeds
   it the distro facts that are known at build time.
@@ -22,7 +24,7 @@ const browse = browseUrl(distro);
 <PackageTable
   client:load
   distro={distro.name}
-  eol={distro.status === "eol"}
+  requestable={requestable}
   browse={browse}
 />
 <noscript>
