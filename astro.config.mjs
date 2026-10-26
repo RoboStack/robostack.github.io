@@ -53,7 +53,6 @@ export default defineConfig({
         baseUrl: "https://github.com/RoboStack/robostack.github.io/edit/main/",
       },
       customCss: ["./src/styles/custom.css"],
-      routeMiddleware: "./src/routeData.ts",
       components: {
         Header: "./src/components/Header.astro",
         Sidebar: "./src/components/Sidebar.astro",
@@ -61,35 +60,38 @@ export default defineConfig({
         PageTitle: "./src/components/PageTitle.astro",
       },
       sidebar: [
-        // One top-level group per header tab (src/components/Header.astro);
-        // the Sidebar override shows only the current page's group, so these
-        // group labels never render. List each page in exactly one group, the
-        // one whose tab nav.ts highlights for it, so the sidebar and the
-        // header tabs never disagree. Slugs are set explicitly in each page's
-        // frontmatter to keep the published mixed-case URLs
-        // (`GettingStarted.html`, `FAQ.html`, ...).
+        // The sidebar is the Docs section: the frontpage and the distro table
+        // pages have none. Every page listed here also has to match the Docs
+        // tab's pattern in src/data/nav.ts, so the header highlights it.
+        // Slugs are set explicitly in each page's frontmatter to keep the
+        // published mixed-case URLs (`GettingStarted.html`, `FAQ.html`, ...).
         {
-          label: "Docs",
+          label: "Use RoboStack",
           items: [
             { label: "Getting Started", slug: "GettingStarted" },
             {
-              label: "Alternative to Pixi",
+              label: "Alternatives to Pixi",
               items: [
                 { label: "Micromamba", slug: "micromamba" },
                 { label: "Conda", slug: "conda" },
               ],
             },
             { label: "JupyterRos", slug: "JupyterRos" },
-            { label: "FAQ", slug: "FAQ" },
-            { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
         {
-          label: "Community",
+          label: "Get help",
           items: [
-            { label: "Community Meeting", slug: "CommunityMeeting" },
             { label: "Support", slug: "support" },
+            { label: "Community Meeting", slug: "CommunityMeeting" },
+            { label: "FAQ", slug: "FAQ" },
+          ],
+        },
+        {
+          label: "Contribute",
+          items: [
             { label: "Contributing", slug: "Contributing" },
+            { label: "RoboStack monorepo", slug: "Monorepo" },
           ],
         },
       ],
