@@ -56,8 +56,33 @@
   ];
 
   const OVERSCAN = 6;
-  const CONTRIBUTING =
-    "/Contributing.html#adding-new-packages-via-pull-requests";
+  // The monorepo's "Package request" issue form. robostack-bot answers the
+  // issue with a pull request that adds the package.
+  const PACKAGE_REQUEST =
+    "https://github.com/RoboStack/robostack/issues/new?template=2_package_request.yaml";
+
+  /**
+   * The package request form, prefilled for one ROS package. The context
+   * names the distro page it came from, so maintainers can tell these
+   * requests apart from ones written by hand.
+   */
+  function requestUrl(rosName: string): string {
+    return (
+      PACKAGE_REQUEST +
+      "&title=" +
+      encodeURIComponent("Package request: " + rosName) +
+      "&package_name=" +
+      encodeURIComponent(rosName) +
+      "&additional_context=" +
+      encodeURIComponent(
+        "Requested from the " +
+          distro +
+          " package list on robostack.github.io: https://robostack.github.io/" +
+          distro +
+          ".html",
+      )
+    );
+  }
 
   interface ActivePlatform {
     id: string;
@@ -66,9 +91,9 @@
 
   let {
     distro,
-    eol = false,
+    requestable = false,
     browse,
-  }: { distro: string; eol?: boolean; browse: string } = $props();
+  }: { distro: string; requestable?: boolean; browse: string } = $props();
 
   let doc = $state<Doc | null>(null);
   let error = $state("");
@@ -587,11 +612,13 @@
                     Pushed to the far right of the package cell, so it uses
                     the slack in that column instead of squeezing the name.
                   -->
-                  {#if row.never && !eol}
+                  {#if row.never && requestable}
                     <a
                       class="rs-add"
-                      href={CONTRIBUTING}
-                      title="How to get {row.name} built for {channel}"
+                      href={requestUrl(rosName)}
+                      title="Request {rosName} on GitHub, robostack-bot opens the pull request"
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       {@render iconSpan("github", 12)}
                       <span class="rs-add__label">Add to channel</span>
@@ -686,6 +713,9 @@
        stylesheet stays the single source of truth. Content is about 46px,
        so the rest is breathing room above and below. */
     --rs-row-h: 68px;
+    /* Lets "Add to channel" follow the table's width rather than the
+       viewport's. */
+    container-type: inline-size;
 
     --rs-yes-bg: #e7f4d6;
     --rs-yes-fg: #3f7a12;
@@ -1193,10 +1223,12 @@
     border-color: var(--sl-color-accent);
     color: var(--sl-color-accent);
   }
-  /* Below this the package column is too narrow to carry both, and the button
-     does not shrink, so the name would lose. Drop to the icon instead; the
-     title still names the package and the channel. */
-  @media screen and (max-width: 1400px) {
+  /* Once the table shrinks below its full width the package column is too
+     narrow to carry both, and the button does not shrink, so the name would
+     lose. Drop to the icon instead; the title still names the package. 67.5rem
+     is Starlight's content width on a page without a sidebar, which is what
+     the table fills. */
+  @container (width < 67.5rem) {
     .rs-add {
       padding: 0.15em 0.45em;
     }
