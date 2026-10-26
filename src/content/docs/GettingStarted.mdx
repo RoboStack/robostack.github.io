@@ -50,6 +50,32 @@ pixi init ros_ws --channel https://prefix.dev/robostack-lyrical
 cd ros_ws
 ```
 
+On macOS, also tell pixi to use macOS 14:
+
+```shell
+pixi workspace platform add osx-latest=osx-arm64 --osx 14
+pixi workspace platform rm osx-arm64
+```
+
+On an Intel Mac, replace `osx-arm64` with `osx-64` in both commands.
+Run them in this order: pixi won't remove the only platform of a workspace.
+
+<details>
+<summary>Why is this needed on macOS?</summary>
+
+The current RoboStack builds need macOS 14 or newer.
+Pixi doesn't look at the macOS version of your machine, it assumes macOS 13 unless the workspace says otherwise.
+Without this step it quietly installs an older generation of the ROS packages.
+
+The first command adds your platform again with macOS 14 declared, the second removes the default one.
+Your `pixi.toml` then has:
+
+```toml
+platforms = [{ name = "osx-latest", platform = "osx-arm64", macos = "14" }]
+```
+
+</details>
+
 <details>
 <summary>What did just happen?</summary>
 
@@ -163,7 +189,14 @@ You can replace the previous `pixi.toml` or use `pixi init` to create a new work
 name = "ros_ws"
 description = "Development environment for RoboStack ROS packages"
 channels = ["https://prefix.dev/conda-forge"]
-platforms = ["linux-64", "win-64", "osx-64", "osx-arm64", "linux-aarch64"]
+# RoboStack's macOS builds need macOS 14, pixi assumes 13 unless told otherwise
+platforms = [
+  "linux-64",
+  "linux-aarch64",
+  "win-64",
+  { name = "osx-64-latest", platform = "osx-64", macos = "14" },
+  { name = "osx-arm64-latest", platform = "osx-arm64", macos = "14" },
+]
 
 # This will automatically activate the ros workspace on activation
 [target.win.activation]
