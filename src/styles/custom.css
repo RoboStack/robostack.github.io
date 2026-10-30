@@ -197,3 +197,23 @@ samp {
 :root[data-theme="light"] .sl-menu-button:has(~ :popover-open) {
   background-color: var(--sl-color-gray-6);
 }
+
+/* ---------- Docs sidebar ----------
+   Starlight renders every sidebar group as a collapsible <details>. The
+   docs sidebar is short, so its groups act as section labels instead: no
+   caret, no click target, and the pages stay visible even when a group was
+   closed from the keyboard or restored closed from session storage. Nested
+   pages indent half as far as Starlight's default. */
+#starlight__sidebar summary {
+  pointer-events: none;
+}
+#starlight__sidebar summary .caret {
+  display: none;
+}
+#starlight__sidebar details::details-content {
+  content-visibility: visible;
+}
+#starlight__sidebar ul ul li {
+  margin-inline-start: calc(var(--sl-sidebar-item-padding-inline) / 2);
+  padding-inline-start: calc(var(--sl-sidebar-item-padding-inline) / 2);
+}
