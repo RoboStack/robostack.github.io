@@ -76,6 +76,7 @@ export default defineConfig({
               ],
             },
             { label: "JupyterRos", slug: "JupyterRos" },
+            { label: "Bridging ROS 1 and ROS 2", slug: "Ros1Bridge" },
           ],
         },
         {

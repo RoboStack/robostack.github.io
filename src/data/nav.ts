@@ -17,7 +17,7 @@ export const NAV_TABS: NavTab[] = [
     label: "Docs",
     href: "/GettingStarted.html",
     match:
-      /^\/(GettingStarted|micromamba|conda|JupyterRos|FAQ|support|CommunityMeeting|Contributing|Monorepo)/,
+      /^\/(GettingStarted|micromamba|conda|JupyterRos|Ros1Bridge|FAQ|support|CommunityMeeting|Contributing|Monorepo)/,
   },
   {
     label: "Packages",
