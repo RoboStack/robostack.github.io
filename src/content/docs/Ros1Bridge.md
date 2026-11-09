@@ -1,10 +1,10 @@
 ---
 title: Bridging ROS 1 and ROS 2
 slug: Ros1Bridge
-description: Connect ROS 1 Noetic and ROS 2 Humble nodes with ros1_bridge, built from source in a pixi project.
+description: Connect ROS 1 Noetic and ROS 2 Humble nodes with ros1_bridge, built from source in a Pixi project.
 ---
 
-[`ros1_bridge`](https://github.com/ros2/ros1_bridge) passes topics and services between ROS 1 and ROS 2, for example between a robot running ROS 1 Noetic and a computer running ROS 2 Humble. It isn't packaged, but builds from source in a pixi project. Tested on Linux (aarch64) and macOS (Apple silicon).
+[`ros1_bridge`](https://github.com/ros2/ros1_bridge) passes topics and services between ROS 1 and ROS 2, for example between a robot running ROS 1 Noetic and a computer running ROS 2 Humble. It isn't packaged, but builds from source in a Pixi project. Tested on Linux (aarch64) and macOS (Apple silicon).
 
 :::caution[Keep Noetic and Humble in separate environments]
 Both distributions have packages with the same names (`std_msgs`, `rosgraph_msgs`, ...). In one environment, their Python modules and CMake files overwrite each other, which breaks `roscore` and building the bridge.
@@ -12,7 +12,7 @@ Both distributions have packages with the same names (`std_msgs`, `rosgraph_msgs
 
 ## Set up
 
-One pixi project with two environments, `noetic` and `humble`. The `humble` environment uses `noetic` as an underlay, like sourcing `/opt/ros/noetic` before `/opt/ros/humble` on Ubuntu.
+One Pixi project with two environments, `noetic` and `humble`. The `humble` environment uses `noetic` as an underlay, like sourcing `/opt/ros/noetic` before `/opt/ros/humble` on Ubuntu.
 
 `pixi.toml`:
 
