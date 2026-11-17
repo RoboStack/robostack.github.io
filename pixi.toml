@@ -84,8 +84,13 @@ lint = {
 pyyaml = ">=6.0.3,<7"
 py-rattler = ">=0.28.1,<0.29"
 niquests = ">=3.21.2,<4"
+pytest = ">=9.2.0,<10"
 
 [feature.scripts.tasks]
+test-scripts = {
+  cmd = "pytest scripts",
+  description = "Test package table generation",
+}
 check-dependabot-merge = {
   cmd = "python scripts/check_dependabot_merge.py",
   description = "Check whether every Dependabot update qualifies for auto-merge",

@@ -58,7 +58,7 @@ from typing import Any, TypeAlias
 
 import niquests
 import yaml
-from rattler import MatchSpec, PackageRecord
+from rattler import BuildString, MatchSpec, PackageRecord
 from urllib3.util.retry import Retry
 
 # The distro list and the platform list are shared with the site through
@@ -289,7 +289,7 @@ def collect_mutexes(repos: dict[str, list[Artifact]]) -> tuple[str, MutexRecords
                 PackageRecord(
                     name=artifact["name"],
                     version=artifact["version"],
-                    build=artifact["build"],
+                    build=BuildString(artifact["build"]),
                     build_number=artifact.get("build_number", 0),
                     subdir=platform,
                 )
