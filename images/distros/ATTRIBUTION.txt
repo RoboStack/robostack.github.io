@@ -1,0 +1,16 @@
+Distribution artwork
+====================
+
+foxy.png, galactic.png, humble.png, jazzy.png, kilted.png, lyrical.png, rolling.png
+  Source: https://github.com/ros2/ros2_documentation
+          source/Get-Started/Releases/<distro>-small.png
+  Licence: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+  Credit: Open Robotics / the ROS 2 documentation contributors
+
+noetic.png
+  Source: http://wiki.ros.org/noetic (page attachment "noetic.png")
+  Licence: CC BY 3.0 — https://creativecommons.org/licenses/by/3.0/
+  Credit: Open Robotics / the ROS wiki contributors
+
+Both licences permit reuse, including commercially, with attribution. The files
+are unmodified copies of the originals.
