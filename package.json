@@ -18,7 +18,7 @@
     "@astrojs/check": "^0.9.12",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
-    "prettier-plugin-svelte": "^4.1.1",
+    "prettier-plugin-svelte": "^4.2.0",
     "svelte-check": "^4.7.8",
     "typescript": "^6.0.3"
   }
