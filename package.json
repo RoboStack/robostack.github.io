@@ -9,7 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.43.0",
+    "@astrojs/starlight": "^0.43.1",
     "@astrojs/svelte": "^9.1.6",
     "astro": "^7.4.12",
     "svelte": "^5.59.1"
